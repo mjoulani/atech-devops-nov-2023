@@ -17,7 +17,7 @@ umask 0007
 
 ## check if the directory exists and add it to the PATH variable, if it does not exist create it
 if [[ -d ~/usercommands ]];then
-   export PATH+=:$~/usercommands
+   export PATH=$PATH:~/usercommands
 else
    mkdir ~/usercommands
 fi
@@ -34,11 +34,11 @@ alias ltxt="ls *.txt"
 if [[ ! -d ~/tmp ]];then
    mkdir ~/tmp
 else
-  rm -r ~/tmp/*
+  rm -r ~/tmp/* 2> /dev/null
 fi
 
 
 ## kill processes attached to 8080
-portsToKill=$(netstat -tnlp | grep 8080 | awk '{print $7}' | cut -d'/' -f1)
-for i in $portsToKill;do kill $i;done
-echo "Done initializing"
+portsToKill=$(sudo netstat -tnlp | grep 8080 | awk '{print $7}' | cut -d'/' -f1)
+for i in $portsToKill;do sudo kill $i;done
+
