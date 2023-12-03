@@ -4,11 +4,7 @@ echo "Hello" $USER
 #B
 export COURSE_ID="DevOpsBootcampElevation"
 
-
-
 #IF
-
-
 if [ -e ~/.token ]; then
     permissions=$(stat -c "%a" ~/.token)
     if [ "$permissions" != "600" ]; then
@@ -40,4 +36,13 @@ fi
 
 
 #kill service port 8080
-lsof -i :8080 | awk '{print $2}' | xargs kill -9
+# Check if the port is already in use
+if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null ; then
+    # Get the PID of the process using port 8080
+    pid=$(lsof -Pi :8080 -sTCP:LISTEN -t)
+
+    # Kill the process
+    echo "Killing process with PID $pid using port 8080"
+    kill -9 "$pid"
+#echo "No process found using port 8080"
+fi
