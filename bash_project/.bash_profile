@@ -1,0 +1,43 @@
+#A
+echo "Hello" $USER
+
+#B
+export COURSE_ID="DevOpsBootcampElevation"
+
+
+
+#IF
+
+
+if [ -e ~/.token ]; then
+    permissions=$(stat -c "%a" ~/.token)
+    if [ "$permissions" != "600" ]; then
+        echo "Warning: .token file has too open permissions"
+    fi
+fi
+
+
+
+umask 0077
+
+#adding path to existing path the user home directory 
+export PATH=$PATH:/home/$USER/usercommands
+
+#echo date specific form
+echo "The current date is: $(date -u +'%Y-%m-%dT%H:%M:%S%:z')"
+
+
+#new alias to funtion 
+alias ltxt='ls *.txt'
+
+#create temp clean direvtory 
+
+if [ -d ~/tmp ]; then
+    rm -rf ~/tmp/*
+else
+    mkdir ~/tmp
+fi
+
+
+#kill service port 8080
+lsof -i :8080 | awk '{print $2}' | xargs kill -9
