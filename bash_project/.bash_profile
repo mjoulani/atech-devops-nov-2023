@@ -13,7 +13,6 @@ if [ -e ~/.token ]; then
 fi
 
 
-
 umask 0077
 
 #adding path to existing path the user home directory 
