@@ -2,7 +2,7 @@ name: Bash poject test
 on:
   push:
     branches:
-      - */bash_poject*
+      - bash_project/*
 
 jobs:
   test:
