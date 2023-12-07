@@ -2,7 +2,7 @@ name: Bash poject test
 on:
   push:
     branches:
-      - bash_project/*
+      - 'bash_project/*'  # Make sure to use single quotes around patterns
 
 jobs:
   test:
