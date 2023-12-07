@@ -1,0 +1,16 @@
+name: Bash poject test
+on:
+  push:
+    branches:
+      - */bash_poject*
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run test
+        run: bash bash_project/test.sh
