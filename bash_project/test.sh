@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 
 USER_PASS=1234
@@ -17,7 +18,7 @@ if id -u myuser &> /dev/null; then
   userdel myuser
 fi
 
-cat .bash_profile > /etc/skel/.bash_profile
+cat bash_project/.bash_profile > /etc/skel/.bash_profile
 
 adduser myuser --gecos "" --disabled-password
 echo "myuser:$USER_PASS" | chpasswd
