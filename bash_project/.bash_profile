@@ -1,3 +1,4 @@
+#!/bin/bash
 #A
 echo "Hello" $USER
 
