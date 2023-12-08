@@ -26,7 +26,7 @@ echo "The current date is: $(date -u +'%Y-%m-%dT%H:%M:%S%:z')"
 #new alias to funtion 
 alias ltxt='ls *.txt'
 
-#create temp clean direvtory 
+#create temp clean directory
 
 if [ -d ~/tmp ]; then
     rm -rf ~/tmp/*
@@ -40,9 +40,6 @@ fi
 if lsof -Pi :8080 -sTCP:LISTEN -t >/dev/null ; then
     # Get the PID of the process using port 8080
     pid=$(lsof -Pi :8080 -sTCP:LISTEN -t)
-
     # Kill the process
-    echo "Killing process with PID $pid using port 8080"
     kill -9 "$pid"
-#echo "No process found using port 8080"
 fi
