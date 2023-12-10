@@ -18,7 +18,7 @@ if id -u myuser &> /dev/null; then
   userdel myuser
 fi
 
-sudo cat bash_project/.bash_profile > /etc/skel/.bash_profile
+cat bash_project/.bash_profile > /etc/skel/.bash_profile
 
 adduser myuser --gecos "" --disabled-password
 echo "myuser:$USER_PASS" | chpasswd
