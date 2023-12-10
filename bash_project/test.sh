@@ -17,8 +17,8 @@ rm -f -r /home/myuser
 if id -u myuser &> /dev/null; then
   userdel myuser
 fi
-echo $PWD
-cat .bash_profile > /etc/skel/.bash_profile
+
+cat bash_project/.bash_profile > /etc/skel/.bash_profile
 
 adduser myuser --gecos "" --disabled-password
 echo "myuser:$USER_PASS" | chpasswd
