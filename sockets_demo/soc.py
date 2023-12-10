@@ -32,7 +32,7 @@ def start_socket_listener(host, port):
 if __name__ == "__main__":
     # Set the host and port to listen on
     host = "127.0.0.1"
-    port = 12345
+    port = 8080
 
     # Start the socket listener
     start_socket_listener(host, port)
