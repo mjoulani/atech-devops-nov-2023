@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1e01f50c-67ff-4a7c-9125-9dcbb28a442f" name="Changes" comment="fix .bash_profile">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bash_project/.bash_profile" beforeDir="false" afterPath="$PROJECT_DIR$/bash_project/.bash_profile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/bash_test.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/bash_test.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,15 +45,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "bash__project/FirasNaarani",
-    "last_opened_file_path": "/home/batman/GitHub/atech-devops-nov-2023"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;bash__project/FirasNaarani&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/batman/GitHub/atech-devops-nov-2023&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
