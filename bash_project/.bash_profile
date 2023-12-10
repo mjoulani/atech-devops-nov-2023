@@ -4,11 +4,6 @@ echo "Hello $USER"
 # Define an environment variable
 export COURSE_ID=DevOpsBootcampElevation
 
-# Check if the file .token exists in the home directory
-if [[ ! -f ~/.token ]]; then
-    touch ~/.token
-fi
-
 : '
 stat: Is used to display information about the file
 -c "%a": Specifies the format for the output. "%a" represents the file permissions in octal format.
@@ -17,12 +12,12 @@ stat: Is used to display information about the file
 # Check the permissions
 permissions=$(stat -c %a ~/.token)
 
-if [ "$permissions" != "600" ]; then
+if [ "$permissions" -ne  600 ]; then
     echo "Warning: .token file has too open permissions"
 fi
 
 # Set the default permissions of newly created files to read and write for the user only
-umask 0077
+umask 0006
 
 # Add /home/<username>/usercommands to the end of the PATH environment variable
 export PATH=$PATH:/home/$USER/usercommands
