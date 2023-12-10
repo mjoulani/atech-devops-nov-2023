@@ -1,4 +1,3 @@
-  GNU nano 6.2                                     .bash_profile
 #!/bin/bash
 
 echo "Hello $USER"
