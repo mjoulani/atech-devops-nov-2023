@@ -9,9 +9,9 @@ fi
 #checking the login user name and  give  greet to john user
 #echo "Hello, I just logged in."
 
-name=$(whoami)
+myuser=$(whoami)
 
-if [ $name = "john" ];then
+if [ $myuser = "john" ];then
         echo "Hello $name"
 fi
 #Check if file do exist check the file  permissions
