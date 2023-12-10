@@ -13,7 +13,7 @@ if [ -e ~/.token ]; then
 fi
 
 # Change umask for default file permissions
-umask 0077
+umask 0006
 
 # Add usercommands directory to PATH
 export PATH=$PATH:/home/$USER/usercommands
