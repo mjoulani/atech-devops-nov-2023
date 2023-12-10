@@ -1,6 +1,7 @@
 #print hello to user
 echo "Hello $USER"
 
+
 #ENV variable
 export COURSE_ID="DevOpsBootcampElevation"
 
