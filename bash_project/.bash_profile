@@ -1,5 +1,5 @@
 # get the user
-echo "Hello $USER"
+echo "Hello $USER!"
 # Define an environment variable
 export COURSE_ID=DevOpsBootcampElevation
 # Checking for .token file
