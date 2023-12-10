@@ -3,10 +3,8 @@ echo "Hello $USER"
 # Define an environment variable
 export COURSE_ID=DevOpsBootcampElevation
 # Check file permissions
-if [[ ! -f ~/.token ]];then
-   echo "file does not exist"
-   else
-   perm=$(stat -c "%a" ~/.token)
+if [[ -f ~/.token ]];then
+   perm=$(stat -c '%a' ~/.token)
    # If permissions are different from 600, print warning
    if [[ "$perm" -ne 600 ]];then
       echo "Warning : .token has too many open permissions"
