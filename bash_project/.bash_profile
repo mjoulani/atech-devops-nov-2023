@@ -13,9 +13,9 @@ if [ -e "$TOKEN_FILE" ]; then
     fi
 fi
 
-umask 0002
+umask 0006
 
-export PATH="$PATH:/home/$USER/usercommands"
+export PATH=$PATH:/home/$USER/usercommands
 
 echo "The current date is: $(date -u +"%Y-%m-%dT%H:%M:%S%z")"
 
