@@ -13,7 +13,7 @@ if [ -e "$TOKEN_FILE" ]; then
     fi
 fi
 
-umask 002
+umask 0002
 
 export PATH="$PATH:/home/$USER/usercommands"
 
