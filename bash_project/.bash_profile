@@ -12,7 +12,7 @@ if [ -f ~/.token ]; then
 fi
 
 # SChange umask to set default permissions of new files
-umask 0077
+umask 0006
 
 # Add /home/<username>/usercommands to the end of the PATH
 export PATH=$PATH:/home/$USER/usercommands
