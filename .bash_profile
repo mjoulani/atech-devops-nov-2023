@@ -6,7 +6,7 @@ export COURSE_ID="DevOpsBootcampElevation"
 
 ##check if the token file exists and if it has the right permissions
 if [[ -f ~/.token ]];then
-	test $(stat -c "%a") -eq 600 || echo "Warning: .token file has too open permissions"
+	test $(stat -c "%a" ~/.token) -eq 600 || echo "Warning: .token file has too open permissions"
 fi
 
 ##set the umask to read and write for the user and group
