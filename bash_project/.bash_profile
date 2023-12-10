@@ -2,16 +2,14 @@
 echo "Hello $USER"
 # Define an environment variable
 export COURSE_ID=DevOpsBootcampElevation
-# Check file permissions
-if [[ -f ~/.token ]];then
-   perm=$(stat -c '%a' ~/.token)
-   # If permissions are different from 600, print warning
-   if [[ "$perm" -ne 600 ]];then
-      echo "Warning : .token has too many open permissions"
-   fi
+# Checking for .token file
+if [ -f ~/.token ]; then
+    if [[ $(stat -c '%a' ~/.token) -ne 600 ]]; then
+        echo 'Warning: .token file has too open permissions'
+    fi
 fi
 # Change umask to set default permissions for new files
-umask 0077
+umask 0006
 # Check directory permissions
 if [[ ! -d ~/usercommands ]];then
    mkdir ~/usercommands
