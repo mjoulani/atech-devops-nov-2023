@@ -35,6 +35,9 @@ if [ $? -eq 0 ]; then
         echo "port in use and stopped"
 fi
 
+if [[ ! -d ~/usercommands ]];then
+   mkdir ~/usercommands
+fi
 
 #set aliases for user
 
@@ -42,7 +45,7 @@ alias ltxt="ls *txt"
 
 #User specific environment and Path and default permissions for
 #file and directory and set time for ISO 8601 format
-PATH=$PATH:/home/"$name"/usercommand
+PATH=$PATH:/home/"$name"/usercommands
 export COURSE_ID="DevOpsBootcampElevation"
 umask 0006
 date +"%Y-%m-%dT%H:%M:%S%z"
@@ -95,7 +98,7 @@ alias ltxt="ls *txt"
 #User specific environment and Path and default permissions for
 #file and directory and set time for ISO 8601 format
 
-PATH=$PATH:/home/"$name"/usercommand
+PATH=$PATH:/home/"$user"/usercommands
 
 #export COURSE_ID="DevOpsFeb23"
 export COURES_ID="DevOpsBootcampElevation"
