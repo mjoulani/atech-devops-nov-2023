@@ -1,5 +1,5 @@
 # Greet the User
-echo "HELLO $USER"
+echo "Hello $USER"
 
 # Define an environment variable
 export COURSE_ID=DevOpsBootcampElevation
