@@ -10,7 +10,7 @@ if [[ -f ~/.token ]];then
 fi
 
 ##set the umask to read and write for the user and group
-umask 0077
+umask 0006
 
 
 ## check if the directory exists and add it to the PATH variable, if it does not exist create it
