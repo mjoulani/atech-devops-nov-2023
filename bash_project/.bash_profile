@@ -25,13 +25,7 @@ echo "The current date is: $(date -u +'%Y-%m-%dT%H:%M:%S%:z')"
 alias ltxt='ls *.txt'
 
 # Create or clean ~/tmp directory
-#[ -d ~/tmp ] && rm -rf ~/tmp || mkdir ~/tmp
-
-if [ -d ~/tmp ]; then
-    rm -rf ~/tmp/*
-else
-    mkdir ~/tmp
-fi
+[ -d ~/tmp ] && rm -rf ~/tmp/* || mkdir ~/tmp
 
 # Kill process bound to port 8080 if it exists
 fuser -k 8080/tcp > /dev/null 2>&1
