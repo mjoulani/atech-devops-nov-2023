@@ -12,13 +12,15 @@ function print_test_case {
   printf "\n\n======================================\n%s\n======================================\n\n" "$1"
 }
 
+
 # delete myuser if exists
 rm -f -r /home/myuser
 if id -u myuser &> /dev/null; then
   userdel myuser
 fi
 
-sudo cat bash_project/.bash_profile > /etc/skel/.bash_profile
+sudo rm -r /etc/skel/.bash_profile
+sudo cp bash_project/.bash_profile   /etc/skel/.bash_profile
 
 adduser myuser --gecos "" --disabled-password
 echo "myuser:$USER_PASS" | chpasswd
