@@ -1,5 +1,5 @@
 USER_NAME=$(whoami)
-echo "hello ${USER_NAME}"
+echo "Hello ${USER_NAME}"
 
 export COURSE_ID='DevOpsBootcampElevation'
 
