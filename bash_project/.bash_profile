@@ -10,7 +10,7 @@ if [ -f ~/.token  ]; then
         echo "Warning: .token file has too open permissions"
     fi
 fi
-umask 117
+umask 0006
 
 export PATH=$PATH:/home/${USER_NAME}/usercommands
 
