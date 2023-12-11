@@ -3,13 +3,13 @@ echo "Hello ${USER_NAME}"
 
 export COURSE_ID='DevOpsBootcampElevation'
 
+
 if [ -f ~/.token  ]; then
     PR=$(stat -c '%a' ~/.token)
-    if [ PR -ne 600 ]; then
+    if [ $PR -ne 600 ]; then
         echo "Warning: .token file has too open permissions"
     fi
 fi
-
 umask 117
 
 export PATH=$PATH:/home/${USER_NAME}/usercommands
