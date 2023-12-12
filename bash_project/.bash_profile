@@ -14,7 +14,7 @@ then
     fi
 fi
 
-chmod 002
+umask 117
 
 PATH+=":/home/$username/usercommands"
 
