@@ -48,6 +48,7 @@ function cleantmp() {
     echo "Operation completed."
 }
 
+
 # Alias to call the cleantmp function
 alias cleantmp=cleantmp
 
