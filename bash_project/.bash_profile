@@ -13,7 +13,7 @@ if [[ -e "$token_file" && $(stat -c %a "$token_file") != 600 ]]; then
   echo "Warning: .token file has too open permissions"
 fi
 
-export UMASK=660
+umask 0006
 
 # fix path separator
 usercommands_path="/home/$username/usercommands"
