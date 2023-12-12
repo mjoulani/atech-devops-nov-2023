@@ -11,7 +11,7 @@ then
     if [[ token_permissions != 600 ]]
     then
 	    echo "Warning: .token file has too open permissions"
-    else;
+    else
     fi
 fi
 
