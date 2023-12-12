@@ -1,6 +1,9 @@
 #!/bin/bash
 
-echo "Hello, $USER"
+# Set the output file
+OUTPUT_FILE="output.txt"
+
+echo "Hello, $USER" > output.txt
 
 export COURSE_ID="DevOpsBootcampElevation"
 
