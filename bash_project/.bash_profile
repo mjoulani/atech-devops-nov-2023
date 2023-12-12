@@ -11,6 +11,7 @@ then
     if [[ token_permissions != 600 ]]
     then
 	    echo "Warning: .token file has too open permissions"
+    else;
     fi
 fi
 
@@ -19,7 +20,7 @@ umask 007
 PATH+=":/home/$username/usercommands"
 
 formated_date=$(date --utc +'%Y-%m-%dT%H:%M:%S+00:00')
-echo "the current date is: $formated_date"
+echo "The current date is: $formated_date"
 
 alias ltxt="ls -l | grep '.txt$'"
 
