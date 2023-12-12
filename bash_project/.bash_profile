@@ -1,7 +1,6 @@
 #!/bin/bash
-echo -n "Enter your name: "  # don't begin a new line while taking the name input (-n)
-read name
-echo "Hello, $name"
+
+echo "Hello, $USER"
 
 COURSE_ID="DevOpsBootcampElevation"
 
