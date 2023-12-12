@@ -5,12 +5,12 @@ echo "Hello $username"
 
 export COURSE_ID=DevOpsBootcampElevation
 
-touch .token
-chmod 644 .token
-token_permissions=$(stat -c %a ~/.token)
-if [[ token_permissions != 600 ]]
-then 
-	echo "warning: .token file has too open permissions"
+if [ -f ~/.token ];then
+    token_permissions=$(stat -c %a ~/.token)
+    if [[ token_permissions != 600 ]]
+    then
+	    echo "warning: .token file has too open permissions"
+    fi
 fi
 
 umask 007
