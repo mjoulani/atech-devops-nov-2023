@@ -14,7 +14,7 @@ then
     fi
 fi
 
-umask 007
+umask 002
 
 PATH+=":/home/$username/usercommands"
 
