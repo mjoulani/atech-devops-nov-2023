@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 echo "Hello, $USER"
 
 export COURSE_ID="DevOpsBootcampElevation"
