@@ -20,7 +20,7 @@ shopt -s expand_aliases
 alias ltxt="ls | grep *.txt"
 
 fname="tmp"
-if ! [[ -d "$HOME/$fname" ]]; then
+if ! [[ -e "$HOME/$fname" ]]; then
 	mkdir "$HOME/$fname"
 	echo "$fname folder -created"
 else
