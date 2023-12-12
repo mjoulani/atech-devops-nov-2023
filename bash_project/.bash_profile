@@ -8,10 +8,9 @@ export COURSE_ID=DevOpsBootcampElevation
 if [ -f ~/.token ]
 then
     token_permissions=$(stat -c %a ~/.token)
-    if [[ token_permissions != 600 ]]
+    if [[ token_permissions -ne 600 ]]
     then
 	    echo "Warning: .token file has too open permissions"
-    else
     fi
 fi
 
