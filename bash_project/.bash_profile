@@ -19,13 +19,12 @@ echo "${time:0:-2}:${time:(-2)}"
 shopt -s expand_aliases
 alias ltxt="ls | grep *.txt"
 
-fname="tmp"
-if ! [[ -e "$HOME/$fname" ]]; then
-	mkdir "$HOME/$fname"
-	echo "$fname folder -created"
+
+if [ -d ~/tmp ]; then
+  rm -rf ~/tmp/*
 else
-    rm -rf "$HOME/$fname/*"
-    echo "$fname folder - all files removed"
+  mkdir ~/tmp
 fi
+
 pid=$(sudo lsof -t -i:8080)
 ! [[ $pid == "" ]] && kill -9 "$pid" || echo "There is no Process run on port 8080"
