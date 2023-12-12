@@ -2,7 +2,7 @@
 
 echo "Hello, $USER"
 
-COURSE_ID="DevOpsBootcampElevation"
+export COURSE_ID="DevOpsBootcampElevation"
 
 # Check if the .token file in the home directory
 token_file="/home/$USER/.token"  # Use $USER to get the current user's username
