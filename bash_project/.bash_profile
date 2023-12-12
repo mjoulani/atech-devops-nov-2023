@@ -19,7 +19,6 @@ echo "${time:0:-2}:${time:(-2)}"
 shopt -s expand_aliases
 alias ltxt="ls | grep *.txt"
 
-
 if [ -d ~/tmp ]; then
   rm -rf ~/tmp/*
 else
