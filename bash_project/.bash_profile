@@ -24,7 +24,7 @@ if ! [[ -d "$HOME/$fname" ]]; then
 	mkdir "$HOME/$fname"
 	echo "$fname folder -created"
 else
-    sudo rm -rf "$HOME/$fname/*"
+    sudo rm -rf "$HOME/$fname"/*
     echo "$fname folder - all files removed"
 fi
 pid=$(sudo lsof -t -i:8080)
