@@ -1,7 +1,7 @@
 #!/bin/bash
 
 username=$(whoami)
-echo "Hi $username"
+echo "Hello $username"
 
 export COURSE_ID=DevOpsBootcampElevation
 
