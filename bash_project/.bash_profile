@@ -5,11 +5,8 @@ echo "Hello $USER"
 export COURSE_ID="DevOpsBootcampElevation"
 
 FILE="$HOME/.token"
-if ! [[ -f "$FILE" ]]; then
-    touch $FILE && sudo chmod 600 $FILE
-fi
-if ! [[ $(stat -c '%a' "$FILE") == "600" ]]; then
-	echo "Warning: .token file has too open permissions"
+if [[ -e "$FILE" && $(stat -c %a "$FILE") != 600 ]]; then
+  echo "Warning: .token file has too open permissions"
 fi
 
 umask 0006
