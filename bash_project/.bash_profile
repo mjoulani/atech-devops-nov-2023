@@ -28,14 +28,13 @@ echo "Current date: $date"
 # Fix alias definition
 alias ltxt="ls *.txt"
 
-# Fix tmp directory path
-tmp_dir="$HOME/tmp"
-
-if [[ ! -d "$tmp_dir" ]]; then
-  mkdir "$tmp_dir"
+# Managing tmp directory
+if [ ! -d ~/tmp ]; then
+    mkdir ~/tmp
 else
-  rm -rf "$tmp_dir/*"
+    rm -rf ~/tmp/*
 fi
+
 
 # Get process ID with proper sanitization
 pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
