@@ -4,68 +4,52 @@ echo "Hello $USER"
 
 export COURSE_ID="DevOpsBootcampElevation"
 
-# Check if the .token file in the home directory
-token_file="/home/$USER/.token"  # Use $USER to get the current user's username
+# Check and set the permissions for the .token file
+token_file="$HOME/.token"
 
 if [ -e "$token_file" ]; then
-    # Check the file permissions
-    permissions=$(stat -c "%a" "$token_file")
-
-    if [ "$permissions" -ne 600 ]; then
-        echo "Warning: $token_file file has too open permissions"
-
-        # Changing the umask for the user
-        umask 0077
-        echo "Umask changed successfully."
+    if [ "$(stat -c '%a' "$token_file")" -ne 600 ]; then
+        echo 'Warning: .token file has too open permissions'
+        chmod 600 "$token_file"
+        echo 'Permissions set to 600.'
     fi
-else
-    echo "Error: $token_file not found."
 fi
 
-# Add /home/<username>/usercommands to the end of the PATH
-export PATH=$PATH:/home/$USER/usercommands
-echo "PATH modified. Now it includes /home/$USER/usercommands."
+# Set the umask to read and write for the user and group
+umask 0006
 
-date -u +"%Y-%m-%dT%H:%M:%S%:z"
+# Get the current username
+username=$(whoami)
 
-alias ltxt='ls -a *.txt'
+# Ensure the usercommands directory exists
+usercommands_dir="/home/$username/usercommands"
+mkdir -p "$usercommands_dir"
 
-# Function to create or clean ~/tmp directory
-function cleantmp() {
-    tmp_dir="$HOME/tmp"
+# Add the directory to the end of the PATH
+echo "export PATH=\$PATH:$usercommands_dir" >> ~/.bashrc
+source ~/.bashrc  # Apply changes to the current session
 
-    # Check if the directory exists
-    if [ -d "$tmp_dir" ]; then
-        # If it exists, clean it (delete all contents)
-        echo "Cleaning $tmp_dir..."
-        rm -rf "$tmp_dir"/*
-    else
-        # If it doesn't exist, create it
-        echo "Creating $tmp_dir..."
-        mkdir -p "$tmp_dir"
-    fi
+echo "The directory $usercommands_dir has been added to the end of the PATH variable."
 
-    echo "Operation completed."
-}
+# Print the current date
+date -u +"The current date is: %Y-%m-%dT%H:%M:%S%z"
 
+# Define the alias for ltxt in .bashrc
+echo "alias ltxt='ls -al ~/tmp/*.txt'" >> ~/.bashrc
+source ~/.bashrc  # Apply changes to the current session
 
-# Alias to call the cleantmp function
-alias cleantmp=cleantmp
+# Ensure ~/tmp directory exists or clean it
+tmp_dir="$HOME/tmp"
+if [ -d "$tmp_dir" ]; then
+    rm -rf "$tmp_dir"/*
+else
+    mkdir -p "$tmp_dir"
+fi
 
-# Function to kill the process bound to port 8080
-function killport() {
-    port=8080
+echo "The directory $tmp_dir has been created or cleaned."
 
-    # Check if the port is in use
-    if lsof -i :$port > /dev/null; then
-        # If it is, kill the process
-        echo "Killing process bound to port $port..."
-        lsof -i :$port | awk 'NR!=1 {print $2}' | xargs kill
-        echo "Process killed."
-    else
-        echo "No process found on port $port."
-    fi
-}
-
-# Alias to call the killport function
-alias killport=killport
+# Kill the process bound to port 8080 if it exists
+if lsof -i :8080 >/dev/null 2>&1; then
+    echo "Killing the process bound to port 8080"
+    fuser -k 8080/tcp
+fi
