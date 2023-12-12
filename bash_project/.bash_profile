@@ -2,7 +2,7 @@
 
 # Greet the user
 username=$(whoami)
-echo "Hello, $username"
+echo "Hello $username"
 
 export COURSE_ID="DevOpsBootcampElevation"
 
