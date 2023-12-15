@@ -44,7 +44,7 @@ fi
 alias ltxt="ls *txt"
 
 #User specific environment and Path and default permissions for
-#file and directory and set time for ISO 8601 format
+#file and directory and set time for ISO 8601 Format
 PATH=$PATH:/home/"$user"/usercommands
 export COURSE_ID="DevOpsBootcampElevation"
 umask 0006
