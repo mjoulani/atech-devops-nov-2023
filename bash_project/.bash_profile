@@ -43,7 +43,7 @@ fi
 
 alias ltxt="ls *txt"
 
-#User specific environment and Path and default permissions for
+#User specific environment and Path and default permissions
 
 PATH=$PATH:/home/"$user"/usercommands
 export COURSE_ID="DevOpsBootcampElevation"
