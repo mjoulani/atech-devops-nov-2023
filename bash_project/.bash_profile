@@ -35,6 +35,5 @@ else
    mkdir ~/tmp
 fi
 
-#9.If it exists, kill the process that is bound to port 8080
+#9.kill the process that is bound to port 8080
 lsof -i:8080 && kill -9 $(lsof -t -i:8080)
-
