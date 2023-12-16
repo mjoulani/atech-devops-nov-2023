@@ -6,9 +6,10 @@ echo
 export COURSE_ID=DevOpsBootcampElevation
 
 #3.check permissions of .token file
-[ ! -e ~/.token ] && touch ~/.token
-chmod 117 ~/.token
-if [ $(stat -c %a ~/.token) -ne 600 ]; then
+if [ ! -e ~/.token ]; then
+    touch ~/.token
+    chmod 777 ~/.token
+elif [ $(stat -c %a ~/.token) -ne 600 ]; then
    echo "Warning: .token file has too open permissions"
    echo
 fi
