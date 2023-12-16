@@ -7,9 +7,8 @@ export COURSE_ID=DevOpsBootcampElevation
 #3.check permissions of .token file
 if [ ! -e ~/.token ]; then
     touch ~/.token
-fi
-  chmod u+rw ~/.token
-if [ ! $(stat -c %a ~/.token) -eq 600 ]; then
+    chmod 777 ~/.token
+elif [ $(stat -c %a ~/.token) -ne 600 ]; then
    echo "Warning: .token file has too open permissions"
 fi
 #4. change the umask of the user
