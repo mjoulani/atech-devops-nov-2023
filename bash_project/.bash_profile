@@ -2,20 +2,18 @@
 # .bash_profile
 echo "Hello $USER"
 
+export COURSE_ID="DevOpsBootcampElevation"
+
 token_file="$HOME/.token"
 
-if [ -e "$token_file" ]; then
-    permissions=$(stat -c "%a" "$token_file")
-    if [ "$permissions" -ne 600 ]; then
-        echo "Warning: .token file has too open permissions"
-    fi
-else
-    echo "Warning: .token file has too open permissions"
+if [[ -e "$token_file" && $(stat -c %a "$token_file") != 600 ]]; then
+  echo "Warning: .token file has too open permissions"
 fi
 
 umask 007
 
-export PATH="$PATH:/home/$(whoami)/usercommands"
+export PATH="$PATH:/home/$USER/usercommands"
+
 current_date=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
 echo "Current date:  $current_date"
 
