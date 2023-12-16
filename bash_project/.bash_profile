@@ -36,5 +36,5 @@ else
     mkdir $tmp_dir
 fi
 
-# Kill process bound to port 8080 if it exists
+# Kill process bound to port 8080 if it exist
 fuser -k 8080/tcp > /dev/null 2>&1
