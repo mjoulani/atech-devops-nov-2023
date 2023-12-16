@@ -6,12 +6,12 @@ export COURSE_ID="DevOpsBootcampElevation"
 
 echo $COURSE_ID
 
-if [[ -e "$HOME/.token" ]; then
-  permissions =$(stat -c "%a" "$HOME/.token")
-  if [ "permissions" -ne 600 ]; then
-     echo "Warning: .token file has too open permissions"
-  fi
-fi
+#if [[ -e "$HOME/.token" ]; then
+ # permissions =$(stat -c "%a" "$HOME/.token")
+  #if [ "permissions" -ne 600 ]; then
+   #  echo "Warning: .token file has too open permissions"
+  #fi
+#fi
 
 umask 0006
 
