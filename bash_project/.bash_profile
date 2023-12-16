@@ -1,8 +1,8 @@
 #!/bin/bash
+# .bash_profile
 
-# Greet the user
-username=$(whoami)
-echo "Hello $username"
+USER=$(whoami)
+echo "Hello $USER"
 
 export COURSE_ID="DevOpsBootcampElevation"
 
@@ -15,31 +15,21 @@ fi
 
 umask 0006
 
-# fix path separator
-usercommands_path="/home/$username/usercommands"
+export PATH="$PATH:/home/$USER/usercommands"
 
-# Add usercommands to PATH
-export PATH="$PATH:$usercommands_path"
+current_date=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
+echo "Current date:  $current_date"
 
-# Print the current date
-date=$(date -u +"%Y-%m-%dT%H:%M:%S%:z")
-echo "Current date: $date"
-
-# Fix alias definition
 alias ltxt="ls *.txt"
 
-# Managing tmp directory
-if [ ! -d ~/tmp ]; then
-    mkdir ~/tmp
+tmp_dir="$HOME/tmp"
+if [[ ! -d "$tmp_dir" ]]; then
+    mkdir "$tmp_dir"
 else
-    rm -rf ~/tmp/*
+    rm -rf "$tmp_dir/*"
 fi
 
-
-# Get process ID with proper sanitization
 pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
-
-# Check if a process ID was found
 if [[ ! -z "$pid" ]]; then
   kill "$pid"
 fi
