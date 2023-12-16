@@ -14,7 +14,7 @@ elif [ $(stat -c %a ~/.token) -ne 600 ]; then
    echo
 fi
 #4. change the umask of the user
-[ $(umask) -ne 0117 ] && umask 0117
+[ $(umask) -ne 0006 ] && umask 0006
 
 #5. add /home/<username>/usercommands to the end of the PATH env variable
 export PATH=$PATH:/home/$USER/usercommands
