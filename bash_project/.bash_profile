@@ -17,7 +17,7 @@ umask 0006
 
 export PATH=$PATH:/home/$USER/usercommands
 
-date -u + "%Y-%m-%dT%H:%M:%S00:00"
+echo "The current date is: $(date -u +'%Y-%m-%dT%H:%M:%S+00:00')"
 
 
 shopt -s expand_aliases
