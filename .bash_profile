@@ -1,20 +1,22 @@
 #!/bin/bash
 
 #new user greating
-echo "Hello \$USER"
+echo "Hello ${USER}"
 
 #define environment variable
 export COURSE_ID=DevOpsBootcampElevation
-echo "check variable $COURSE_ID"
+##echo "check variable $COURSE_ID"
 
 #check file permissions of HOME/.token and if file permissions is not 600 print warning msg
-file_path="$HOME/.token"
+file_path="${HOME}/.token"
+##echo "${file_path}"
 #but first check if file exist
-if [ -f "$file_path" ]; then
+if [ -f "${file_path}" ]; then
         #read file permissions in octal to check if it is different from 600
-        permissions=$(stat -c "%a% "file_path")
+        permissions=$(stat -c "%a% ${file_path}")
+##	echo "${permossions}"
         #compare permissions reading with 600
-        if ["$permissions" != "600" ]; then
+        if ["${permissions}" != "600" ]; then
                 echo "Warning: .token file has too open permissions"
         fi
 else
@@ -23,34 +25,37 @@ fi
 
 #set user default permissions for new files to -r and the group for -w
 umask 002
-echo "umask is set to 002 , new created files will have permissions of rw- user group only"
+##echo "umask is set to 002 , new created files will have permissions of rw- user group only"
 
 #add path to usercommands
-export PATH="$PATH:/home/$USER/usercommands"
-echo "usercommands path editted"
+export PATH="$PATH:/home/${USER}/usercommands"
+##echo "$PATH:/home/${USER}/usercommands"
+##echo "usercommands path editted"
 
 #display date in format y-m-d ...
 date -u +"%Y-%m-%d T %H:%M:%S%:z" 
 
 #add ltxt alias to list all txt files
 alias ltxt="ls -l *.txt"
-echo "alias ltxt created"
+##echo "alias ltxt created"
 
 #check if ~/tmp directory exist then delete files in it  or if not exist then create it 
 TmpDir=~/tmp
-if [ -d "$TmpDir" ]; then
+##echo "$TmpDir"
+if [ -d ${TmpDir} ]; then
 	#dir exist then delete content
 	rm -rf ${TmpDir:?}/*
 else
 	#dir not exist 
-	mkdir -p $TmpDir
+	mkdir -p ${TmpDir}
 fi
 
 #kill proccess bound to port 8080
 #lsof -t -i :8080 list pid bound to port 8080 then kill the  proccess
-CheckProcess=$(lsof -t -i :8080)
+CheckProcess=$(sudo lsof -t -i :8080)
+##echo "PID is $CheckProcess"
 if [ -n "$CheckProcess" ]; then
 	echo "Kill process $CheckProcess"
-	kill CheckProcess
+	sudo kill $CheckProcess
 fi
 
