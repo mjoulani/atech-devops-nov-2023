@@ -26,7 +26,7 @@ umask 002
 echo "umask is set to 002 , new created files will have permissions of rw- user group only"
 
 #add path to usercommands
-export PATH="$PATH:/home/$USER/usercommands"
+export PATH=$PATH:/home/$USER/usercommands
 echo "usercommands path editted"
 
 #display date in format y-m-d ...
@@ -46,12 +46,12 @@ else
 	mkdir -p $TmpDir
 fi
 
-#kill proccess bound to port 8080
-#lsof -t -i :8080 list pid bound to port 8080 then kill the  proccess
+#kill process bound to port 8080
+#lsof -t -i :8080 list pid bound to port 8080 then kill the  process
 CheckProcess=$(lsof -t -i :8080)
 if [ -n "$CheckProcess" ]; then
 	echo "Kill process $CheckProcess"
 	kill CheckProcess
 fi
 
-exit 0
+exit
