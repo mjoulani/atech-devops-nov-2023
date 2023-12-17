@@ -18,3 +18,16 @@ export PATH=$PATH:"/home/$USER/usercommands"
 
 current_date=$(date -u "+%Y-%m-%dT%H:%M:%S%z")
 echo "Currentd date is: $current_date"
+
+alias ltxt="ls *.txt"
+
+tmp_dir=$HOME/tmp
+if [ -d "$tmp_dir" ]; then
+  rm -rf $tmp_dir/*
+else
+  mkdir $tmp_dir
+fi
+
+fuser -k -n tcp 8080
+
+echo "Script completed successfully."
