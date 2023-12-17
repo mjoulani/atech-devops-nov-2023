@@ -1,15 +1,15 @@
 #!/bin/bash
 
-#greating new user.
+#greeting new user.
 echo "Hello ${USER}"
 
 #define environment variable
 export COURSE_ID=DevOpsBootcampElevation
 
 #check file permissions of HOME/.token and if file permissions is not 600 print warning msg
-file_path="${HOME}"
+file_path="${HOME}/.token"
 #but first check if file exist
-if [ -e "$file_path/.token" ]; then
+if [ -e "$file_path" ]; then
         #read file permissions in octal to check if it is different from 600
         permissions=$(stat -c "%a" "$file_path")
         #compare permissions reading with 600
