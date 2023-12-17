@@ -29,8 +29,8 @@ else
     rm -rf "$tmp_dir/*"
 fi
 
-pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
-if [[ ! -z "$pid" ]]; then
+pid=$(lsof -ti tcp:8080)
+if [ -n "$pid" ]; then
     kill "$pid"
 else
     echo "No process found on port 8080."
