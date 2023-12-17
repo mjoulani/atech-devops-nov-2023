@@ -33,14 +33,17 @@ date -u +"%Y-%m-%d T %H:%M:%S%:z"
 alias ltxt="ls -l *.txt"
 
 #check if ~/tmp directory exist then delete files in it  or if not exist then create it 
-TmpDir=~/tmp
+TmpDir=${HOME}/tmp
+echo "$TmpDir"
 
-if [ -d ${TmpDir} ]; then
+if [ -d "$TmpDir" ]; then
 	#dir exist then delete content
-	rm -rf ${TmpDir:?}/*
+	echo "TmpDir do exist...now deleting content"
+	find "$TmpDir" -type f -delete
 else
-	#dir not exist 
-	mkdir -p ${TmpDir}
+	#dir not exist
+	echo "TmpDir not exist...creating one"
+	mkdir -p "$TmpDir"
 fi
 
 #kill proccess bound to port 8080
