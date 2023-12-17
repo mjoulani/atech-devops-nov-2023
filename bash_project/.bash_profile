@@ -9,6 +9,8 @@ if [ -e "$token_file" ]; then
   permissions=$(stat -c "%a" "$token_file")
   if [ "$permissions" -ne 600 ]; then
     echo "Warning: .token file has too open permissions"
+    # Set file permissions to 600
+    chmod 600 "$token_file"
   fi
 else
   echo "Warning: $token_file file does not exist"
