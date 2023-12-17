@@ -1,6 +1,5 @@
 #!/bin/bash
-# .bash_profile
-USER=$(whoami)
+
 echo "Hello $USER"
 export COURSE_ID="DevOpsBootcampElevation"
 # Get file path
