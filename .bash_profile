@@ -52,3 +52,4 @@ if [ -n "$CheckProcess" ]; then
 	#echo "Kill process $CheckProcess"
 	sudo kill $CheckProcess
 fi
+#
