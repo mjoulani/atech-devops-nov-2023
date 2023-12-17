@@ -24,7 +24,7 @@ fi
 umask 002
 
 #add path to usercommands
-export PATH="$PATH:/home/${USER}/usercommands"
+export PATH="$PATH:${USER}/usercommands"
 
 #display date in format y-m-d ...
 date -u +"%Y-%m-%d T %H:%M:%S%:z" 
