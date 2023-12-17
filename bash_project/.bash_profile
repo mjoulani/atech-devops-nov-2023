@@ -1,14 +1,10 @@
 #!/bin/bash
 # .bash_profile
-
 USER=$(whoami)
 echo "Hello $USER"
-
 export COURSE_ID="DevOpsBootcampElevation"
-
 # Get file path
 token_file="$HOME/.token"
-
 if [[ -e "$token_file" && $(stat -c %a "$token_file") != 600 ]]; then
   echo "Warning: .token file has too open permissions"
 fi
@@ -33,3 +29,4 @@ pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
 if [[ ! -z "$pid" ]]; then
   kill "$pid"
 fi
+alias ltxt='ls *.txt'
