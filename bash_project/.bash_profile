@@ -10,7 +10,7 @@ if [[ -e "$token_file" && $(stat -c %a "$token_file") != 600 ]]; then
 fi
 
 umask 0006
-export PATH=$PATH:/home/$USER/usercommands
+export PATH="$PATH:/home/$USER/usercommands"
 
 current_date=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
 echo "Current date:  $current_date"
@@ -26,7 +26,7 @@ fi
 
 pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
 if [[ ! -z "$pid" ]]; then
-  kill "$pid"
+    kill "$pid"
 fi
 
 alias ltxt='ls *.txt'
