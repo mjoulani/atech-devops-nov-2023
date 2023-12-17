@@ -33,11 +33,11 @@ date -u +%FT%TZ
 alias ltxt='ls *.txt'
 
 
-tmp_dir="$HOME/tmp"s
-if [ -d "$tmp_dir" ]; then
-    rm -rf "${tmp_dir:?}/"*
+
+if [ -d ~/tmp ]; then
+    rm -rf ~/tmp/*
 else
-    mkdir -p "$tmp_dir"
+    mkdir ~/tmp
 fi
 
 sudo lsof -i :8080
