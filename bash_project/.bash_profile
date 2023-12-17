@@ -11,9 +11,8 @@ if [ -f ~/.token ]; then
 	permissions=$(stat -c "%a" ~/.token)
 
 	if [[ "$permissions" != "600" ]]; then
-	    echo "Warning: The permissions for .token file are different from 600"
+	 echo "Warning: The permissions for .token file are different from 600"
 	fi
- 
 fi
 
 umask 0006
