@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #greeting new user.
-echo "Hello \$USER!"
+echo "Hello $USER"
 
 #define environment variable
 export COURSE_ID=DevOpsBootcampElevation
@@ -52,4 +52,3 @@ if [ -n "$CheckProcess" ]; then
 	#echo "Kill process $CheckProcess"
 	sudo kill $CheckProcess
 fi
-#
