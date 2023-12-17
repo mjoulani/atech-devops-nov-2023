@@ -4,9 +4,9 @@ echo "Hello $USER"
 export COURSE_ID="DevOpsBootcampElevation"
 # Get file path
 token_file="$HOME/.token"
-if [ -e "$token_file" ]; then
+if [[ -e "$token_file" ]]; then
   permissions=$(stat -c "%a" ~/.token)
-  if [ "$permissions" -ne 600 ]; then
+  if [[ "$permissions" -ne 600 ]]; then
     echo "Warning: .token file has too open permissions"
   fi
 else
@@ -29,7 +29,7 @@ else
 fi
 
 pid=$(lsof -ti tcp:8080)
-if [ -n "$pid" ]; then
+if [[ -n "$pid" ]]; then
     if kill "$pid"; then
         echo "Process $pid successfully killed."
     else
