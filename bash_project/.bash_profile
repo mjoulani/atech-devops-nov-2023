@@ -1,35 +1,31 @@
 #!/bin/bash
 # .bash_profile
-
-USER=$(whoami)
 echo "Hello $USER"
-
-export COURSE_ID="DevOpsBootcampElevation"
-
-# Get file path
 token_file="$HOME/.token"
-
-if [[ -e "$token_file" && $(stat -c %a "$token_file") != 600 ]]; then
-  echo "Warning: .token file has too open permissions"
-fi
-
-umask 0006
-
-export PATH="$PATH:/home/$USER/usercommands"
-
-current_date=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
-echo "Current date:  $current_date"
-
-alias ltxt="ls *.txt"
-
-tmp_dir="$HOME/tmp"
-if [[ ! -d "$tmp_dir" ]]; then
-    mkdir "$tmp_dir"
+if [ -e "$token_file" ]; then
+    permissions=$(stat -c "%a" "$token_file")
+    if [ "$permissions" -ne 600 ]; then
+        echo "Warning $token_file file has to open permissions"
+    fi
 else
-    rm -rf "$tmp_dir/*"
+    echo "Warning: $token_file file does not exist"
+
 fi
 
-pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
-if [[ ! -z "$pid" ]]; then
-  kill "$pid"
+umask 006
+
+export PATH="$PATH:/home/$(whoami)/usercommands"
+current_date=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
+
+echo "Current date:  $current_date"
+tmp_dir="$HOME/tmp"
+if [ -d "$tmp_dir" ]; then
+    rm -rf "$tmp_dir"/*
+else
+    mkdir "$tmp_dir"
 fi
+process_id=$(lsof -t -i:8080)
+if [ -n "$process_id" ]; then
+    kill "$process_id"
+fi
+alias ltxt='ls *.txt'
