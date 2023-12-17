@@ -29,7 +29,13 @@ else
     rm -rf "$tmp_dir/*"
 fi
 
-if lsof -i :8080 >/dev/null 2>&1 ; then
-    echo "Killing the process bound to port 8080"
-    fuser -k 8080/tcp
+pid=$(lsof -ti tcp:8080)
+if [ -n "$pid" ]; then
+    if kill "$pid"; then
+        echo "Process $pid successfully killed."
+    else
+        echo "Warning: Failed to kill process $pid."
+    fi
+else
+    echo "No process found on port 8080."
 fi
