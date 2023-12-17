@@ -20,8 +20,6 @@ export PATH="$PATH:/home/$USER/usercommands"
 current_date=$(date -u +"%Y-%m-%dT%H:%M:%S%z")
 echo "Current date:  $current_date"
 
-alias ltxt="ls *.txt"
-
 tmp_dir="$HOME/tmp"
 if [[ ! -d "$tmp_dir" ]]; then
     mkdir "$tmp_dir"
