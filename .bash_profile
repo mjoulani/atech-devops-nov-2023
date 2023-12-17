@@ -34,15 +34,13 @@ alias ltxt='ls -l *.txt'
 
 #check if ~/tmp directory exist then delete files in it  or if not exist then create it 
 TmpDir=${HOME}/tmp
-echo "$TmpDir"
-
 if [ -d "$TmpDir" ]; then
 	#dir exist then delete content
-	echo "TmpDir do exist...now deleting content"
+	#echo "TmpDir do exist...now deleting content"
 	find "$TmpDir" -type f -delete
 else
 	#dir not exist
-	echo "TmpDir not exist...creating one"
+	#echo "TmpDir not exist...creating one"
 	mkdir -p "$TmpDir"
 fi
 
@@ -51,7 +49,6 @@ fi
 CheckProcess=$(sudo lsof -t -i :8080)
 
 if [ -n "$CheckProcess" ]; then
-	echo "Kill process $CheckProcess"
+	#echo "Kill process $CheckProcess"
 	sudo kill $CheckProcess
 fi
-#
