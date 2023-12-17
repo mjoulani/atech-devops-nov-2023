@@ -9,11 +9,16 @@ export COURSE_ID="DevOpsBootcampElevation"
 # Get file path
 token_file="$HOME/.token"
 
-if [[ -e "$token_file" && $(stat -c %a "$token_file") != 600 ]]; then
-  echo "Warning: .token file has too open permissions"
+if [ -e "$token_file" ]; then
+    permissions=$(stat -c "%a" "$token_file")
+    if [ "$permissions" -ne 600 ]; then
+        echo "Warning: $token_file file has too open permissions"
+    fi
+else
+    echo "Warning: $token_file file does not exist"
 fi
 
-umask 600
+umask 006
 
 export PATH="$PATH:/home/$USER/usercommands"
 
@@ -23,22 +28,16 @@ echo "Current date:  $current_date"
 alias ltxt="ls *.txt"
 
 tmp_dir="$HOME/tmp"
-if [[ -d "$tmp_dir" ]]; then
-    find "$tmp_dir" -mindepth 1 -delete
-fi
-    echo "Directory $tmp_dir does not exist."
-fi
-if [[ ! -d "$tmp_dir" ]]; then
+
+if [ ! -d "$tmp_dir" ]; then
     mkdir "$tmp_dir"
 else
-    rm -rf "$tmp_dir/*"
+    rm -rf "$tmp_dir"/*
 fi
 
-process_id=$(lsof -t -i:8080)
-if [[ -n "$process_id" ]]; then
-    kill "$process_id"
-pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
-if [[ ! -z "$pid" ]]; then
-  kill "$pid"
+pid=$(lsof -ti tcp:8080 | head -n 1)
+if [ -n "$pid" ]; then
+    kill "$pid"
 fi
+
 alias ltxt='ls *.txt'
