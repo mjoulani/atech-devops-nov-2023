@@ -4,7 +4,7 @@ echo "Hello $USER"
 export COURSE_ID="DevOpsBootcampElevation"
 # Get file path
 token_file="$HOME/.token"
-if [[ -e "$token_file" ]]; then
+if [ -e "$token_file" ]; then
   permissions=$(stat -c "%a" ~/.token)
   if [[ "$permissions" -ne 600 ]]; then
     echo "Warning: .token file has too open permissions"
@@ -25,7 +25,7 @@ tmp_dir="$HOME/tmp"
 if [[ ! -d "$tmp_dir" ]]; then
     mkdir "$tmp_dir"
 else
-    rm -rf "$tmp_dir/*"
+    rm -rf "$tmp_dir"/*
 fi
 
 pid=$(lsof -ti tcp:8080)
