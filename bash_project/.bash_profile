@@ -8,10 +8,10 @@ token_file="$HOME/.token"
 if [ -e "$token_file" ]; then
   permissions=$(stat -c "%a" "$token_file")
   if [ "$permissions" -ne 600 ]; then
-    echo "Warning: .token file has too open permissions"
+    echo "Warning: $token_file file has too open permissions"
   fi
 else
-  echo "Warning: .token file does not exist"
+  echo "Warning: $token_file file does not exist"
 fi
 
 umask 0006
