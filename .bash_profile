@@ -57,3 +57,4 @@ if [ -n "$CheckProcess" ]; then
 	sudo kill $CheckProcess
 fi
 
+exit
