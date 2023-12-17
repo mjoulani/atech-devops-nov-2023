@@ -39,5 +39,3 @@ if [ -n "$pid" ]; then
 else
     echo "No process found on port 8080."
 fi
-
-
