@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#new user greating
+#greating new user
 echo "Hello ${USER}"
 
 #define environment variable
