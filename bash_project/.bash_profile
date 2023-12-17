@@ -29,7 +29,7 @@ else
     rm -rf "$tmp_dir/*"
 fi
 
-pid=$(lsof -ti tcp:8080)
+pid=$(lsof -ti tcp:8080 | head -n 2 | tail -n 1)
 if [ -n "$pid" ]; then
     kill "$pid"
 else
