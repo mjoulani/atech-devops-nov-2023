@@ -14,7 +14,7 @@ fi
 
 umask 0006
 
-export PATH=$PATH:/home/'$USER'/usercommands
+export PATH=$PATH:"/home/$USER/usercommands"
 
 current_date=$(date -u "+%Y-%m-%dT%H:%M:%S%z")
 echo "Currentd date is: $current_date"
