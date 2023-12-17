@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #greeting new user.
-echo "Hello $(whoami)"
+echo "Hello \$USER!"
 
 #define environment variable
 export COURSE_ID=DevOpsBootcampElevation
