@@ -30,7 +30,7 @@ export PATH="$PATH:/home/${USER}/usercommands"
 date -u +"%Y-%m-%d T %H:%M:%S%:z" 
 
 #add ltxt alias to list all txt files
-alias ltxt="ls -l *.txt"
+alias ltxt='ls -l *.txt'
 
 #check if ~/tmp directory exist then delete files in it  or if not exist then create it 
 TmpDir=${HOME}/tmp
