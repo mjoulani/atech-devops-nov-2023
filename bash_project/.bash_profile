@@ -7,7 +7,7 @@ export COURSE_ID="DevOpsBootcampElevation"
 ##check if the token file exists and if it has the right permissions
 if [[ -f ~/.token ]]
 then
-	if [[ $(stat -c "%a" ~/.token) -eq 600 ]]
+	if [[ $(stat -c "%a" ~/.token) -ne 600 ]]
 	then
 		echo "Warning: .token file has too open permissions"
 	fi
