@@ -29,7 +29,6 @@ export PATH="$PATH:/home/${USER}/usercommands"
 
 #display date in ISO format y-m-d ...
 date +'%Y-%m-%dT%H:%M:%S%z'
-#date -u +"%Y-%m-%d T %H:%M:%S%:z"
 
 #add ltxt alias to list all txt files
 alias ltxt='ls -l *.txt'
