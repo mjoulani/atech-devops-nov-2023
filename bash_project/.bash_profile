@@ -16,9 +16,10 @@ if [ -e "$file_path" ]; then
         if [ "$permissions" != "600" ]; then
                 echo "Warning: .token file has too open permissions"
         fi
-else
-        echo "The .token file does not exist in your Home directory!"
 fi
+#else
+#        echo "The .token file does not exist in your Home directory!"
+#fi
 
 #set user default permissions for new files to -r and the group for -w
 umask 002
