@@ -27,8 +27,9 @@ umask 006
 #add path to usercommands
 export PATH="$PATH:/home/${USER}/usercommands"
 
-#display date in format y-m-d ...
-date -u +"%Y-%m-%d T %H:%M:%S%:z" 
+#display date in ISO format y-m-d ...
+date +'%Y-%m-%dT%H:%M:%S%z'
+#date -u +"%Y-%m-%d T %H:%M:%S%:z"
 
 #add ltxt alias to list all txt files
 alias ltxt='ls -l *.txt'
