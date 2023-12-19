@@ -22,7 +22,7 @@ fi
 #fi
 
 #set user default permissions for new files to -r and the group for -w
-umask 002
+umask 02
 
 #add path to usercommands
 export PATH="$PATH:${USER}/usercommands"
