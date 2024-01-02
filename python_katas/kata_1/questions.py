@@ -13,12 +13,6 @@ def sum_of_element(elements):
 
 
 def versing(word):
-    if len(word) < 3:
-        return word
-    if word[-3:] == 'ing':
-        return word + 'ly'
-    else:
-        return word + 'ing'
     # 1 Kata
     #
     # Given a string 'word', if its length is at least 3, add 'ing' to its end.
@@ -62,10 +56,7 @@ def words_concatenation(words):
         :param words: list of str
         :return: Return the resulting string.
         """
-        s = ''
-        for word in words:
-            s = s + word + ' '
-        return s.strip()
+ 
     return None
 
 
