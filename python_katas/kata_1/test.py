@@ -3,11 +3,7 @@ from python_katas.kata_1 import questions
 from python_katas.utils import unittest_runner
 
 
-
 class TestSumOfElements(unittest.TestCase):
-    """
-    1 Katas
-    """
 
     def sum_of_element(elements):
         return sum(elements)
@@ -15,7 +11,6 @@ class TestSumOfElements(unittest.TestCase):
     def test_empty_list(self):
         lst = []
         self.assertEqual(questions.sum_of_element(lst), 0)
-
 
     def test_integers_list(self):
         lst = [1, 2, 3, 4, 5]
@@ -58,21 +53,22 @@ class TestWordsConcatenation(unittest.TestCase):
     """
 
     def test_daft_funk(self):
-        lyrics=['one', 'more', 'time']
+        lyrics = ['one', 'more', 'time']
         self.assertEqual(questions.words_concatenation(lyrics), 'one more time')
 
     def test_bob_marley(self):
-        lyrics=["don't", 'worry', 'about', 'a', 'thing,', 'cause', 'every', 'little', 'thing', 'is', 'gonna', 'be', 'alright']
-        self.assertEqual(questions.words_concatenation(lyrics), "don't worry about a thing, cause every little thing is gonna be alright")
+        lyrics = ["don't", 'worry', 'about', 'a', 'thing,', 'cause', 'every', 'little', 'thing', 'is', 'gonna', 'be',
+                  'alright']
+        self.assertEqual(questions.words_concatenation(lyrics),
+                         "don't worry about a thing, cause every little thing is gonna be alright")
 
     def test_dolly_parton(self):
-        lyrics=["working", "9", "to", "5"]
+        lyrics = ["working", "9", "to", "5"]
         self.assertEqual(questions.words_concatenation(lyrics), 'working 9 to 5')
 
     def test_queen(self):
-        lyrics=['we', 'are', 'the', 'champions', 'my', 'friend']
+        lyrics = ['we', 'are', 'the', 'champions', 'my', 'friend']
         self.assertEqual(questions.words_concatenation(lyrics), 'we are the champions my friend')
-
 
 
 class TestReverseWordsConcatenation(unittest.TestCase):
@@ -111,12 +107,11 @@ class TestIsUniqueString(unittest.TestCase):
         self.assertEqual(questions.is_unique_string(some_str), True)
 
 
-
-
 class TestListDiff(unittest.TestCase):
     """
     1 Katas
     """
+
     def test_sample(self):
         test_list = [1, 5, 0, 4, 1, 1, 1]
         expected = [None, 4, -5, 4, -3, 0, 0]
@@ -132,6 +127,7 @@ class TestListDiff(unittest.TestCase):
         test_list = [1]
         expected = [None]
         self.assertEqual(questions.list_diff(test_list), expected)
+
 
 class TestPrimeNumber(unittest.TestCase):
     """
@@ -167,6 +163,7 @@ class TestPalindromeNum(unittest.TestCase):
     """
     1 Katas
     """
+
     def test_pal1True(self):
         num = 1441
         self.assertTrue(questions.palindrome_num(num), "the num is palindrome but you return False")
@@ -177,11 +174,11 @@ class TestPalindromeNum(unittest.TestCase):
 
     def test_pal1False(self):
         num = 113
-        self.assertFalse(questions.palindrome_num(num),"the num is not palindrome but you return True")
+        self.assertFalse(questions.palindrome_num(num), "the num is not palindrome but you return True")
 
     def test_pal1Zero(self):
         num = 0
-        self.assertTrue(questions.palindrome_num(num)," 0 is palindrom num but you return False")
+        self.assertTrue(questions.palindrome_num(num), " 0 is palindrom num but you return False")
 
 
 class TestPairMatch(unittest.TestCase):
@@ -224,7 +221,6 @@ class TestBestStudent(unittest.TestCase):
     """
 
     def test_best_student_original_example(self):
-
         dict1 = {
             "Ben": 78,
             "Hen": 88,
@@ -270,14 +266,12 @@ class TestPrintDictAsTable(unittest.TestCase):
     1 Katas
     """
 
-
     def test_DictTable(self):
-        resutls =''
+        resutls = ''
         dict = {"Yuval": 23, "alex": 59}
         for key, value in dict.items():
             resutls += ("{:<10} {:<10}".format(key, value) + "\n")
         self.assertEqual(questions.print_dict_as_table(dict), resutls)
-
 
 
 class TestMergeDicts(unittest.TestCase):
@@ -316,6 +310,7 @@ class TestMergeDicts(unittest.TestCase):
         expected_dict = {'a': 7, 'b': 2, 'd': 2}
 
         self.assertEqual(questions.merge_dicts(dict1, dict2), expected_dict)
+
 
 class TestSevenBoom(unittest.TestCase):
     """
@@ -357,6 +352,7 @@ class TestSumOfDigits(unittest.TestCase):
     def test_1(self):
         num = "546312"
         self.assertEqual(questions.sum_of_digits(num), 21)
+
     def test_2(self):
         num = "123456789"
         self.assertEqual(questions.sum_of_digits(num), 45)
@@ -365,4 +361,5 @@ class TestSumOfDigits(unittest.TestCase):
 if __name__ == '__main__':
     import inspect
     import sys
+
     unittest_runner(inspect.getmembers(sys.modules[__name__], inspect.isclass))
