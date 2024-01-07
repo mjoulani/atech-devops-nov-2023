@@ -13,12 +13,6 @@ def sum_of_element(elements):
 
 
 def versing(word):
-    if len(word) < 3:
-        return word
-    if word[-3:] == 'ing':
-        return word + 'ly'
-    else:
-        return word + 'ing'
     # 1 Kata
     #
     # Given a string 'word', if its length is at least 3, add 'ing' to its end.
@@ -32,10 +26,13 @@ def versing(word):
     #
     # :param word: str
     # :return: Return the resulting string.
-
-
-
-    return None
+    if len(word) >= 3:
+        if word[-3:] == 'ing':
+            return word + 'ly'
+        else:
+            return word + 'ing'
+    else:
+        return word
 
 
 def words_concatenation(words):
@@ -46,37 +43,6 @@ def words_concatenation(words):
 
     For example:
     words_concatenation(['take', 'me', 'home']) returns 'take me home'
-
-    :param words: list of str
-    :return: Return the resulting string.
-    """
-    def words_concatenation(words):
-        """
-        1 Kata
-
-        Given a list of words, write a program that concatenates the words.
-
-        For example:
-        words_concatenation(['take', 'me', 'home']) returns 'take me home'
-
-        :param words: list of str
-        :return: Return the resulting string.
-        """
-        s = ''
-        for word in words:
-            s = s + word + ' '
-        return s.strip()
-    return None
-
-
-def reverse_words_concatenation(words):
-    """
-    1 Kata
-
-    Given a list of words, write a program that concatenates the words in a reverse way
-
-    For example:
-    reverse_words_concatenation(['take', 'me', 'home']) returns 'home me take'
 
     :param words: list of str
     :return: Return the resulting string.
