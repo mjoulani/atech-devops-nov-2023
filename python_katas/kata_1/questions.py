@@ -144,7 +144,11 @@ def palindrome_num(num):
     :param num: int
     :return: bool. True is palindrome, else False
     """
-    return None
+    num=str(num)
+    for i in range(len(num)):
+        if(num[i]!=num[len(num)-i-1]):
+            return False
+    return True
 
 
 def pair_match(men, women):
@@ -175,7 +179,22 @@ def pair_match(men, women):
     :param women: dict mapping name -> age
     :return: tuple (men_name, women_name) such their age absolute difference is the minimal
     """
-    return None
+
+    min=2000
+    manKey=""
+    womenKey=""
+
+
+    for key,val in men.items():
+        for key2,val2 in women.items():
+            if(abs(val-val2)<min):
+                min=abs(val-val2)
+                manKey=key
+                womenKey=key2
+
+    return (manKey,womenKey)
+
+
 
 
 def bad_average(a, b, c):
@@ -187,7 +206,7 @@ def bad_average(a, b, c):
 
     :return:
     """
-    return a + b + c / 3
+    return (a + b + c) / 3
 
 
 def best_student(grades):
@@ -210,7 +229,10 @@ def best_student(grades):
     :param grades: dict of name -> grade mapping
     :return: str. some key from the dict
     """
-    return None
+    v = list(grades.values())
+    k = list(grades.keys())
+    return k[v.index(max(v))]
+    
 
 
 def print_dict_as_table(some_dict):
@@ -239,7 +261,13 @@ def print_dict_as_table(some_dict):
     :param some_dict:
     :return:
     """
-    return None
+
+    print("Key\tValue\n-------------")
+
+    for key,val in some_dict.items():
+        print(f"{key}\t{val}")
+
+    return ""
 
 
 def merge_dicts(dict1, dict2):
@@ -259,6 +287,9 @@ def merge_dicts(dict1, dict2):
     :param dict2:
     :return:
     """
+
+    for key, value in dict2.items():
+        dict1[key] = value
     return dict1
 
 
@@ -274,7 +305,16 @@ def seven_boom(n):
     :param n: int. The last number for count for a 7-boom play
     :return: list of integers
     """
-    return None
+    lst=[]
+    for i in range(n):
+        if(i%7==0 and i>0):
+            lst.append(i)
+        else:
+            string_number = str(i)
+            for digit in string_number:
+                if(int(digit)==7):
+                    lst.append(int(digit))
+    return lst
 
 
 def caesar_cipher(str_to_encrypt):
@@ -289,7 +329,27 @@ def caesar_cipher(str_to_encrypt):
 
     :return:
     """
-    return None
+    enc=""
+    for ch in str_to_encrypt:
+        if(ch == " "):
+            enc+=ch
+        else:
+            if(ch=='x'):
+                enc+='a'
+            elif(ch=='y'):
+                enc+='b'
+            elif(ch=='z'):
+                enc+='Z'
+            elif(ch=='X'):
+                enc+='A'
+            elif(ch=='Y'):
+                enc+='B'
+            elif(ch=='Z'):
+                enc+='C'
+            else:
+                enc+=chr(ord(ch)+3)
+
+    return enc
 
 
 def sum_of_digits(digits_str):
@@ -307,31 +367,34 @@ def sum_of_digits(digits_str):
     :param digits_str: str of numerical digits only
     :return: int representing the sum of digits
     """
-    return None
+    sum=0
+    for digit in digits_str:
+        sum+=int(digit)
+    return sum
 
 
 if __name__ == '__main__':
-    # print('\nsum_of_element:\n--------------------')
-    # print(sum_of_element([1, 2, 3, 4, 5, 6]))
+    print('\nsum_of_element:\n--------------------')
+    print(sum_of_element([1, 2, 3, 4, 5, 6]))
 
-    # print('\nverbing:\n--------------------')
-    # print(versing('walk'))
-    # print(versing('swimming'))
-    # print(versing('do'))
+    print('\nverbing:\n--------------------')
+    print(versing('walk'))
+    print(versing('swimming'))
+    print(versing('do'))
 
-    # print('\nwords_concatenation:\n--------------------')
-    # print(words_concatenation(['take', 'me', 'home']))
+    print('\nwords_concatenation:\n--------------------')
+    print(words_concatenation(['take', 'me', 'home']))
 
-    # print('\nreverse_words_concatenation:\n--------------------')
-    # print(reverse_words_concatenation(['take', 'me', 'home']))
+    print('\nreverse_words_concatenation:\n--------------------')
+    print(reverse_words_concatenation(['take', 'me', 'home']))
 
-    # print('\nis_unique_string:\n--------------------')
-    # print(is_unique_string('aasdssdsederd'))
-    # print(is_unique_string('12345tgbnh'))
+    print('\nis_unique_string:\n--------------------')
+    print(is_unique_string('aasdssdsederd'))
+    print(is_unique_string('12345tgbnh'))
 
-    # print('\nlist_diff:\n--------------------')
-    # print(list_diff([1, 2, 3, 8, 77, 0]))
-    # print(list_diff([]))
+    print('\nlist_diff:\n--------------------')
+    print(list_diff([1, 2, 3, 8, 77, 0]))
+    print(list_diff([]))
 
 
     print('\nprime_number:\n--------------------')
@@ -339,51 +402,51 @@ if __name__ == '__main__':
     print(prime_number(22))
     
 
-    # print('\npalindrome_num:\n--------------------')
-    # print(palindrome_num(12221))
-    # print(palindrome_num(577))
+    print('\npalindrome_num:\n--------------------')
+    print(palindrome_num(12221))
+    print(palindrome_num(577))
 
-    # print('\npair_match:\n--------------------')
-    # print(pair_match(
-    #     {
-    #         "John": 20,
-    #         "Abraham": 45
-    #     },
-    #     {
-    #         "July": 18,
-    #         "Kim": 26
-    #     }
-    # ))
+    print('\npair_match:\n--------------------')
+    print(pair_match(
+        {
+            "John": 20,
+            "Abraham": 45
+        },
+        {
+            "July": 18,
+            "Kim": 26
+        }
+    ))
 
-    # print('\nbad_average:\n--------------------')
-    # print(bad_average(1, 2, 3))
+    print('\nbad_average:\n--------------------')
+    print(bad_average(1, 2, 3))
 
-    # print('\nbest_student:\n--------------------')
-    # print(best_student({
-    #     "Ben": 78,
-    #     "Hen": 88,
-    #     "Natan": 99,
-    #     "Efraim": 65,
-    #     "Rachel": 95
-    # }))
+    print('\nbest_student:\n--------------------')
+    print(best_student({
+        "Ben": 78,
+        "Hen": 88,
+        "Natan": 99,
+        "Efraim": 65,
+        "Rachel": 95
+    }))
 
-    # print('\nprint_dict_as_table:\n--------------------')
-    # print(print_dict_as_table({
-    #     "Ben": 78,
-    #     "Hen": 88,
-    #     "Natan": 99,
-    #     "Efraim": 65,
-    #     "Rachel": 95
-    # }))
+    print('\nprint_dict_as_table:\n--------------------')
+    print(print_dict_as_table({
+        "Ben": 78,
+        "Hen": 88,
+        "Natan": 99,
+        "Efraim": 65,
+        "Rachel": 95
+    }))
 
-    # print('\nmerge_dicts:\n--------------------')
-    # print(merge_dicts({'a': 1}, {'b': 2}))
+    print('\nmerge_dicts:\n--------------------')
+    print(merge_dicts({'a': 1}, {'b': 2}))
 
-    # print('\nseven_boom:\n--------------------')
-    # print(seven_boom(30))
+    print('\nseven_boom:\n--------------------')
+    print(seven_boom(30))
 
-    # print('\ncaesar_cipher:\n--------------------')
-    # print(caesar_cipher('Fly Me To The Moon'))
+    print('\ncaesar_cipher:\n--------------------')
+    print(caesar_cipher('Fly Me To The Moon'))
 
-    # print('\nsum_of_digits:\n--------------------')
-    # print(sum_of_digits('1223432'))
+    print('\nsum_of_digits:\n--------------------')
+    print(sum_of_digits('00232'))
