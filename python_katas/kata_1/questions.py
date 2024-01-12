@@ -109,7 +109,7 @@ def list_diff(elements):
     diff=[]
     for i in range(len(elements)):
         if(i==0):
-            diff.append("None")
+            diff.append(None)
         else:
             diff.append(elements[i]-elements[i-1])
     return diff
@@ -262,12 +262,12 @@ def print_dict_as_table(some_dict):
     :return:
     """
 
-    print("Key\tValue\n-------------")
+    print("\nKey\tValue\n-------------")
 
     for key,val in some_dict.items():
         print(f"{key}\t{val}")
 
-    return ""
+    return None
 
 
 def merge_dicts(dict1, dict2):
@@ -313,7 +313,8 @@ def seven_boom(n):
             string_number = str(i)
             for digit in string_number:
                 if(int(digit)==7):
-                    lst.append(int(digit))
+                    lst.append(int(i))
+                    break
     return lst
 
 
