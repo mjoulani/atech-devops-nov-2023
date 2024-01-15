@@ -66,7 +66,14 @@ def is_unique_string(some_str):
     :param some_str:
     :return: bool
     """
-    return None
+    def unique(s):
+        return len(set(s)) == len(s)
+
+
+    result = unique(some_str)
+    print(some_str)
+    
+    return  result
 
 
 def list_diff(elements):
