@@ -59,15 +59,15 @@ class TestIsUniqueString(unittest.TestCase):
    def test_emty_string(self):
         lst = ''
         self.assertEqual(questions.is_unique_string(lst), True)
-        
-   def test_emty_string(self):
+        pass
+   def test_unique_string(self):
         lst = 'abcd'
         self.assertEqual(questions.is_unique_string(lst), True)    
         
    def test_not_unique(self):
         lst = 'abcdd'
         self.assertEqual(questions.is_unique_string(lst), False)
-   
+        pass
    
 
 

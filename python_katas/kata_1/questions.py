@@ -52,7 +52,7 @@ def words_concatenation(words):
 
 
 
-def is_unique_string(some_str):
+def (some_str):
     """
     2 Kata
 
