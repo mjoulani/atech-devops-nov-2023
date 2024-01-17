@@ -1,16 +1,21 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+<ip-here> 
+DNS Servers: 10.0.0.2
 
 
 
 Default gateway IP
 -------------------
 <ip-here>
+Gateway: 0.0.0.0
 
 
 
 DHCP IP allocation sys-logs
 -------------------
 <logs-here>
-
+DHCPDISCOVER on ens5 to 255.255.255.255 port 67 interval 3 (xid=0xc234f531)
+DHCPOFFER of 10.0.0.183 from 10.0.0.1
+DHCPREQUEST for 10.0.0.183 on ens5 to 255.255.255.255 port 67 (xid=0x31f534c2)
+DHCPACK of 10.0.0.183 from 10.0.0.1 (xid=0xc234f531)
