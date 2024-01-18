@@ -340,7 +340,7 @@ def caesar_cipher(str_to_encrypt):
             elif(ch=='y'):
                 enc+='b'
             elif(ch=='z'):
-                enc+='Z'
+                enc+='c'
             elif(ch=='X'):
                 enc+='A'
             elif(ch=='Y'):

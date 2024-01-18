@@ -1,11 +1,18 @@
 import os
 
+
 def createfile(file):
     # isExisting = os.path.exists(file)
     f = open(os.getcwd()+"\\python_katas\\kata_1\\"+file, "a")
     f.write("Now the file has more content!\n")
     f.close()
     return None
+
+
+def get_word_value(msg):
+    return sum(ord(c)-96 for c in msg)
+
+
 
 if __name__ == '__main__':
     file="demo.txt"
@@ -22,4 +29,10 @@ if __name__ == '__main__':
         # my_file.seek(0)
 
     # Print the list of lines
-    print(lines_list)
+    # print(lines_list)
+
+    res = "".join([chr(ord(c)+1) for c in "text"]) 
+    # print(res)
+
+    print(get_word_value("day"))
+    
