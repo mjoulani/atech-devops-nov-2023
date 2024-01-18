@@ -32,15 +32,15 @@ if [ "$#" -eq  0 ]; then
     exit 5
 elif [ "$#" -eq  1 ]; then
         check_string "$1"
-        ssh -i $PATH_KEY  "$1"
+        ssh -i $KEY_PATH  "$1"
 elif [ "$#" -eq  2 ]; then
         check_string "$1"
         check_string "$2"
-        ssh -i $PATH_KEY -J  "$1" "$2"
+        ssh -i $KEY_PATH -J  "$1" "$2"
 elif [ "$#" -eq  3 ]; then
         check_string "$1"
         check_string "$2"
-        ssh -i $PATH_KEY -J "$1" "$2" $3
+        ssh -i $KEY_PATH -J "$1" "$2" $3
 else
          echo "The $0 can have only three argument"
          exit 5
