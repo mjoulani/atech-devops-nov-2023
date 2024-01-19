@@ -1,5 +1,4 @@
 import os
-
 import Python_cli_project.utils.prints as prints
 import Python_cli_project.utils.colors as colors
 
@@ -17,7 +16,7 @@ def exit_program():
 def restart_program():
     while True:
         go_again = input(
-            colors.magenta + colors.bold + "\nRestart WP Auditor" + colors.cln + colors.grey + "(y/n)? " + colors.cln).lower()
+            colors.magenta + colors.bold + "\nRestart Python Cli Project" + colors.cln + colors.grey + "(y/n)? " + colors.cln).lower()
         if go_again == 'y':
             result = True
             break
