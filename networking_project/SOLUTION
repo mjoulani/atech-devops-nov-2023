@@ -12,11 +12,11 @@ Default gateway IP
 
 DHCP IP allocation sys-logs
 
-ubuntu@ip-10-0-0-33:~$  cat /var/log/syslog | grep DHCP
-Jan 16 20:39:56 ip-10-0-0-33 dhclient[271]: Internet Systems Consortium DHCP Client 4.4.1
-Jan 16 20:39:56 ip-10-0-0-33 dhclient[271]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xbe85a546)
-Jan 16 20:39:56 ip-10-0-0-33 dhclient[271]: DHCPOFFER of 10.0.0.33 from 10.0.0.1
-Jan 16 20:39:56 ip-10-0-0-33 dhclient[271]: DHCPREQUEST for 10.0.0.33 on eth0 to 255.255.255.255 port 67 (xid=0x46a585be)
-Jan 16 20:39:56 ip-10-0-0-33 dhclient[271]: DHCPACK of 10.0.0.33 from 10.0.0.1 (xid=0xbe85a546)
+ubuntu@ip-10-0-0-249:~$ cat /var/log/syslog | grep DHCP
+Jan 19 01:41:56 ip-10-0-0-249 dhclient[275]: Internet Systems Consortium DHCP Client 4.4.1
+Jan 19 01:41:56 ip-10-0-0-249 dhclient[275]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xca62735c)
+Jan 19 01:41:56 ip-10-0-0-249 dhclient[275]: DHCPOFFER of 10.0.0.249 from 10.0.0.1
+Jan 19 01:41:56 ip-10-0-0-249 dhclient[275]: DHCPREQUEST for 10.0.0.249 on eth0 to 255.255.255.255 port 67 (xid=0x5c7362ca)
+Jan 19 01:41:56 ip-10-0-0-249 dhclient[275]: DHCPACK of 10.0.0.249 from 10.0.0.1 (xid=0xca62735c)
 
 
