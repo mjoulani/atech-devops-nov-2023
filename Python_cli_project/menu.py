@@ -1,12 +1,11 @@
 import utils.prints as prints
 import utils.menu_tools as menu
-import Python_cli_project.polindrom.polindrom as polindrom
-import concurrent.futures
+import Python_cli_project.methods.polindrom as polindrom
 
-from Python_cli_project.polindrom.armstrong import armstrong
-from Python_cli_project.polindrom.digits import digits
-from Python_cli_project.polindrom.lower import lower
-from Python_cli_project.polindrom.nationalize import nationalize
+from Python_cli_project.methods.armstrong import armstrong
+from Python_cli_project.methods.digits import digits
+from Python_cli_project.methods.lower import lower
+from Python_cli_project.methods.nationalize import nationalize
 
 white = "\033[97m"
 black = "\033[30m\033[1m"
