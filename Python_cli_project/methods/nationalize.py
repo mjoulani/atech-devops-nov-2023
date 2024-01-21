@@ -1,4 +1,3 @@
-import requests
 
 
 def nationalize(name):

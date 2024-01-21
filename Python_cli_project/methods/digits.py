@@ -1,2 +1,4 @@
-def digits(num):
-    return True
+def digits(str):
+
+
+    return str.isdigit()
