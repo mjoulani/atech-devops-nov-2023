@@ -1,16 +1,19 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+ip-10-0-0-60.ap-south-1.compute.internal
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+<0.0.0.0>
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+Jan 21 14:59:48 ubuntu dhclient[272]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xc2d1f012)
+Jan 21 14:59:48 ubuntu dhclient[272]: DHCPOFFER of 10.0.0.60 from 10.0.0.1
+Jan 21 14:59:48 ubuntu dhclient[272]: DHCPREQUEST for 10.0.0.60 on eth0 to 255.255.255.255 port 67 (xid=0x12f0d1c2)
+Jan 21 14:59:48 ubuntu dhclient[272]: DHCPACK of 10.0.0.60 from 10.0.0.1 (xid=0xc2d1f012)
 
