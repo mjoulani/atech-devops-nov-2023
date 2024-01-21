@@ -1,16 +1,21 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+ip-192-168-10-10.us-west-2.compute.internal
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+0.0.0.0/0
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+journalctl | grep -iE "dhcp.*discover|dhcp.*offer|dhcp.*request|dhcp.*ack"
+
+Jan 21 14:36:28 ip-192-168-10-10 dhclient[284]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xc6e3db4d)
+Jan 21 14:36:28 ip-192-168-10-10 dhclient[284]: DHCPOFFER of 192.168.10.10 from 192.168.10.1
+Jan 21 14:36:28 ip-192-168-10-10 dhclient[284]: DHCPREQUEST for 192.168.10.10 on eth0 to 255.255.255.255 port 67 (xid=0x4ddbe3c6)
+Jan 21 14:36:28 ip-192-168-10-10 dhclient[284]: DHCPACK of 192.168.10.10 from 192.168.10.1 (xid=0xc6e3db4d)
 
