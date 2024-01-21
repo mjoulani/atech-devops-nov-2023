@@ -25,8 +25,8 @@ case $# in
     ;;
 
   3)
-    com=$#3
-    $ssh_command ubuntu@$public_instance_ip "export KEY_PATH=Daniel-key.pem && ssh -i $KEY_PATH ubuntu@$private_instance_ip $com"
+    com=$3
+    $ssh_command ubuntu@$public_instance_ip "ssh ubuntu@$private_instance_ip $com"
     ;;
 
   *)
