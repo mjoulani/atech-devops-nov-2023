@@ -1,16 +1,19 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+<127.0.0.53>
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+<172.31.32.1>
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+<Jan 21 14:34:40 ip-172-31-40-128 dhclient[271]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x559abe18)
+Jan 21 14:34:40 ip-172-31-40-128 dhclient[271]: DHCPOFFER of 172.31.40.128 from 172.31.32.1
+Jan 21 14:34:40 ip-172-31-40-128 dhclient[271]: DHCPREQUEST for 172.31.40.128 on eth0 to 255.255.255.255 port 67 (xid=0x18be9a55)
+Jan 21 14:34:40 ip-172-31-40-128 dhclient[271]: DHCPACK of 172.31.40.128 from 172.31.32.1 (xid=0x559abe18)>
 
