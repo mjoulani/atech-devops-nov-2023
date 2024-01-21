@@ -1,6 +1,6 @@
 import unittest
 import questions
-from python_katas.utils import unittest_runner
+# from python_katas.utils import unittest_runner
 
 
 class TestSumOfElements(unittest.TestCase):
@@ -48,11 +48,17 @@ class TestWordsConcatenation(unittest.TestCase):
         self.assertEqual(questions.words_concatenation(lst), 'take me home country road', 'Should be "take me home country road"')
 
 
-class TestReverseWordsConcatenation(unittest.TestCase):
-
+class TestIsUniqueString(unittest.TestCase):
     def test_sample(self):
-        # your code here
-        pass
+        # Test when all characters are unique
+        self.assertTrue(is_unique_string('abcd'))
+
+        # test if there a repeated characters
+        self.assertFalse(is_unique_string('aaabcd'))
+
+        # Test with an empty string
+        self.assertTrue(is_unique_string(''))
+
 
 
 class TestIsUniqueString(unittest.TestCase):

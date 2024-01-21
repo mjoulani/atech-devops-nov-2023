@@ -54,19 +54,24 @@ def words_concatenation(words):
 
 def is_unique_string(some_str):
     """
-    2 Kata
+    Given a string, the function returns True if all characters in the string are unique, False otherwise.
 
-    Given a string, the function returns True if all characters in the string are unique, False otherwise
-
-    e.g
-    'abcd' -> True
-    'aaabcd' -> False
-    '' -> True      (empty string)
-
-    :param some_str:
+    :param some_str: Input string
     :return: bool
     """
-    return None
+    # set to save the the values
+    unique_chars = set()
+
+    # Iterate through each character in the string
+    for char in some_str:
+        # If the character is already in the set, it's not unique
+        if char in unique_chars:
+            return False
+        # Otherwise, add the character to the set
+        unique_chars.add(char)
+
+    # If all the characters are unique
+    return True
 
 
 def list_diff(elements):
