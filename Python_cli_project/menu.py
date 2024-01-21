@@ -117,7 +117,7 @@ while True:
         prints.print_ascii_banner("Nationalize")
         name = input("Enter the input: ")
         output = nationalize(name)
-        print(output)
+        #print(output)
         if output is None:
             if menu.restart_program():
                 continue

@@ -1,7 +1,7 @@
-
-
+import requests
 def nationalize(name):
-    url = "https://api.nationaliz.io/?name="
+    url = "https://api.nationalize.io/?name="
+   # https: // api.nationalize.io /
     data = requests.get(url+name)
     if data.status_code != 200 :return None
     newdata=data.json()
