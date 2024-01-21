@@ -21,7 +21,7 @@ case $# in
     ;;
 
   2)
-    $ssh_command ubuntu@$public_instance_ip "ssh  $KEY_PATH ubuntu@$private_instance_ip"
+    $ssh_command ubuntu@$public_instance_ip "ssh ubuntu@$private_instance_ip"
     ;;
 
   3)
