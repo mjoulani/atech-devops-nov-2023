@@ -1,7 +1,8 @@
 #!/bin/bash
-export KEY_PATH
-read -s KEY_PATH < PATH.txt
-
+#export KEY_PATH="/Users/hamadfyad/PycharmProjects/pythonProject522/5/a-tech_Project/atech-devops-nov-2023/networking_project/hamad_key.pem"
+#export KEY_PATH
+#read -s KEY_PATH < private_key.txt
+#echo $KEY_PATH
 public_key=$1
 private_key=$2
 if [ -z "$1" ];then
