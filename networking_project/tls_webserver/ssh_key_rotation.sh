@@ -17,11 +17,11 @@ fi
 echo  "pass"
 # Check if two arguments are provided
 if [ "$#" -eq  0 ]; then
-    echo "Please provide bastion IP address"
+    echo "Please provide IP address"
     echo "Please run the ssh_key_rotation.sh in this form : $0 <private-instance-ip> <enter new key name>"
     exit 5
 elif [ "$#" -eq 1 ]; then
-        echo "Please enter name for the key after Hostname the $0 must have to argument"
+        echo "Please enter name for the key after Hostname the $0 must have two argument"
         exit 5
 elif [ "$#" -eq  2 ]; then
         check_string "$1"
