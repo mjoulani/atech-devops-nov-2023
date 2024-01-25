@@ -192,3 +192,4 @@ out/
 # .gitignore file
 *.pem
 KEY_PATH.txt
+networking_project/KEY_PATH
