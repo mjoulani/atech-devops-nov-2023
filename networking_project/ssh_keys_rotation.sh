@@ -18,7 +18,7 @@ private_instance_ip=$1
 #Generate New Key
 ssh-keygen -t rsa -b 2048 -f ~/new_key -q -N ""
 echo "sshkeygen pass"
-NEW_PUBLIC_KEY=$(new_key.pub)
+NEW_PUBLIC_KEY=$(<new_key.pub)
 # Get auth key
 scp -i $KEY_PATH "$private_instance_ip:~/.ssh/authorized_keys" "."
 
