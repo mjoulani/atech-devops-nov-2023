@@ -188,3 +188,7 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
+# .gitignore file
+*.pem
+KEY_PATH.txt
