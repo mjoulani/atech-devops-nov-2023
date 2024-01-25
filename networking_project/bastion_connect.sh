@@ -1,5 +1,5 @@
 #!/bin/bash
-expot KEY_PATH
+export KEY_PATH
 read -s KEY_PATH < PATH.txt
 
 public_key=$1
