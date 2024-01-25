@@ -17,10 +17,15 @@ NEW_PUBLIC_KEY="~/new_key.pub"
 private_instance_ip=$1
 #Generate New Key
 ssh-keygen -t rsa -b 2048 -f ~/new_key -q -N ""
+echo "sshkeygen pass"
 # Get auth key
 scp -i $KEY_PATH "$private_instance_ip:~/.ssh/authorized_keys" "."
+
+echo " get auth file pass"
 #change Key
 ssh-keygen -y -f $KEY_PATH > pub
+echo "create public key success "
+
 OLD_PUBLIC_KEY=$(<pub)
 sed -i "s|$OLD_PUBLIC_KEY|$NEW_PUBLIC_KEY|" "authorized_keys"
 
