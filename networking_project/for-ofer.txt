@@ -1,0 +1,6 @@
+for aws configure
+
+AKIA5SPWCQVQGOCI257A
+B3vfX0sA6y+EDT8P/M72rELaXMq1Dma2L6pIxzs6
+ap-southeast-2
+text
