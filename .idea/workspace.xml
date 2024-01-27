@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="msgg">
+    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="adding IPs to SOLUTION">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/networking_project/SOLUTION" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/SOLUTION" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/virtual_nic/init.sh" beforeDir="false" afterPath="$PROJECT_DIR$/virtual_nic/init.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701623219568</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="adding IPs to SOLUTION">
+      <option name="closed" value="true" />
+      <created>1706365197876</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1706365197876</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -132,6 +139,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="msg" />
     <MESSAGE value="msgg" />
-    <option name="LAST_COMMIT_MESSAGE" value="msgg" />
+    <MESSAGE value="adding IPs to SOLUTION" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding IPs to SOLUTION" />
   </component>
 </project>

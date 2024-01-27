@@ -12,6 +12,12 @@ Default gateway IP
 
 DHCP IP allocation sys-logs
 -------------------
+Jan 27 12:12:52 ip-10-0-21-171 dhclient[272]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x28d12e4f)
+Jan 27 12:12:52 ip-10-0-21-171 dhclient[272]: DHCPOFFER of 10.0.21.171 from 10.0.0.1
+Jan 27 12:12:52 ip-10-0-21-171 dhclient[272]: DHCPREQUEST for 10.0.21.171 on eth0 to 255.255.255.255 port 67 (xid=0x4f2ed128)
+Jan 27 12:12:52 ip-10-0-21-171 dhclient[272]: DHCPACK of 10.0.21.171 from 10.0.0.1 (xid=0x28d12e4f)
+
+<!--
 Discover:
 Log entry: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x28d12e4f)
 
@@ -23,4 +29,5 @@ Log entry: DHCPREQUEST for 10.0.21.171 on eth0 to 255.255.255.255 port 67 (xid=0
 
 Acknowledge:
 Log entry: DHCPACK of 10.0.21.171 from 10.0.0.1 (xid=0x28d12e4f)
+-->
 
