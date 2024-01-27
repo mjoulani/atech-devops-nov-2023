@@ -1,16 +1,29 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+127.0.0.53
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+10.0.0.1
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+Jan 16 15:36:06 ip-10-0-0-251 dhclient[274]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x92d3e008)
+Jan 16 15:36:06 ip-10-0-0-251 dhclient[274]: DHCPOFFER of 10.0.0.251 from 10.0.0.1
+Jan 16 15:36:06 ip-10-0-0-251 dhclient[274]: DHCPREQUEST for 10.0.0.251 on eth0 to 255.255.255.255 port 67 (xid=0x8e0d392)
+Jan 16 15:36:06 ip-10-0-0-251 dhclient[274]: DHCPACK of 10.0.0.251 from 10.0.0.1 (xid=0x92d3e008)
+
+Jan 16 16:00:29 ip-10-0-0-251 dhclient[281]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xfeed2f7d)
+Jan 16 16:00:29 ip-10-0-0-251 dhclient[281]: DHCPOFFER of 10.0.0.251 from 10.0.0.1
+Jan 16 16:00:29 ip-10-0-0-251 dhclient[281]: DHCPREQUEST for 10.0.0.251 on eth0 to 255.255.255.255 port 67 (xid=0x7d2fedfe)
+Jan 16 16:00:29 ip-10-0-0-251 dhclient[281]: DHCPACK of 10.0.0.251 from 10.0.0.1 (xid=0xfeed2f7d)
+
+Jan 16 16:02:51 ip-10-0-0-251 dhclient[281]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xed94c541)
+Jan 16 16:02:51 ip-10-0-0-251 dhclient[281]: DHCPOFFER of 10.0.0.251 from 10.0.0.1
+Jan 16 16:02:51 ip-10-0-0-251 dhclient[281]: DHCPREQUEST for 10.0.0.251 on eth0 to 255.255.255.255 port 67 (xid=0x41c594ed)
+Jan 16 16:02:51 ip-10-0-0-251 dhclient[281]: DHCPACK of 10.0.0.251 from 10.0.0.1 (xid=0xed94c541)
 
