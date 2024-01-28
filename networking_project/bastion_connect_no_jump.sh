@@ -21,12 +21,12 @@ case $# in
     ;;
 
   2)
-    $ssh_command -J ubuntu@$public_instance_ip ubuntu@$private_instance_ip
+    $ssh_command ubuntu@$public_instance_ip "ssh ubuntu@$private_instance_ip"
     ;;
 
   3)
     com=$3
-    $ssh_command -J ubuntu@$public_instance_ip ubuntu@$private_instance_ip $com
+    $ssh_command ubuntu@$public_instance_ip "ssh ubuntu@$private_instance_ip $com"
     ;;
 
   *)
