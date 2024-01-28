@@ -15,7 +15,17 @@ fi
 #Variables
 
 private_instance_ip=$1
+#Backup OLD Access
+ssh -i $KEY_PATH ubuntu@$private_instance_ip cp .ssh/authorized_keys authorized_keys.back
+if [ $? -ne 0 ]; then
+    echo "Error: cant make rotation ."
+    exit 1
+fi
+#Backup existing key
+cp new_key new_key.back
+cp new_key.pub new_key.pub.back
 #Generate New Key
+
 ssh-keygen -t rsa -b 2048 -f ~/new_key -q -N ""
 echo "sshkeygen pass"
 NEW_PUBLIC_KEY=$(<new_key.pub)
