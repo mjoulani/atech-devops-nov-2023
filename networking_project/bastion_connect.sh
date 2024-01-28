@@ -1,48 +1,24 @@
-
 #!/bin/bash
+export KEY_PATH
+read -s KEY_PATH < PATH.txt
 
-
-
-function check_string {
-    local str="$@"
-    if ! [[ $str =~ [[:alpha:]] && $str =~ [[:digit:]] && $str =~ "@" ]];  then
-        echo "String '$str' is invalid. It should contain @, at least one letter, and at least one number."
-        echo "Example : $0  public_user1@example.com   private_user1@178.0.0.10"
-        exit 5
-    fi
-}
-
-#*************************************************************************************************************
-
-# Check if the KEY_PATH environment variable is set
-if [ -z "$KEY_PATH" ]; then
-    echo "Error: The KEY_PATH environment variable is not set."
-    exit 5
+public_key=$1
+private_key=$2
+if [ -z "$1" ];then
+echo "Please provide bastion IP address"
+exit 5
+fi
+if [ -z "$KEY_PATH" ];then
+echo "KEY_PATH env var is expected"
+exit 5
+fi
+ssh-add $KEY_PATH
+if [ ! -z "$3" ]; then
+    ssh -t -A ubuntu@$public_key "ssh ubuntu@$private_key '$3'"
+elif [ ! -z "$2" ]; then
+    ssh -t -A ubuntu@$public_key "ssh ubuntu@$private_key"
+elif [ -z "$2" ]; then
+    ssh -t -A ubuntu@$public_key
 fi
 
-echo  "pass"
-
-
-
-
-
-# Check if two arguments are provided
-if [ "$#" -eq  0 ]; then
-    echo "Please provide bastion IP address"
-    echo "Please run the bastion_connect.sh in this form : $0 <public-instance-ip> <private-instance-ip>"
-    exit 5
-elif [ "$#" -eq  1 ]; then
-        check_string "$1"
-        ssh -i $KEY_PATH  "$1"
-elif [ "$#" -eq  2 ]; then
-        check_string "$1"
-        check_string "$2"
-        ssh -i $KEY_PATH -J  "$1" "$2"
-elif [ "$#" -eq  3 ]; then
-        check_string "$1"
-        check_string "$2"
-        ssh -i $KEY_PATH -J "$1" "$2" $3
-else
-         echo "The $0 can have only three argument"
-         exit 5
-fi
+#ssh -t -i $KEY_PATH ubuntu@$public_ins ". connect.sh "
