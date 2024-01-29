@@ -2,7 +2,7 @@
 private_ip=$1
 echo "private_ip: $private_ip"
 
-newkey="your_key_filename"  # Replace with your desired key filename
+newkey="newkey"  # Replace with your desired key filename
 
 if [[ -z $KEY_PATH ]];then
    echo "KEY_PATH variable not found."
