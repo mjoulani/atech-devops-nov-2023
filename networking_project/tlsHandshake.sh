@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "1****************************"
 
 client_hello_response=$(curl -X POST -H "Content-Type: application/json" -d '{
   "version": "1.3",
@@ -16,7 +15,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "2****************************"
 
 server_version=$(echo "$client_hello_response" | jq -r '.version')
 server_cipher_suite=$(echo "$client_hello_response" | jq -r '.cipherSuite')
@@ -26,7 +24,6 @@ server_cert=$(echo "$client_hello_response" | jq -r '.serverCert')
 echo "$session_id" > session_id.txt
 echo "$server_cert" > server_cert.pem
 
-echo "3****************************"
 
 wget https://raw.githubusercontent.com/alonitac/atech-devops-june-2023/main/networking_project/tls_webserver/cert-ca-aws.pem -O cert-ca-aws.pem
 
@@ -37,7 +34,6 @@ if [ $? -ne 0 ]; then
   exit 5
 fi
 
-echo "4**************************** start from here need fixing "
 
 MASTER_KEY=$(openssl rand -base64 32)
 encrypted_master_key=$(echo "$MASTER_KEY" | openssl smime -encrypt -aes-256-cbc -outform DER <(echo "$server_cert") | base64 -w 0)
@@ -57,25 +53,15 @@ fi
 
 echo "$key_exchange_response"
 encrypted_sample_message=$(echo "$key_exchange_response" | jq -r '.encryptedSampleMessage')
-if [ $? -ne 0 ]; then
-  echo "error1 ."
-  exit 5
-fi
-echo "5"
+
+
 echo "$encrypted_sample_message" | base64 -d > encSampleMsgReady.txt
-if [ $? -ne 0 ]; then
-  echo "error2 ."
-  exit 5
-fi
-echo "6"
+
 
 decrypted_message=$(openssl enc -d -aes-256-cbc -pbkdf2 -in encSampleMsgReady.txt -pass pass:"$MASTER_KEY")
-if [ $? -ne 0 ]; then
-  echo "error 3."
-  exit 5
-fi
+
 echo "$decrypted_message"
-echo "7"
+
 if [ "$decrypted_message" != "Hi server, please encrypt me and send to client!" ]; then
   echo "Server symmetric encryption using the exchanged master-key has failed."
   exit 6
