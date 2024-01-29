@@ -15,9 +15,9 @@ exit 5
 fi
 ssh-add $KEY_PATH
 if [ ! -z "$3" ]; then
-    ssh -t -A ubuntu@$public_key "ssh ubuntu@$private_key '$3'"
+    ssh -t -A ubuntu@$public_key "ssh -i new_key ubuntu@$private_key '$3'"
 elif [ ! -z "$2" ]; then
-    ssh -t -A ubuntu@$public_key "ssh ubuntu@$private_key"
+    ssh -t -A ubuntu@$public_key "ssh -i new_key ubuntu@$private_key"
 elif [ -z "$2" ]; then
     ssh -t -A ubuntu@$public_key
 fi
