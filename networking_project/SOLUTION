@@ -1,20 +1,17 @@
 Local DNS Server IP
 -------------------
-<ip-here> 
 ip-10-0-0-183.ap-northeast-3.compute.internal
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
-Gateway: 0.0.0.0
+0.0.0.0
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
 DHCPDISCOVER on ens5 to 255.255.255.255 port 67 interval 3 (xid=0xc234f531)
 DHCPOFFER of 10.0.0.183 from 10.0.0.1
 DHCPREQUEST for 10.0.0.183 on ens5 to 255.255.255.255 port 67 (xid=0x31f534c2)
