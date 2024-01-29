@@ -28,10 +28,9 @@ echo "$server_cert" > server_cert.pem
 
 echo "3****************************"
 
-ca_cert_url="https://raw.githubusercontent.com/alonitac/atech-devops-june-2023/main/networking_project/tls_webserver/cert-ca-aws.pem"
-wget -O cert-ca-aws.pem "$ca_cert_url"
+wget https://raw.githubusercontent.com/alonitac/atech-devops-june-2023/main/networking_project/tls_webserver/cert-ca-aws.pem -O cert-ca-aws.pem
 
-openssl verify -CAfile cert-ca-aws.pem server_cert.pem
+openssl verify -CAfile cert-ca-aws.pem <<< "$server_cert"
 
 if [ $? -ne 0 ]; then
   echo "Server Certificate is invalid."
@@ -40,24 +39,46 @@ fi
 
 echo "4**************************** start from here need fixing "
 
-master_key=$(openssl rand -hex 32)
-
-encrypted_master_key=$(echo "$master_key" | openssl smime -encrypt -aes-256-cbc -outform DER -recip server_cert.pem | base64 -w 0)
-
+MASTER_KEY=$(openssl rand -base64 32)
+encrypted_master_key=$(echo "$MASTER_KEY" | openssl smime -encrypt -aes-256-cbc -outform DER <(echo "$server_cert") | base64 -w 0)
+echo "1"
 key_exchange_payload='{
   "sessionID": "'"$session_id"'",
-  "encryptedMasterKey": "'"$encrypted_master_key"'",
+  "masterKey": "'"$encrypted_master_key"'",
   "sampleMessage": "Hi server, please encrypt me and send to client!"
 }'
-
-key_exchange_response=$(curl -X POST -H "Content-Type: application/json" -d "$key_exchange_payload" http://0.0.0.0:8080/keyexchange)
-
-if [ $? -ne 0 ]; then
+echo "2"
+key_exchange_response=$(curl -s -X POST -H "Content-Type: application/json" -d "$key_exchange_payload" http://0.0.0.0:8080/keyexchange)
+echo "3"
+if [ -z "$key_exchange_response" ]; then
   echo "Key Exchange failed."
   exit 2
 fi
 
-session_id=$(echo "$key_exchange_response" | jq -r '.sessionID')
+echo "$key_exchange_response"
 encrypted_sample_message=$(echo "$key_exchange_response" | jq -r '.encryptedSampleMessage')
+if [ $? -ne 0 ]; then
+  echo "error1 ."
+  exit 5
+fi
+echo "5"
+echo "$encrypted_sample_message" | base64 -d > encSampleMsgReady.txt
+if [ $? -ne 0 ]; then
+  echo "error2 ."
+  exit 5
+fi
+echo "6"
 
+decrypted_message=$(openssl enc -d -aes-256-cbc -pbkdf2 -in encSampleMsgReady.txt -pass pass:"$MASTER_KEY")
+if [ $? -ne 0 ]; then
+  echo "error 3."
+  exit 5
+fi
+echo "$decrypted_message"
+echo "7"
+if [ "$decrypted_message" != "Hi server, please encrypt me and send to client!" ]; then
+  echo "Server symmetric encryption using the exchanged master-key has failed."
+  exit 6
+fi
 
+echo "Client-Server TLS handshake has been completed successfully"
