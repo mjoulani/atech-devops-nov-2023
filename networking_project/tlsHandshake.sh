@@ -6,7 +6,7 @@ json_data=$(curl -X POST -H "Content-Type: application/json" -d '{
     "TLS_CHACHA20_POLY1305_SHA256"
   ],
   "message": "Client Hello"
-}' http://18.180.54.40:8080/clienthello)
+}' http://127.0.0.1:8080/clienthello)
 
 version=$(echo "$json_data" | jq -r '.version')
 sessionID=$(echo "$json_data" | jq -r '.sessionID')
@@ -44,14 +44,14 @@ ENCRYPTED_MASTER_KEY=$(openssl smime -encrypt -aes-256-cbc -in master-key  -outf
     #"sessionID": "'"$sessionID"'",
     #"masterKey": "'"$ENCRYPTED_MASTER_KEY"'",
     #"sampleMessage": "Hi server, please encrypt me and send to client!"
-#} 'http://18.180.54.40:8080/keyexchange)
+#} 'http://127.0.0.1:8080/keyexchange)
 
 KEY_EXCHANGE='{
     "sessionID": "'"$sessionID"'",
     "masterKey": "'"$ENCRYPTED_MASTER_KEY"'",
     "sampleMessage": "Hi server, please encrypt me and send to client!"
 }'
-json_data1=$(curl -s -X POST -H "Content-Type: application/json" -d "$KEY_EXCHANGE" http://18.180.54.40:8080/keyexchange)
+json_data1=$(curl -s -X POST -H "Content-Type: application/json" -d "$KEY_EXCHANGE" http://127.0.0.1:8080/keyexchange)
 
 
 # Check if the curl command was successful
@@ -87,8 +87,3 @@ echo "Decrypted Sample Message: $DECRYPTED_SAMPLE_MESSAGE"
 
 # Print positive message upon successful TLS handshake completion
 echo "Client-Server TLS handshake has been completed successfully"
-
-
-
-
-
