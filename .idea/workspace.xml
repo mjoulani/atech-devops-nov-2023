@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="updating local dns IP">
+    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="Finishing SSH Bastion">
+      <change afterPath="$PROJECT_DIR$/networking_project/ssh_keys_rotation.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/networking_project/bastion_connect.sh" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/bastion_connect.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,18 +46,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "networking__project/WaseemAbuEsaid",
-    "last_opened_file_path": "/home/cs/folder/atech-devops-nov-2023"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;networking__project/WaseemAbuEsaid&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/cs/folder/atech-devops-nov-2023&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13135.95" />
+        <option value="bundled-python-sdk-5a2391486177-d3b881c8e49f-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-233.13763.11" />
       </set>
     </attachedChunks>
   </component>
@@ -142,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706446644807</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Finishing SSH Bastion">
+      <option name="closed" value="true" />
+      <created>1706556492277</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1706556492277</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -166,6 +174,7 @@
     <MESSAGE value="adding IPs to SOLUTION" />
     <MESSAGE value="adding region,vpcID,public and private instances IDs in vpc.sh file" />
     <MESSAGE value="updating local dns IP" />
-    <option name="LAST_COMMIT_MESSAGE" value="updating local dns IP" />
+    <MESSAGE value="Finishing SSH Bastion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finishing SSH Bastion" />
   </component>
 </project>
