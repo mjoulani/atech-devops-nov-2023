@@ -4,7 +4,7 @@
 
 function check_string {
     local str="$@"
-    if ! [[ $str =~ [[:alpha:]] && $str =~ [[:digit:]] && $str =~ "@" ]];  then
+    if ! [[ $str =~ [[:digit:]] && $str =~ "." ]];  then
         echo "String '$str' is invalid. It should contain @, at least one letter, and at least one number."
         echo "Example : $0  public_user1@example.com   private_user1@178.0.0.10"
         exit 5

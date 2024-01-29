@@ -55,7 +55,7 @@ chmod  400 "$NEW_KEY_NAME.pem"
 
 # Define variables
 PRIVATE_INSTANCE_IP="$1"
-PRIVATE_INSTANCE_USER="ec2-user"
+PRIVATE_INSTANCE_USER="ubuntu"
 PRIVATE_KEY_PATH="$KEY_PATH"
 
 # Copy the public key to the private instance
