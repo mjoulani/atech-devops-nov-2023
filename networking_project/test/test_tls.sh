@@ -1,5 +1,5 @@
 # run the server locally
-cd tls_webserver
+cd ~/atech-devops-nov-2023/networking_project/tls_webserver/
 python3 app.py $1 &
 cd ..
 
