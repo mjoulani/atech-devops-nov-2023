@@ -1,4 +1,4 @@
-resource "aws_security_group" "alexey-secure-group" {
+resource "aws_security_group" "bash-project-secure-group" {
   name        = "web_server_secure_group"
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_vpc.vpc.id
@@ -26,6 +26,7 @@ resource "aws_security_group" "alexey-secure-group" {
   }
 
   tags = {
-    Name = var.tagging+"-security_group-terraform"
+        Name =   format("%s-security_group-terraform", var.tagging)
+
   }
 }

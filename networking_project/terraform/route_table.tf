@@ -5,10 +5,10 @@ resource "aws_route_table" "public-route-table" {
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = var.route_table
-    gateway_id = aws_internet_gateway.internet-gateway.id
+    gateway_id = aws_internet_gateway.my_ig.id
   }
   tags = {
-    Name = var.tagging+"-Public Route Table-terraform"
+    Name =   format("%s-Public Route Table-terraform", var.tagging)
   }
 }
 

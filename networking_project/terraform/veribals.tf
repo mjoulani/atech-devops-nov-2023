@@ -35,3 +35,9 @@ variable "tagging" {
   default     = "networ_project"
   
 }
+
+variable "private_key_path" {
+  description = "The availability_zone where the virtual network is created."
+  default     = "E:\\elements\\Devops_Atech\\atech-devops-nov-2023\\networking_project\\terraform"
+  
+}
