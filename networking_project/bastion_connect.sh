@@ -21,10 +21,10 @@ elif [ "$#" -eq 1 ]; then
     ssh -t -i $KEY_PATH ubuntu@$public_ins
 elif [ "$#" -eq 2 ]; then
     printing "Connecting to your private instance using the public instance , please wait  .... "
-    ssh -t -i $KEY_PATH ubuntu@$public_ins "ssh -i ofer-bakria-key02.pem ubuntu@10.0.1.94"
+    ssh -t -i $KEY_PATH ubuntu@$public_ins "ssh -i ofer-bakria-key02.pem ubuntu@$private_ins"
 else
     printing "Connecting to your private instance using the public instance to run a command '$command' in the private machine , please wait  .... "
-    ssh -t -i $KEY_PATH ubuntu@$public_ins "ssh -i ofer-bakria-key02.pem ubuntu@10.0.1.94 '$command'"
+    ssh -t -i $KEY_PATH ubuntu@$public_ins "ssh -i ofer-bakria-key02.pem ubuntu@$private_ins '$command'"
 fi
 
 
