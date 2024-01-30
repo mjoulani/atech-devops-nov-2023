@@ -1,5 +1,6 @@
 set -e
-
+PUBLIC_EC2_IP="13.54.114.124"
+PRIVATE_EC2_IP="10.0.2.187"
 source ../vpc.sh
 
 OLD_KEYS=$(bash ../bastion_connect.sh $PUBLIC_EC2_IP $PRIVATE_EC2_IP "cat ~/.ssh/authorized_keys")
@@ -17,7 +18,7 @@ fi
 
 if ! echo "$NEW_KEYS" | grep -q "$NEW_PUBLIC_KEY_FILE"
 then
-    echo -e "\n\nthe public key 'new_key.pub' in the public instance must be the same as in ~/.ssh/authorized_keys in the private instance.\n\n\nnew_key.pub is: \n\n $NEW_PUBLIC_KEY_FILE \n\n while the key found in ~/.ssh/authorized_keys is \n\n $NEW_KEYS"
+    echo -e "\n\nthe public key 'new_key9.pub' in the public instance must be the same as in ~/.ssh/authorized_keys in the private instance.\n\n\nnew_key.pub is: \n\n $NEW_PUBLIC_KEY_FILE \n\n while the key found in ~/.ssh/authorized_keys is \n\n $NEW_KEYS"
     exit 1
 fi
 

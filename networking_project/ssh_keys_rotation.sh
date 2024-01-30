@@ -34,10 +34,11 @@ fi
 #    exit 1
 #fi
 # Test the connection using the new key
-ssh -i "$NEW_KEY_PATH" "ubuntu@$1"
+ssh -i "$NEW_KEY_PATH" "ubuntu@$1" ""
 
 if [ $? -eq 0 ]; then
     echo "Key rotation successful."
+    ssh-add $NEW_KEY_PATH
 else
     echo "Key rotation failed. Please check and try again."
 fi
