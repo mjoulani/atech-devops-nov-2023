@@ -5,7 +5,8 @@ __pycache__/
 
 # C extensions
 *.so
-
+networking_project/bashar_z-keyP.pem
+networking_project/bashar_z-privateKey.pem
 .githubtoken
 
 # Distribution / packaging
@@ -188,3 +189,4 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
