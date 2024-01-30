@@ -20,6 +20,11 @@ if [ -z "$KEY_PATH" ]; then
 fi
 
 echo  "pass"
+#actived the ssh agent
+#forwarding, you can connect from one server to another using the same credentials
+#without copying private keys between machines.
+eval "$(ssh-agent -s)"
+ssh-add "$KEY_PATH"
 
 
 

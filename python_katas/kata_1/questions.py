@@ -52,7 +52,7 @@ def words_concatenation(words):
 
 
 
-def (some_str):
+def is_unique_string(some_str):
     """
     2 Kata
 
@@ -71,9 +71,9 @@ def (some_str):
 
 
     result = unique(some_str)
-    print(some_str)
+    print(some_str) 
     
-    return  result
+    return None
 
 
 def list_diff(elements):
