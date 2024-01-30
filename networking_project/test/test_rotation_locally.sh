@@ -4,7 +4,7 @@ source ../vpc.sh
 
 OLD_KEYS=$(bash ../bastion_connect.sh ubuntu$PUBLIC_EC2_IP ubuntu$PRIVATE_EC2_IP "cat ~/.ssh/authorized_keys")
 
-ssh -i $KEY_PATH ubuntu@$PUBLIC_EC2_IP "./ssh_keys_rotation.sh $PRIVATE_EC2_IP"
+ssh -i $KEY_PATH ubuntu@$PUBLIC_EC2_IP "./ssh_keys_rotation.sh unbuntu$PRIVATE_EC2_IP"
 
 NEW_KEYS=$(bash ../bastion_connect.sh ubumtu$PUBLIC_EC2_IP ubuntu$PRIVATE_EC2_IP "cat ~/.ssh/authorized_keys")
 NEW_PUBLIC_KEY_FILE=$(ssh -i $KEY_PATH ubuntu@$PUBLIC_EC2_IP "cat new_key.pub")
