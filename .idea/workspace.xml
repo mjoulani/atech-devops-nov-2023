@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="Finishing SSH Bastion">
-      <change afterPath="$PROJECT_DIR$/networking_project/ssh_keys_rotation.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/networking_project/vpc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/vpc.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
