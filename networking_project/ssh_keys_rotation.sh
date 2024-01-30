@@ -49,3 +49,5 @@ fi
 # Run bastion_connect.sh with the new key
 echo "Running bastion_connect.sh with the new key..."
 ./bastion_connect.sh "$NEW_KEY_NAME" "$PUBLIC_IP" "$PRIVATE_IP"
+
+echo "Script execution completed."
