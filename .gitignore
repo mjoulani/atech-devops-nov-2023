@@ -6,6 +6,12 @@ __pycache__/
 # C extensions
 *.so
 
+# Terraform state
+*.tfstate
+*.tfstate.*
+*provider-aws*
+
+
 .githubtoken
 
 # Distribution / packaging
