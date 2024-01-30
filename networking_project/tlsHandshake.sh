@@ -16,7 +16,7 @@ version=$(echo "$json_data" | jq -r '.version')
 sessionID=$(echo "$json_data" | jq -r '.sessionID')
 cipherSuite=$(echo "$json_data" | jq -r '.cipherSuite')
 serverCert=$(echo "$json_data" | jq -r '.serverCert')
-# echo $serverCert>cert.pem
+echo $serverCert>cert.pem
 # #-----END clienthello section-----
 
 
