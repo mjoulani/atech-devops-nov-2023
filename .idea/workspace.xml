@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="Finishing SSH Bastion">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="changing private instance ip">
       <change beforePath="$PROJECT_DIR$/networking_project/vpc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/vpc.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -175,6 +174,7 @@
     <MESSAGE value="adding region,vpcID,public and private instances IDs in vpc.sh file" />
     <MESSAGE value="updating local dns IP" />
     <MESSAGE value="Finishing SSH Bastion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finishing SSH Bastion" />
+    <MESSAGE value="changing private instance ip" />
+    <option name="LAST_COMMIT_MESSAGE" value="changing private instance ip" />
   </component>
 </project>
