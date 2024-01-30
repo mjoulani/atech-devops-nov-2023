@@ -1,64 +1,51 @@
 #!/bin/bash
 
-# Check if KEY_PATH environment variable is set
+# Validate the presence of the KEY_PATH environment variable
 if [ -z "$KEY_PATH" ]; then
-    echo "KEY_PATH env var is expected"
+    echo "Error: Please set the KEY_PATH environment variable."
     exit 5
 fi
 
-# Check if PUBLIC_IP and PRIVATE_IP are provided
-if [ $# -lt 2 ]; then
-    echo "Please provide public and private instance IP addresses"
+# Ensure both public and private IP addresses are provided
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 PUBLIC_IP PRIVATE_IP"
     exit 5
 fi
 
-PUBLIC_IP="$1"
-PRIVATE_IP="$2"
-NEW_KEY_PATH=./new_key
+# Assign the first and second arguments to respective variables
+PUBLIC_IP=$1
+PRIVATE_IP=$2
+NEW_KEY_NAME="new_ssh_key"
 
+echo "Starting key update process..."
 
-echo "Step 1: Generating a new SSH key pair..."
-# Generate a new SSH key pair
-ssh-keygen -f "$NEW_KEY_PATH" -N ""
+# Generate a new SSH key without a passphrase
+ssh-keygen -t rsa -b 2048 -f "$NEW_KEY_NAME" -q -N ""
 
-# Copy the master key to the public instance
-scp -i "$KEY_PATH" master_key.pem ubuntu@"$PUBLIC_IP":~/master_key.pem
+# Transfer the existing key to the public server
+scp -i "$KEY_PATH" -o StrictHostKeyChecking=no master_key.pem ubuntu@"$PUBLIC_IP":~/
 
-scp -i "$KEY_PATH" "$NEW_KEY_PATH.pub" ubuntu@"$PUBLIC_IP":~/new_key.pub
+# Copy the new public key to the public server
+scp -i "$KEY_PATH" -o StrictHostKeyChecking=no "$NEW_KEY_NAME.pub" ubuntu@"$PUBLIC_IP":~/
 
-echo "Step 2: Copying the public key to the authorized_keys file on the private instance via the public instance..."
-# Copy the public key to the authorized_keys file on the private instance via the public instance
-scp -o StrictHostKeyChecking=no -i "$KEY_PATH" "$NEW_KEY_PATH.pub" ubuntu@"$PUBLIC_IP":~/new_key.pub
+echo "Updating keys on the private server..."
+# Push the new public key to the private server's authorized_keys via the public server
+ssh -i "$KEY_PATH" -o StrictHostKeyChecking=no ubuntu@"$PUBLIC_IP" "scp -o StrictHostKeyChecking=no $NEW_KEY_NAME.pub ubuntu@$PRIVATE_IP:~/.ssh/authorized_keys && echo 'Public key updated on private server.'"
 
-echo "Step 3: Performing key rotation on the private instance..."
-# Perform key rotation on the private instance
-ssh -o StrictHostKeyChecking=no -i "$KEY_PATH" -A ubuntu@"$PUBLIC_IP" "bash -s" << EOF
-    PRIVATE_IP="$PRIVATE_IP"
-    KEY_PATH="$KEY_PATH"
-    NEW_KEY_PATH=~/new_key
+# Clean up the keys from the public server
+ssh -i "$KEY_PATH" -o StrictHostKeyChecking=no ubuntu@"$PUBLIC_IP" "rm ~/master_key.pem ~/new_ssh_key.pub"
 
-    # Copy the new public key to the private instance
-    scp -o StrictHostKeyChecking=no -i "$KEY_PATH" "\$NEW_KEY_PATH.pub" ubuntu@\$PRIVATE_IP:~/new_key.pub
+# Test the new connection to the public server with the new key
+echo "Testing connection to the public server with the new key..."
+ssh -i "$NEW_KEY_NAME" -o StrictHostKeyChecking=no ubuntu@"$PUBLIC_IP" "echo 'Connection test successful.'"
 
-    # Perform key rotation on the private instance
-    ssh -o StrictHostKeyChecking=no -i "$KEY_PATH" ubuntu@\$PRIVATE_IP "cat ~/new_key.pub >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys && rm -f ~/new_key.pub"
-
-    echo "Keys on Public-instance rotated successfully."
-EOF
-
-# Delete master key from public instance
-ssh -o StrictHostKeyChecking=no -i "$KEY_PATH" ubuntu@"$PUBLIC_IP" "rm -f ~/master_key.pem"
-# Delete new key from public instance
-ssh -o StrictHostKeyChecking=no -i "$KEY_PATH" ubuntu@"$PUBLIC_IP" "rm -f ~/new_key.pub"
-
-# Check if keys have changed and if login with the new key is successful
-if [ "$KEY_PATH" != "$NEW_KEY_PATH" ]; then
-    echo "Key rotation completed successfully."
-    echo "New private key: $NEW_KEY_PATH"
-    echo "New public key: $NEW_KEY_PATH.pub"
+# Output the result
+if [ -f "$NEW_KEY_NAME" ]; then
+    echo "Key update completed. New keys are stored at $NEW_KEY_NAME and $NEW_KEY_NAME.pub"
 else
-    echo "Keys have not changed. Rotation is not required."
+    echo "Key update failed."
 fi
 
 # Run bastion_connect.sh with the new key
-./bastion_connect.sh  "$PUBLIC_IP" "$PRIVATE_IP"
+echo "Running bastion_connect.sh with the new key..."
+./bastion_connect.sh "$NEW_KEY_NAME" "$PUBLIC_IP" "$PRIVATE_IP"
