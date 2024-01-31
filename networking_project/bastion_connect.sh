@@ -29,7 +29,9 @@ if [ ! -z "$remote_command" ]; then
 # בדיקה אם ניתנה כתובת IP של שרת פרטי
 elif [ ! -z "$private_ip" ]; then
     ssh -t -A ubuntu@$bastion_ip "ssh ubuntu@$private_ip"
+
 # אם לא ניתנה כתובת IP של שרת פרטי
+
 else
     ssh -t -A ubuntu@$bastion_ip
 fi
