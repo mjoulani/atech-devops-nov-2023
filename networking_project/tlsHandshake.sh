@@ -68,3 +68,4 @@ if [ "$decrypted_message" != "Hi server, please encrypt me and send to client!" 
 fi
 
 echo "Client-Server TLS handshake has been completed successfully"
+#?
