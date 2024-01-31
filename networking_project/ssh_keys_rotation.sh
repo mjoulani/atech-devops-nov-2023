@@ -40,5 +40,3 @@ export KEY_PATH="$new_key_path"
 
 # Clean up old keys
 rm -f "$KEY_PATH.pub"
-
-echo "Key rotation completed."

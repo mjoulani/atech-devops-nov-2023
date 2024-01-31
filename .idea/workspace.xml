@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="changing private instance ip">
+    <list default="true" id="9f88545b-329f-426d-8652-62eaec49a432" name="Changes" comment="changing private instance IP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/networking_project/bastion_connect.sh" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/bastion_connect.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/networking_project/ssh_keys_rotation.sh" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/ssh_keys_rotation.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/networking_project/vpc.sh" beforeDir="false" afterPath="$PROJECT_DIR$/networking_project/vpc.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -158,7 +160,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706641179657</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="changing private instance IP">
+      <option name="closed" value="true" />
+      <created>1706641235690</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1706641235690</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -184,6 +194,7 @@
     <MESSAGE value="updating local dns IP" />
     <MESSAGE value="Finishing SSH Bastion" />
     <MESSAGE value="changing private instance ip" />
-    <option name="LAST_COMMIT_MESSAGE" value="changing private instance ip" />
+    <MESSAGE value="changing private instance IP" />
+    <option name="LAST_COMMIT_MESSAGE" value="changing private instance IP" />
   </component>
 </project>
