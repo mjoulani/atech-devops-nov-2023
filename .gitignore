@@ -188,3 +188,5 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
+.networking_project/encSampleMsgReady.txt
