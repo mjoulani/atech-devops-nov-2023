@@ -5,14 +5,11 @@ usage() {
   echo "tlsHandShake.sh [ip]"
   exit 6
 }
-
 failed() {
-  # shellcheck disable=SC2238
-  echo Server symmetric encryption using the exchanged master-key has fail>  exit 6
+  echo "Server symmetric encryption using the exchanged master-key has fail"  exit 6
 }
-
 success() {
-  echo Client-Server TLS handshake has been completed successfully
+  echo "Client-Server TLS handshake has been completed successfully"
   exit 0
 }
 check_if_server_and_send_hello() {
@@ -22,10 +19,9 @@ check_if_server_and_send_hello() {
     exit 1
   fi
 }
+public_ip="your_server_ip"
 
-  public_ip="your_server_ip"
-
-echo Beginning TLS with hello client ..
+echo "Beginning TLS with hello client"
 response=$(curl -X POST -d '{
     "version": "1.3",
     "ciphersSuites": ["TLS_AES_128_GCM_SHA256", "TLS_CHACHA20_POLY1305_SHA256"],
@@ -37,52 +33,47 @@ if [ $? -eq 0 ]; then
     # Check if the response contains a sessionID using jq
     if [ -n "$response" ] && [ "$(echo $response | jq -e '.sessionID')" != "null" ]; then
         SESSION_ID=$(echo $response | jq -r .sessionID)
-        echo Session ID: $SESSION_ID
+        echo "Session ID: $SESSION_ID"
     else
-        echo Error: Unable to extract sessionID from the response.
+        echo "Error: Unable to extract sessionID from the response."
     fi
 else
-    echo Error: Curl command failed.
+    echo "Error: Curl command failed."
 fi
 
 validate_cert_and_generate_key() {
   openssl verify -CAfile cert-ca-aws.pem cert.pem 2> /dev/null
   if [[ $? -ne 0 ]]; then
-    echo Server Certificate is invalid.
+    echo "Server Certificate is invalid."
     exit 5
   fi
 
-  echo Generating Master Key
+  echo "Generating Master Key"
   openssl rand 32 | base64 > master_key
 }
 main() {
   if [[ -z $public_ip ]]; then
-    echo Please provide the servers IP address.
+    echo "Please provide the servers IP address."
     usage
   fi
 
   check_if_server_and_send_hello
 
-  echo falidating Certificate ...
+  echo "falidating Certificate "
   validate_cert_and_generate_key
 
-  echo Encrypting master key with certificate
-  # shellcheck disable=SC2034
+  echo "Encrypting master key with certificate"
   MASTER_KEY=$(encryptMasterKey)
 
-  echo Sending Key ...
+  echo "Sending Key"
   response=$(send_key 2> /dev/null)
 
-  echo Decrypting message..
+  echo "Decrypting message"
   decrypt
-
 
 if [[ $(cat decrypted.txt) == "Hi server, please encrypt me and send to client" ]]; then
     echo "success"
 else
     echo "failed"
 fi
-
-}
-
-main
+}main
