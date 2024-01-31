@@ -1,16 +1,35 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+127.0.0.53 
+<!-- grep "nameserver" /etc/resolv.conf -->
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
-
-
+10.0.0.1
+<!-- route -n -> always under UG flag under the forth column -->
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x87b5363c)
+<!-- using grep -i "dhcpdiscover" /var/log/syslog  , Discover-->
+
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPOFFER of 10.0.0.186 from 10.0.0.1
+<!-- using grep -i "dhcpoffer" /var/log/syslog  , Offer-->
+
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPREQUEST for 10.0.0.186 on eth0 to 255.255.255.255 port 67 (xid=0x3c36b587)
+<!-- using grep -i "dhcprequest" /var/log/syslog , Request -->
+
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPACK of 10.0.0.186 from 10.0.0.1 (xid=0x87b5363c)
+<!-- using grep -i "dhcpack" /var/log/syslog , Aknowledge -->
+
+<!--
+you can see all the DORA steps using grep -i "dhcp" /var/log/syslog
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x87b5363c)
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPOFFER of 10.0.0.186 from 10.0.0.1
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPREQUEST for 10.0.0.186 on eth0 to 255.255.255.255 port 67 (xid=0x3c36b587)
+Jan 19 07:55:10 ip-10-0-0-186 dhclient[283]: DHCPACK of 10.0.0.186 from 10.0.0.1 (xid=0x87b5363c) 
+-->
+
 
