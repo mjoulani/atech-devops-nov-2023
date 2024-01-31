@@ -9,7 +9,7 @@ client_hello_response=$(curl -X POST -H "Content-Type: application/json" -d '{
     "TLS_CHACHA20_POLY1305_SHA256"
   ],
   "message": "Client Hello"
-}' http://0.0.0.0:8080/clienthello)
+}' http://18.143.175.20:8080/clienthello)
 
 if [ $? -ne 0 ]; then
   echo "Client Hello failed."
@@ -38,15 +38,15 @@ fi
 
 MASTER_KEY=$(openssl rand -base64 32)
 encrypted_master_key=$(echo "$MASTER_KEY" | openssl smime -encrypt -aes-256-cbc -outform DER <(echo "$server_cert") | base64 -w 0)
-echo "1"
+
 key_exchange_payload='{
   "sessionID": "'"$session_id"'",
   "masterKey": "'"$encrypted_master_key"'",
   "sampleMessage": "Hi server, please encrypt me and send to client!"
 }'
-echo "2"
-key_exchange_response=$(curl -s -X POST -H "Content-Type: application/json" -d "$key_exchange_payload" http://0.0.0.0:8080/keyexchange)
-echo "3"
+
+key_exchange_response=$(curl -s -X POST -H "Content-Type: application/json" -d "$key_exchange_payload" http://18.143.175.20:8080/keyexchange)
+
 if [ -z "$key_exchange_response" ]; then
   echo "Key Exchange failed."
   exit 2
