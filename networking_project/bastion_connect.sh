@@ -6,12 +6,12 @@ if [ -z "$KEY_PATH" ]; then
     exit 5
 fi
 ssh_command="ssh -i $KEY_PATH "
+ssh-add $KEY_PATH
 # Check if both public and private instance IPs are provided
 if [ $# -lt 1 ] || [ $# -gt 3 ] ; then
     echo "Usage: $0 <public-instance-ip> [<private-instance-ip>] command"
     exit 5
 fi
-
 public_instance_ip=$1
 private_instance_ip=$2
 case $# in
