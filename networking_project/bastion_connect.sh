@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#this is the main bastion connection using Jump
+# its more convienet to use jump than to use double command. as long as this technology can help.
 # Check if KEY_PATH environment variable is set
 if [ -z "$KEY_PATH" ]; then
     echo "Error: KEY_PATH environment variable is not set."

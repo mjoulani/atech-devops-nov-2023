@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#old fasion connection without jump but you must export keypath on public server and copy the master keypath
 # Check if KEY_PATH environment variable is set
 if [ -z "$KEY_PATH" ]; then
     echo "Error: KEY_PATH environment variable is not set."

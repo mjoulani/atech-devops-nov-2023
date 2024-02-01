@@ -1,6 +1,8 @@
 #!/bin/bash
 #TODO generate new certificate, make autherization file , scp autherization file to private virtual
 #TODO ssh-keygen -t rsa -b 2048 -f ~/new_key
+#this is main ssh key rotation
+#generate key --> copy key to public server --> no need to make export on public server--> change the authorized_keys --> exit
 
 #Check Parameters
 if [ -z "$KEY_PATH" ]; then
