@@ -1,19 +1,12 @@
-Local DNS Server IP -------------------
-<ip-here>
-  nameserver 127.0.0.53 Default gateway IP -------------------
-  <ip-here>
-    10.0.0.1 DHCP IP allocation sys-logs -------------------
-    <logs-here>
-      DHCPDISCOVER on ens5 to 255.255.255.255 port 67 interval 3
-      (xid=0x1078d34a) Feb 1 13:05:31 ip-10-0-0-148 dhclient[297]: DHCPOFFER of
-      10.0.0.148 from 10.0.0.1 Feb 1 13:05:31 ip-10-0-0-148 dhclient[297]:
-      DHCPREQUEST for 10.0.0.148 on ens5 to 255.255.255.255 port 67
-      (xid=0x4ad37810) Feb 1 13:05:31 ip-10-0-0-148 dhclient[297]: DHCPACK of
-      10.0.0.148 from 10.0.0.1 (xid=0x1078d34a) Feb 1 13:05:31 ip-10-0-0-148
-      systemd-networkd[316]: ens5: DHCPv4 address 10.0.0.148/24 via 10.0.0.1 Feb
-      1 13:05:31 ip-10-0-0-148 kernel: [ 5.890442] audit: type=1400
-      audit(1706792726.280:9): apparmor="STATUS" operation="profile_load"
-      profile="unconfined" name="/usr/lib/
-    </logs-here></ip-here
-  ></ip-here
->
+Local DNS Server IP ------------------- nameserver 127.0.0.53 Default gateway IP
+------------------- 10.0.0.1 10.0.0.1 DHCP IP allocation sys-logs
+------------------- logs-here ------- DHCPDISCOVER on ens5 to 255.255.255.255
+port 67 interval 3 (xid=0x1078d34a) Feb 1 13:05:31 ip-10-0-0-148 dhclient[297]:
+DHCPOFFER of 10.0.0.148 from 10.0.0.1 Feb 1 13:05:31 ip-10-0-0-148
+dhclient[297]: DHCPREQUEST for 10.0.0.148 on ens5 to 255.255.255.255 port 67
+(xid=0x4ad37810) Feb 1 13:05:31 ip-10-0-0-148 dhclient[297]: DHCPACK of
+10.0.0.148 from 10.0.0.1 (xid=0x1078d34a) Feb 1 13:05:31 ip-10-0-0-148
+systemd-networkd[316]: ens5: DHCPv4 address 10.0.0.148/24 via 10.0.0.1 Feb 1
+13:05:31 ip-10-0-0-148 kernel: [ 5.890442] audit: type=1400
+audit(1706792726.280:9): apparmor="STATUS" operation="profile_load"
+profile="unconfined" name="/usr/lib/
