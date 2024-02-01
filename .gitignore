@@ -2,7 +2,24 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+#abed
+availability_agent/
+bash_project/
+bash_scripts_demos/
+docker/
+flask_demo_networking/
+graceful_term_simulate/
+package_integrity_verification/
+python_draft/
+python_katas/
+requirements.txt
+signature_verification/
+simple_linux_socket/
+sockets_demo/
+ssh_installations/
+strace_ex/
+theatre_nighout/
+virtual_nic/
 # C extensions
 *.so
 
