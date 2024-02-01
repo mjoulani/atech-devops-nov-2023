@@ -1,5 +1,4 @@
 
-
 #!/bin/bash
 
 # Validate the presence of the KEY_PATH environment variable
