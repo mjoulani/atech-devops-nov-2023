@@ -18,15 +18,13 @@ if [ -z "$public_instance_ip" ]; then
 fi
 
 # Checking if we have private_instance_ip is set
-if [ -z "$private_instance_ip" ]; then
-   	#ssh -i "$KEY_PATH" ubuntu@"$public_instance_ip"
+if [ -z "$private_instance_ip" ]; then 
     scp -i "$KEY_PATH" -p "$KEY_PATH" ubuntu@"$public_instance_ip":/home/ubuntu/old_key
+   	ssh -i "$KEY_PATH" ubuntu@"$public_instance_ip"
 # Checking command is avaible
 elif [ -z "$command" ]; then
-    #scp -i "$KEY_PATH" "$KEY_PATH" ubuntu@"$public_instance_ip":~/new_key
     # connects to the private instance, with overbastion host
     status=$(ssh -i "$KEY_PATH" ubuntu@"$public_instance_ip" ls /home/ubuntu/new_key | wc -l )
-    #if [ "$(ssh -i "$KEY_PATH" ubuntu@"$public_instance_ip" ls -l /home/ubuntu/new_key | wc -l)" = "1" ]; then
     if [ $status = "1" ]; then
         ssh -t -i "$KEY_PATH" ubuntu@"$public_instance_ip" ssh -i "/home/ubuntu/new_key" ubuntu@"$private_instance_ip"
     else
