@@ -1,58 +1,76 @@
-// compile by `gcc -o server server.c`
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <strings.h>
 #include <sys/socket.h>
-#include <resolv.h>
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
 
-#define MY_PORT		9999
-#define MAX_BUF		1024
+#define MY_PORT     9999
+#define MAX_BUF     1024
 
-int main()
-{
-    int sockfd;
-	struct sockaddr_in self;
-	char buffer[MAX_BUF];
+int main() {
+    int sockfd, clientfd;
+    struct sockaddr_in self, client_addr;
+    socklen_t addrlen = sizeof(client_addr);
+    char buffer[MAX_BUF];
 
-    // To create a socket for networking communication. A new socket by itself is not particularly useful
+    // To create a socket for networking communication.
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
+        perror("Error creating socket");
+        exit(EXIT_FAILURE);
+    }
 
-	/** Initialize address/port structure */
-	bzero(&self, sizeof(self));
-	self.sin_family = AF_INET;
-	self.sin_port = htons(MY_PORT);
-	self.sin_addr.s_addr = INADDR_ANY;
+    // Initialize address/port structure
+    bzero(&self, sizeof(self));
+    self.sin_family = AF_INET;
+    self.sin_port = htons(MY_PORT);
+    self.sin_addr.s_addr = INADDR_ANY;
 
-    // The bind call associates an abstract socket with an actual network interface and port
-    bind(sockfd, (struct sockaddr*)&self, sizeof(self));
+    // Bind the socket
+    if (bind(sockfd, (struct sockaddr*)&self, sizeof(self)) == -1) {
+        perror("Error binding");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
 
-    // The listen call specifies the queue size for the number of incoming, unhandled connections
-	listen(sockfd, 40);
+    // Listen for incoming connections
+    if (listen(sockfd, 40) == -1) {
+        perror("Error listening");
+        close(sockfd);
+        exit(EXIT_FAILURE);
+    }
 
-	/** Server run continuously */
-	while (1)
-	{	int clientfd;
-		struct sockaddr_in client_addr;
-		int addrlen=sizeof(client_addr);
+    // Server runs continuously
+    while (1) {
+        // Accept an incoming connection
+        clientfd = accept(sockfd, (struct sockaddr*)&client_addr, &addrlen);
+        if (clientfd == -1) {
+            perror("Error accepting connection");
+            continue;  // Try accepting the next connection
+        }
 
-		/** accept an incomming connection  */
-		clientfd = accept(sockfd, (struct sockaddr*)&client_addr, &addrlen);
-		printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
+        printf("%s:%d connected\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
-		/** print the received data to the client */
-		int read_bytes = read(clientfd, buffer, MAX_BUF);
-		printf("Got client message: %s\n", buffer);
-		write(clientfd, buffer, read_bytes);
+        // Print the received data from the client
+        ssize_t read_bytes = read(clientfd, buffer, MAX_BUF);
+        if (read_bytes == -1) {
+            perror("Error reading from client");
+        } else {
+            printf("Got client message: %.*s\n", (int)read_bytes, buffer);
+            // Send the same data back to the client
+            if (write(clientfd, buffer, read_bytes) == -1) {
+                perror("Error writing to client");
+            }
+        }
 
-		/** Close data connection */
-		close(clientfd);
-	}
+        // Close the data connection
+        close(clientfd);
+    }
 
-	/** Clean up */
-	close(sockfd);
-	return 0;
+    // Clean up
+    close(sockfd);
+    return 0;
 }

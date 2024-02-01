@@ -1,0 +1,80 @@
+
+#!/bin/bash
+
+
+
+# Set the Key_PATH variable
+
+export Key_PATH="~/.ssh/yo-key-pair.pem"
+
+
+
+# Check if Key_PATH variable is set
+
+if [ -z "${Key_PATH}" ]; then
+
+    echo "Variable 'Key_PATH' not recognized. Exiting."
+
+    exit 5
+
+fi
+
+
+
+# Assign command line arguments to variables
+
+public_instance_ip="$1"
+
+private_instance_ip="$2"
+
+bastion_ip="$3"
+
+command_to_private_instance="${4}"
+
+
+
+# Check if public_instance_ip is provided
+
+if [ -z "$public_instan ce_ip" ]; then
+
+    echo "Please provide a public instance IP address."
+
+    exit 1
+
+fi
+
+# Check the number of command line arguments
+
+if [ "$#" -eq 1 ]; then
+
+    # Connect to public instance
+
+    ssh -i "$Key_PATH" ubuntu@"$public_instance_ip"
+
+    exit 0
+
+elif [ "$#" -eq 2 ]; then
+
+    # Connect to private instance through public instance
+
+    ssh -i "$Key_PATH" ubuntu@"$public_instance_ip" ssh -i /home/ubuntu/.ssh/forPrivateMachine.pem ubuntu@"$private_instance_ip"
+
+    exit 0
+
+elif [ "$#" -eq 3 ]; then
+
+    # Connect to private instance and execute a command
+
+    ssh -i "$Key_PATH" ubuntu@"$public_instance_ip" ssh -i /home/ubuntu/.ssh/forPrivateMachine.pem ubuntu@"$private_instance_ip" -t "$command_to_private_instance"
+
+    exit 0
+
+else 
+
+    # Provide usage information if bastion_ip is not provided
+
+    echo "Please provide bastion IP address."
+
+    exit 1
+
+fi
