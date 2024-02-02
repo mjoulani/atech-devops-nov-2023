@@ -111,7 +111,14 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+#abed
+package_integrity_verification/
+python_katas/
+signature_verification/
+simple_linux_socket/
+sockets_demo/
+ssh_installations/
+strace_ex/
 # Spyder project settings
 .spyderproject
 .spyproject
