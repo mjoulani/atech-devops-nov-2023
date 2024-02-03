@@ -3,14 +3,11 @@
 127.0.0.53
 
 ##### Default Gateway
-10.0.16.1
+10.0.0.0
 
 
 #### DORA
-Jan 14 14:46:09 ip-10-0-25-34 dhclient[276]: Internet Systems Consortium DHCP Client 4.4.1
-Jan 14 14:46:09 ip-10-0-25-34 dhclient[276]: For info, please visit https://www.isc.org/software/dhcp/
-Jan 14 14:46:09 ip-10-0-25-34 dhclient[276]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x7b510e38)
-Jan 14 14:46:09 ip-10-0-25-34 dhclient[276]: DHCPOFFER of 10.0.25.34 from 10.0.16.1
-Jan 14 14:46:09 ip-10-0-25-34 dhclient[276]: DHCPREQUEST for 10.0.25.34 on eth0 to 255.255.255.255 port 67 (xid=0x380e517b)
-Jan 14 14:46:09 ip-10-0-25-34 dhclient[276]: DHCPACK of 10.0.25.34 from 10.0.16.1 (xid=0x7b510e38)
-Jan 14 14:46:09 ip-10-0-25-34 systemd-networkd[312]: eth0: DHCPv4 address 10.0.25.34/20 via 10.0.16.1
+Jan 26 12:40:27 ip-10-0-0-74 dhclient[274]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x6b22073a)
+Jan 26 12:40:27 ip-10-0-0-74 dhclient[274]: DHCPOFFER of 10.0.0.74 from 10.0.0.1
+Jan 26 12:40:27 ip-10-0-0-74 dhclient[274]: DHCPREQUEST for 10.0.0.74 on eth0 to 255.255.255.255 port 67 (xid=0x3a07226b)
+Jan 26 12:40:27 ip-10-0-0-74 dhclient[274]: DHCPACK of 10.0.0.74 from 10.0.0.1 (xid=0x6b22073a)
