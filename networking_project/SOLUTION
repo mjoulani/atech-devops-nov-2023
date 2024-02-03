@@ -18,6 +18,3 @@ Jan 30 10:37:20 ip-10-0-0-19 dhclient[274]: DHCPOFFER of 10.0.0.19 from 10.0.0.1
 Jan 30 10:37:20 ip-10-0-0-19 dhclient[274]: DHCPREQUEST for 10.0.0.19 on eth0 to 255.255.255.255 port 67 (xid=0x3fa3d842)
 Jan 30 10:37:20 ip-10-0-0-19 dhclient[274]: DHCPACK of 10.0.0.19 from 10.0.0.1 (xid=0x42d8a33f)
 
-
-
-
