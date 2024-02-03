@@ -78,3 +78,4 @@ then
   echo -e "\n\nthe route table associated with the public subnet should hold a route with the internet gateway as target"
   exit 1
 fi
+#
