@@ -16,9 +16,7 @@ if [[ -z $PubIP ]];then
     exit 5
 fi
 
-#TODO: Automatic Copy KEY.pem to PubIP
-# scp  -o StrictHostKeyChecking=no -i ${KEY_PATH} $KEY_PATH ${User}@${PubIP}:~
-# ssh -o StrictHostKeyChecking=no -i "${KEY_PATH}" "${User}@${PubIP}" "chmod 600 ~/$(basename "${KEY_PATH}")"
+chmod 600  ${KEY_PATH}
 
 case $# in
     1)
