@@ -1,5 +1,5 @@
 #!/bin/bash
-#!/bin/bash
+
 
 # Step 1: Client Hello
 CLIENT_HELLO_RESPONSE=$(curl -s -X POST http://52.14.216.174:8080/clienthello -d '{
