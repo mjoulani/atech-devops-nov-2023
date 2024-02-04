@@ -1,25 +1,34 @@
 #!/bin/bash
-private_ip=$1
-user=ubuntu
-newkey=new_key
+PrvIP=$1
+User=ubuntu
+NewKey=new_key
+GenKey=gen_key
 
-
+#CheckCase1
 if [[ -z $KEY_PATH ]];then
-   echo "KEY_PATH variable not found"
-   exit 5
+    echo "KEY_PATH variable not found"
+    exit 5
 fi
 
-if [[ -z $private_ip ]];then
-  echo "Please provide IP address"
-  exit 5
+#CheckCase2
+if [[ -z $PrvIP ]];then
+    echo "Please provide IP address"
+    exit 5
 fi
-if [[ ! -f ~/$newkey ]];then
-ssh-keygen -f ~/$newkey -t rsa -N ''<<< "y"  1> /dev/null
-chmod 600 ~/$newkey.pub
-scp -o StrictHostKeyChecking=no -i $KEY_PATH ~/$newkey.pub $user@$private_ip:~/.ssh/authorized_keys 1> /dev/null 2> /dev/null
- elif [[ -f ~/$newkey ]];then
-mv ~/$newkey ~/$newkey.bak
-ssh-keygen -f ~/$newkey -t rsa -N ''<<< "y"  1> /dev/null
-scp -o StrictHostKeyChecking=no -i ~/$newkey.bak ~/$newkey.pub $user@$private_ip:~/.ssh/authorized_keys 1> /dev/null 2> /dev/null
-rm ~/$newkey.bak
+
+#Generated new Key
+if [[ -f ~/$NewKey ]];then
+    sed -i 's/export KEY.*/export KEY_PATH=\~\/new_key/g' ~/.bashrc
+    ssh-keygen -f ~/$GenKey -N "" 1>  /dev/null
+    scp -q -o StrictHostKeyChecking=no -i $KEY_PATH ~/$GenKey.pub $User@$PrvIP:~/.ssh/authorized_keys
+    rm ~/$NewKey ~/$NewKey.pub
+    mv $GenKey $NewKey;
+    mv $GenKey.pub $NewKey.pub
+fi
+
+#Added new key to "authorized_keys"
+if [[ ! -f ~/$NewKey ]];then
+    sed -i 's/export KEY.*/export KEY_PATH=\~\/new_key/g' ~/.bashrc
+    ssh-keygen -f ~/$NewKey -N "" 1> /dev/null
+    scp -q -o StrictHostKeyChecking=no -i $KEY_PATH ~/$NewKey.pub $User@$PrvIP:~/.ssh/authorized_keys
 fi
