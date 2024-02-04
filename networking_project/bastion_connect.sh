@@ -16,18 +16,20 @@ if [[ -z $PubIP ]];then
     exit 5
 fi
 
-chmod 600  ${KEY_PATH}
-
-checkKey=$(ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "ls Fnaarani.pem 1> /dev/null 2> /dev/null;echo $?")
-if [[ $checkKey -ne 0 ]];then
-    scp -q -o  StrictHostKeyChecking=no -i ${KEY_PATH} $KEY_PATH ubuntu@${PubIP}:~
+checkKey=$(ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t 'ls Fnaarani.pem 2> /dev/null | wc -l')
+echo $checkKey
+if [[ "$checkKey" != "1" ]];then
+    scp -q -o StrictHostKeyChecking=no -i ${KEY_PATH} $KEY_PATH ubuntu@${PubIP}:~
+    echo "COPIED KEY TO $PubIP"
+    ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "chmod 600 $KEY_PATH"
+    echo "ADDED PERMISTIONS"
 fi
 
-ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "bash -s " <<- EOF
+ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "bash -s" <<EOF
 #!/bin/bash
-grep 'Fnaarani.pem' \~\/.bashrc
-if [[  "\$?" != "0" ]]; then
-sed -i '1s/^/export KEY_PATH=\~\/Fnaarani.pem/' ~/\.\bashrc
+grep Fnaarani.pem .bashrc 1> /dev/null
+if [[ "\$?" != "0" ]];then
+sed -i '1s/^/export KEY_PATH=Fnaarani.pem\\n/' .bashrc
 fi
 EOF
 
