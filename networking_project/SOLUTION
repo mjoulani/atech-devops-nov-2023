@@ -1,16 +1,22 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+<127.0.0.53>
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+<10.0.0.1>
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+< sudo grep -E 'DHCPDISCOVER|DHCPOFFER|DHCPREQUEST|DHCPACK' /var/log/syslog >
+
+
+Jan 31 14:46:19 ip-10-0-0-94 dhclient[276]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0x2407eb2a)
+Jan 31 14:46:19 ip-10-0-0-94 dhclient[276]: DHCPOFFER of 10.0.0.94 from 10.0.0.1
+Jan 31 14:46:19 ip-10-0-0-94 dhclient[276]: DHCPREQUEST for 10.0.0.94 on eth0 to 255.255.255.255 port 67 (xid=0x2aeb0724)
+Jan 31 14:46:19 ip-10-0-0-94 dhclient[276]: DHCPACK of 10.0.0.94 from 10.0.0.1 (xid=0x2407eb2a)
 
