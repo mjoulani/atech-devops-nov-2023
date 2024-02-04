@@ -17,6 +17,18 @@ fi
 # Set bastion IP and optional private instance IP
 BASTION_IP="$1"
 PRIVATE_IP="${2:-}"
+PRIVATE_KEY_PATH="$KEY_PATH"
+
+
+# If two arguments are provided, check for new_key at the bastion
+if [[ $# -gt 1 ]]; then
+  bastion_key_check=$(ssh -i "$KEY_PATH" ubuntu@$BASTION_IP "test -f new_key && echo 'exists' || echo 'not found'")
+  if [[ "$bastion_key_check" == "exists" ]]; then
+    PRIVATE_KEY_PATH="~/new_key"
+    echo "Using new_key for private instance connection"
+  fi
+fi
+
 
 # Construct the SSH command
 ssh_command="ssh -i $KEY_PATH"
@@ -27,13 +39,13 @@ if [ $# -eq 1 ]; then
     
     ssh_command="$ssh_command ubuntu@$BASTION_IP"
     
-    
 fi
 
 # If two arguments are provided, connect to private instance via bastion
 if [ $# -gt 1 ]; then
 
-    ssh_command="$ssh_command -o ProxyCommand=\"ssh -W %h:%p -i $KEY_PATH ubuntu@$BASTION_IP\" ubuntu@$PRIVATE_IP"
+    ssh_command="$ssh_command -o ProxyCommand=\"ssh -W %h:%p -i \"$PRIVATE_KEY_PATH\" ubuntu@$BASTION_IP\" ubuntu@$PRIVATE_IP"
+    
 fi
 
 # Execute the SSH command with any additional arguments
