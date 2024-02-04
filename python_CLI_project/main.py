@@ -109,9 +109,13 @@ class CLIApplication:
     # To run the script in infinte loop and accept command from user
     def run(self):
         while True:
-            self.display_commands()
-            choice = input("Choose a command number: ")
-            choice = int(choice)
+            try:
+                self.display_commands()
+                choice = input("Choose a command number: ")
+                choice=int(choice)
+            except Exception as e:
+                    print(f"An error occurred: {e}")
+                    
             if choice not in self.commands:
                 print("Invalid command number. Please try again.")
                 continue
