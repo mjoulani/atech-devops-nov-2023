@@ -1,16 +1,23 @@
 Local DNS Server IP
 -------------------
-<ip-here>
+127.0.0.53
 
 
 
 Default gateway IP
 -------------------
-<ip-here>
+10.0.0.1
 
 
 
 DHCP IP allocation sys-logs
 -------------------
-<logs-here>
+Jan 14 13:17:46 ip-10-0-0-131 systemd-networkd[323]: eth0: DHCPv4 address 10.0.0.131/24 via 10.0.0.1
+Jan 14 13:32:37 ip-10-0-0-131 dhclient[303]: Internet Systems Consortium DHCP Client 4.4.1
+Jan 14 13:32:37 ip-10-0-0-131 dhclient[303]: DHCPDISCOVER on eth0 to 255.255.255.255 port 67 interval 3 (xid=0xada7b4d)
+Jan 14 13:32:37 ip-10-0-0-131 dhclient[303]: DHCPOFFER of 10.0.0.131 from 10.0.0.1
+Jan 14 13:32:37 ip-10-0-0-131 dhclient[303]: DHCPREQUEST for 10.0.0.131 on eth0 to 255.255.255.255 port 67 (xid=0x4d7bda0a)
+Jan 14 13:32:37 ip-10-0-0-131 dhclient[303]: DHCPACK of 10.0.0.131 from 10.0.0.1 (xid=0xada7b4d)
+Jan 14 13:32:37 ip-10-0-0-131 systemd-networkd[322]: eth0: DHCPv4 address 10.0.0.131/24 via 10.0.0.1
+
 
