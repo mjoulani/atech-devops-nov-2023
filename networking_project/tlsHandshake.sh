@@ -97,4 +97,4 @@ log "Decryption successful. Client-Server TLS handshake has been completed."
 log "Cleaning up temporary files..."
 rm -f cert-ca-aws.pem server_cert.pem encSampleMsgReady.txt
 
-log "Script execution completed successfully."
+log "Client-Server TLS handshake has been completed successfully."
