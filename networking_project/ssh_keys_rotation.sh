@@ -19,8 +19,6 @@ fi
 #Generated new Key
 if [[ -f ~/$NewKey ]];then
     sed -i 's/export KEY.*/export KEY_PATH=\~\/new_key/g' ~/.bashrc
-    echo $KEY_PATH
-    echo "HELOOOOOOOOOOOOOOOOOOOOOOO"
     ssh-keygen -f ~/$GenKey -N "" 1>  /dev/null
     scp -q -o StrictHostKeyChecking=no -i $KEY_PATH ~/$GenKey.pub $User@$PrvIP:~/.ssh/authorized_keys
     rm ~/$NewKey ~/$NewKey.pub
