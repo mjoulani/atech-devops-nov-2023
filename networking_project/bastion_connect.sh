@@ -18,6 +18,19 @@ fi
 
 chmod 600  ${KEY_PATH}
 
+checkKey=$(ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "ls Fnaarani.pem 1> /dev/null 2> /dev/null;echo $?")
+if [[ $checkKey -ne 0 ]];then
+    scp -q -o  StrictHostKeyChecking=no -i ${KEY_PATH} $KEY_PATH ubuntu@${PubIP}:~
+fi
+
+ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "bash -s " <<- EOF
+#!/bin/bash
+grep 'Fnaarani.pem' \~\/.bashrc
+if [[  "\$?" != "0" ]]; then
+sed -i '1s/^/export KEY_PATH=\~\/Fnaarani.pem/' ~/\.\bashrc
+fi
+EOF
+
 case $# in
     1)
         ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP}
