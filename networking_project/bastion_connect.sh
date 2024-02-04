@@ -3,6 +3,7 @@ PubIP=$1
 PrvIP=$2
 cmd=$3
 User=ubuntu
+KeyRot=ssh_keys_rotation.sh
 
 #CheckCase1
 if [[ -z $KEY_PATH ]];then
@@ -16,20 +17,29 @@ if [[ -z $PubIP ]];then
     exit 5
 fi
 
-checkKey=$(ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t 'ls Fnaarani.pem 2> /dev/null | wc -l')
-echo $checkKey
-if [[ "$checkKey" != "1" ]];then
+#Check if 'Key_Rotaion' Exists
+checkKeyRotation=$(ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t 'ls ssh_keys_rotation.sh 2> /dev/null | wc -l')
+if [[ "$checkKeyRotation" != "1" ]];then
+    scp -q -o StrictHostKeyChecking=no -i ${KEY_PATH} $KeyRot ubuntu@${PubIP}:~
+    echo "COPIED KEY ROTATION SCRIPT TO $PubIP"
+    ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "chmod +x $KeyRot"
+    echo -e "ADDED PERMISTIONS\n####################"
+fi
+
+#Check if 'KEY_PATH' Exists
+checkKeyPath=$(ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t 'ls "$KEY_PATH" 2> /dev/null | wc -l')
+if [[ "$checkKeyPath" != "1" ]];then
     scp -q -o StrictHostKeyChecking=no -i ${KEY_PATH} $KEY_PATH ubuntu@${PubIP}:~
     echo "COPIED KEY TO $PubIP"
     ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "chmod 600 $KEY_PATH"
-    echo "ADDED PERMISTIONS"
+    echo -e "ADDED PERMISTIONS\n####################"
 fi
 
 ssh -q -o StrictHostKeyChecking=no -i ${KEY_PATH} ${User}@${PubIP} -t "bash -s" <<EOF
 #!/bin/bash
-grep Fnaarani.pem .bashrc 1> /dev/null
+grep "$KEY_PATH" .bashrc 1> /dev/null
 if [[ "\$?" != "0" ]];then
-sed -i '1s/^/export KEY_PATH=Fnaarani.pem\\n/' .bashrc
+sed -i '1s/^/export KEY_PATH="$KEY_PATH"\\n/' .bashrc
 fi
 EOF
 
