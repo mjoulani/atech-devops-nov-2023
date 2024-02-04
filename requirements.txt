@@ -1,8 +1,13 @@
 mkdocs
 pandas
-flask
+flask~=3.0.0
 aiohttp
 loguru
-requests
+requests~=2.31.0
 youtube-dl>=2021.12.17
-matplotlib
+matplotlib~=3.8.2
+pymongo~=4.6.1
+Flask==3.0.1
+Flask-PyMongo==2.3.0
+
+MyApplication~=0.1.0

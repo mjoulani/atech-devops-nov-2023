@@ -42,9 +42,10 @@ class TestWordsConcatenation(unittest.TestCase):
     def test_list(self):
         lst = ["take", "me", "home"]
         self.assertEqual(questions.words_concatenation(lst), 'take me home', 'Should be "take me home"')
-    def test_sample(self):
-        # your code here
-        pass
+
+    def test_long_list(self):
+        lst = ["take", "me", "home", "country", "road"]
+        self.assertEqual(questions.words_concatenation(lst), 'take me home country road', 'Should be "take me home country road"')
 
 
 class TestReverseWordsConcatenation(unittest.TestCase):
