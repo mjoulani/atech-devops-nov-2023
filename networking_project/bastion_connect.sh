@@ -16,15 +16,13 @@ fi
 public_instance_ip="$1"
 private_instance_ip="$2"
 
-scp -q -i "$KEY_PATH" ssh_keys_rotation.sh ubuntu@"$public_instance_ip":ssh_keys_rotation.sh
-
 switch(){
 ssh -q -i "$KEY_PATH" ubuntu@"$public_instance_ip" -t "bash -s" <<EOF
 #!/bin/bash
 if [[ -f new_key ]];then
- export KEY_PATH=new_key; bash ssh_keys_rotation.sh $private_instance_ip
+ export KEY_PATH=new_key
 else
-  export KEY_PATH=key.pem; bash ssh_keys_rotation.sh $private_instance_ip
+ export KEY_PATH=key.pem
 fi
 EOF
 }
