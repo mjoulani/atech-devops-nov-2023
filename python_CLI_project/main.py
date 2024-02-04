@@ -52,9 +52,9 @@ class NationalizeCommand(Command):
         for country_info in country_list:
             # Access the value of 'country_id' key
             prob = country_info.get('probability')
-            prob = prob * 1000
+            prob = prob * 100
 
-            if prob >= 96:
+            if prob >= 1:
                 id = country_info.get('country_id')
                 country_id.append(id)
                 if prob >= 100:
@@ -62,7 +62,8 @@ class NationalizeCommand(Command):
                 persent.append(prob)
 
         # Print or use the country_id value as needed
-        the_file = open("countray.json")
+        #the_file = open("countray.json")
+        the_file = open(r"C:\atech-devops-nov-2023\python_CLI_project\country.json")
         json_data = json.load(the_file)
 
         result = []
@@ -73,7 +74,7 @@ class NationalizeCommand(Command):
         temp = 0
         if result:
             for i in result:
-                print("The Result is : ", i, " ", persent[temp], "%")
+                print("The Result is : ", i, " ", round(persent[temp],3), "%")
                 temp += 1
             return "for Nationality"
         else:
