@@ -1,11 +1,6 @@
 
 #!/bin/bash
 
-# Check if KEY_PATH environment variable is set
-if [ -z "$KEY_PATH" ]; then
-    echo "KEY_PATH environment variable is expected"
-    e
-
 
 # Check if KEY_PATH environment variable is set
 if [ -z "$KEY_PATH" ]; then
