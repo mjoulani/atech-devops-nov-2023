@@ -1,0 +1,4 @@
+REGION="ap-northeast-2a"
+VPC_ID="vpc-08ef3a1b297090c71"
+PUBLIC_INSTANCE_ID="i-0f9089a116c6e39ac"
+PRIVATE_INSTANCE_ID="i-01b006c0ccdcb7bef"
