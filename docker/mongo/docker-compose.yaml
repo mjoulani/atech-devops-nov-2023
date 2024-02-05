@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - E:\elements\Devops_Atech\mongo_data:/data/db
+      - /home/yoyoq/mongo_demo:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
