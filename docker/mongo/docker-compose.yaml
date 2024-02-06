@@ -12,15 +12,18 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     restart: always
+    
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins
-    ports:
+    ports: 
       - "8080:8080"
       - "50000:50000"
     volumes:
       - E:\elements\Devops_Atech\jenkins:/var/jenkins_home
     restart: always
+    depends_on:
+      - jenkins
 
 
 # use docker-compose up -d
