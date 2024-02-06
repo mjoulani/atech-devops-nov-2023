@@ -1,0 +1,9 @@
+
+
+networks:
+  mongoCluster:
+    driver: bridge
+
+secrets:
+  telegram_token:
+    file: telegram_token.txt

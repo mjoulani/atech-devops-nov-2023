@@ -7,11 +7,13 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - E:\elements\Devops_Atech\mongo_data:/data/db
+      - D:\atech_devops\mongo:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
     restart: always
+    networks:
+      - my_network
     
   jenkins:
     image: jenkins/jenkins:lts
@@ -20,10 +22,20 @@ services:
       - "8080:8080"
       - "50000:50000"
     volumes:
-      - E:\elements\Devops_Atech\jenkins:/var/jenkins_home
+      - D:\atech_devops\jenkins:/var/jenkins_home
     restart: always
     depends_on:
-      - jenkins
+      - mongodb
+
+    networks:
+      - my_network  
+
+
+
+networks:
+  my_network:
+    driver: bridge    
+
 
 
 # use docker-compose up -d
