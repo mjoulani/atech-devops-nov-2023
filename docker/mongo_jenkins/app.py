@@ -96,6 +96,6 @@ student_handler.print_students()
 # collection_finder.find_collection_by_name('students')
 # Drop the database (for clearing all data)
 # mongo_connection.drop_database('mydatabase')
-#mongo_connection.drop_database('university')
+mongo_connection.drop_database('university')
 # Close the connection
 mongo_connection.close()
