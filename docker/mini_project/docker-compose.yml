@@ -1,16 +1,27 @@
 version: '3'
 
 services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:latest
     container_name: mongodb
+<<<<<<< HEAD:docker/mongo/docker-compose.yaml
     ports:
       - "27017:27017"
     volumes:
       - /home/yoyoq/mongo_demo:/data/db
+=======
+>>>>>>> origin:docker/mini_project/docker-compose.yml
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
-    restart: always
-
-# use docker-compose up -d
+    volumes:
+      - ./mongo_data:/data/db
+    ports:
+      - "27017:27017"

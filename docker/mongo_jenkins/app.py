@@ -78,24 +78,25 @@ class CollectionFinder:
 mongo_connection = MongoDBConnection(username='admin', password='password')
 
 # # Add a document
-# document_handler = DocumentHandler(mongo_connection, 'mydatabase', 'myCollection')
-# document_handler.insert_document({"name": "Alice", "age": 25, "city": "London"})
+document_handler = DocumentHandler(mongo_connection, 'demo', 'devops_students')
+document_handler.insert_document({"name": "Alice", "age": 25, "city": "London"})
+
 #
 # # Add students
-students_data = [
-    {"name": "John Doe", "age": 20, "course": "Computer Science"},
-    {"name": "Jane Smith", "age": 22, "course": "Mathematics"},
-    {"name": "Bob Johnson", "age": 21, "course": "Physics"},
-]
-student_handler = StudentHandler(mongo_connection, 'university', 'students', students_data)
-student_handler.insert_students()
-student_handler.print_students()
+# students_data = [
+#     {"name": "John Doe", "age": 20, "course": "Computer Science"},
+#     {"name": "Jane Smith", "age": 22, "course": "Mathematics"},
+#     {"name": "Bob Johnson", "age": 21, "course": "Physics"},
+# ]
+# student_handler = StudentHandler(mongo_connection, 'university', 'students', students_data)
+# student_handler.insert_students()
+# student_handler.print_students()
 #
 # Find a collection by name
-# collection_finder = CollectionFinder(mongo_connection, 'university')
-# collection_finder.find_collection_by_name('students')
+collection_finder = CollectionFinder(mongo_connection, 'demo')
+collection_finder.find_collection_by_name('devops_students')
 # Drop the database (for clearing all data)
 # mongo_connection.drop_database('mydatabase')
-mongo_connection.drop_database('university')
+# mongo_connection.drop_database('university')
 # Close the connection
 mongo_connection.close()
