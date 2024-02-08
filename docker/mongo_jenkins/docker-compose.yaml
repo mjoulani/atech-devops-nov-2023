@@ -7,7 +7,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - D:\atech_devops\mongo:/data/db
+      - \home\ubuntu\mongo_demo:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
@@ -22,7 +22,7 @@ services:
       - "8080:8080"
       - "50000:50000"
     volumes:
-      - D:\atech_devops\jenkins:/var/jenkins_home
+      - \home\ubuntu\mongo_demo:jenkins:/var/jenkins_home
     restart: always
     depends_on:
       - mongodb
