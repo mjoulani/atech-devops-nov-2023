@@ -14,21 +14,8 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-<<<<<<< HEAD
-RUN apt update
-RUN apt install nano
-
-=======
-RUN apt install nano
->>>>>>> b772484079155a796b210ed8fa833e8f71cc2a77
 RUN pip install -r requirements.txt
 
 EXPOSE 5000
-EXPOSE 6000
 
 CMD ["python", "app.py"]
-<<<<<<< HEAD
-=======
- 
-
->>>>>>> b772484079155a796b210ed8fa833e8f71cc2a77
