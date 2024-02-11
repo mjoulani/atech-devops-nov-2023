@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     image: nginx:latest
-    container_name: my-nginx
+    container_name: my-nginx2
     ports:
       - "80:80"
     volumes:
