@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  group:
+    image: group:latest
+    container_name: group
+    ports:
+      - "8000:5000"
+    restart: always
+
+  group1:
+    image: group:latest
+    container_name: group1
+    ports:
+      - "8001:5000"
+    restart: always
+
+  group2:
+    image: group:latest
+    container_name: group2
+    ports:
+      - "8002:5000"
+    restart: always
