@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:latest
+    container_name: my-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    restart: always
+
+  nginx2:
+    image: nginx:latest
+    container_name: my-nginx2
+    ports:
+      - "81:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    restart: always
