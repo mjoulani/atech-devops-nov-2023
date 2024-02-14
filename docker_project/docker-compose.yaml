@@ -22,12 +22,15 @@ services:
     networks:
       - mongoCluster
   yolo5:
-    image: alexey/yolo5:latest
+    image: mjoulani/yolo5:latest
     container_name: yolo5
     ports:
       - "8081:8081"
+    volumes:
+      - /%USERPROFILE%/.aws:/root/.aws:/usr/src/app
     environment:
-      BUCKET_NAME: alexey-yolo
+      #BUCKET_NAME: alexey-yolo
+      BUCKET_NAME: mjoulani-yolo
     networks:
       - mongoCluster
 #  polybot:

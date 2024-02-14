@@ -10,6 +10,7 @@ import os
 import pymongo
 
 images_bucket = os.environ['BUCKET_NAME']
+#images_bucket = os.environ['mjoulani-yolo']
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
