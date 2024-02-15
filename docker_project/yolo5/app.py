@@ -3,11 +3,18 @@ from pathlib import Path
 import boto3
 from flask import Flask, request, jsonify
 from detect import run
+#from detect.sub_module.run import run
 import uuid
 import yaml
 from loguru import logger
 import os
 import pymongo
+
+# Set AWS credentials and region as environment variables
+os.environ["AWS_ACCESS_KEY_ID"] = "AKIA5SPWCQVQKUH5Y2E7"
+os.environ["AWS_SECRET_ACCESS_KEY"] = "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"
+os.environ["AWS_DEFAULT_REGION"] = "ap-northeast-1"
+
 
 images_bucket = os.environ['BUCKET_NAME']
 #images_bucket = os.environ['mjoulani-yolo']
