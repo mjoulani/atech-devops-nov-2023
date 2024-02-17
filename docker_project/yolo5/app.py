@@ -11,9 +11,9 @@ import os
 import pymongo
 
 # Set AWS credentials and region as environment variables
-os.environ["AWS_ACCESS_KEY_ID"] = "AKIA5SPWCQVQKUH5Y2E7"
-os.environ["AWS_SECRET_ACCESS_KEY"] = "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"
-os.environ["AWS_DEFAULT_REGION"] = "ap-northeast-1"
+#os.environ["AWS_ACCESS_KEY_ID"] = "AKIA5SPWCQVQKUH5Y2E7"
+#os.environ["AWS_SECRET_ACCESS_KEY"] = "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"
+#os.environ["AWS_DEFAULT_REGION"] = "ap-northeast-1"
 
 
 images_bucket = os.environ['BUCKET_NAME']

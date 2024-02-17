@@ -28,8 +28,10 @@ services:
     ports:
       - "8081:8081"
     volumes:
+      - //c/Users/HP/.aws/credentials:/root/.aws/credentials
+      #- //c/Users/HP/.aws/credentials:/usr/src/app/.aws/credentials
       #- "%USERPROFILE%\\.aws\\credentials:/root/.aws/"
-       - "C:\\Users\\HP\\.aws\\credentials:/root/.aws/"
+       #- "C:\\Users\\HP\\.aws\\credentials:/root/.aws/"
 
     environment:
       #BUCKET_NAME: alexey-yolo
