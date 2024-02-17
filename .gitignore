@@ -188,3 +188,6 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+
+#don't push any .pem file
+*.pem
