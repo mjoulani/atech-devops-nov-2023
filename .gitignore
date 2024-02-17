@@ -188,3 +188,9 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+.*.pem
+/.DS_Store
+/my-2048-game/2048/
+/networking_project/hamad-key2-private.pem
+/networking_project/hamad_key.pem
+/networking_project/privatekey.txt
