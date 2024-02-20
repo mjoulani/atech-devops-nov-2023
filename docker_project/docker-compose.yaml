@@ -3,13 +3,19 @@ services:
   mongo1:
     image: mongo:5
     container_name: mongo1
-    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1
+    volumes:
+      - ./mongodb-entrypoint.sh:/mongodb-entrypoint.sh
+    # command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1
+    entrypoint: ["./mongodb-entrypoint.sh"]
     ports:
       - "27017:27017"
     restart: always
+    depends_on:
+      - mongo2
+      - mongo3
     networks:
       - mongoCluster
-      
+
   mongo2:
     image: mongo:5
     container_name: mongo2
