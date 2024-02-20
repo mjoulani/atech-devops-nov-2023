@@ -6,6 +6,7 @@ import uuid
 import yaml
 from loguru import logger
 import os
+import boto3
 
 images_bucket = os.environ['BUCKET_NAME']
 
