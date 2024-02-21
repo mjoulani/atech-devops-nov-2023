@@ -18,3 +18,5 @@ mongosh --eval "rs.initiate({
     { _id: 2, host: 'mongo3' }
   ]
 })"
+
+wait
