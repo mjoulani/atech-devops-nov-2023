@@ -5,9 +5,11 @@ from bot import ObjectDetectionBot, Bot
 
 app = flask.Flask(__name__)
 
-TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
+#TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
+#TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
 
+TELEGRAM_TOKEN='6810278453:AAHAp9L-0y4t0WupwoL_hBzaZQDzISSCYkI'
+TELEGRAM_APP_URL='t.me/MSHSHAGAL_BOT'
 
 @app.route('/', methods=['GET'])
 def index():
