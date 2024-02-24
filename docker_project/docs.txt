@@ -8,3 +8,7 @@ docker exec -it mongo1 mongosh --eval "rs.initiate({
  })"
 
  docker exec -it mongo1 mongosh --eval "rs.status()"
+
+git config --global core.autocrlf input
+git rm --cached -r .
+git reset --hard
