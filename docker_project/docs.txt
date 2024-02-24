@@ -12,3 +12,6 @@ docker exec -it mongo1 mongosh --eval "rs.initiate({
 git config --global core.autocrlf input
 git rm --cached -r .
 git reset --hard
+
+
+docker run -d --rm --name yolo_testing -p 8081:8081 -e BUCKET_NAME=oferbakria  -v C:\Users\User\.aws\credentials:/root/.aws/credentials yolo5

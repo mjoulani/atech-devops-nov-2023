@@ -37,6 +37,18 @@ services:
     networks:
       - mongoCluster
 
+
+  yolo5:
+    image: yolo5
+    container_name: yolo5
+    ports:
+        - "8081:8081"
+    environment:
+        - BUCKET_NAME=oferbakria
+    volumes:
+        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
+    restart: always
+
 networks:
   mongoCluster:
     driver: bridge
