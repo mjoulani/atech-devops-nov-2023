@@ -57,7 +57,7 @@ def predict():
 
     # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
 
-    the_image = original_img_path[:-4] + "_predicted.jpg"
+    the_image = "predicted_" + original_img_path
     s3.upload_file(str(predicted_img_path), bucket_name, the_image)
 
     # Parse prediction labels and create a summary
