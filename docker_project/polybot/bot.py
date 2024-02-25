@@ -17,7 +17,8 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        self.telegram_bot_client.set_webhook(url='https://04dc-2a00-a041-38e2-1f00-4cf5-5bff-e055-bcf4.ngrok-free.app/' + token + '/', timeout=60)
+
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -42,6 +43,7 @@ class Bot:
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
         data = self.telegram_bot_client.download_file(file_info.file_path)
         folder_name = file_info.file_path.split('/')[0]
+        print(folder_name)
 
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
@@ -79,8 +81,15 @@ class ObjectDetectionBot(Bot):
         logger.info(f'Incoming message: {msg}')
 
         if self.is_current_msg_photo(msg):
-            pass
             # TODO download the user photo (utilize download_user_photo)
+            self.download_user_photo(msg)
+            # TODO upload the photo to S3
+
+        else:
+            print("bashar: "+msg)
+
+            #self.handle_message(msg)
+
             # TODO upload the photo to S3
             # TODO send a request to the `yolo5` service for prediction
             # TODO send results to the Telegram end-user
