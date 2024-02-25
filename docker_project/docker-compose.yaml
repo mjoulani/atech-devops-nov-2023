@@ -42,6 +42,8 @@ services:
         - "8081:8081"
     environment:
         - BUCKET_NAME=basharziv
+    networks:
+      - mongoCluster
     volumes:
         - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
     restart: always

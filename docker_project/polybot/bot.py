@@ -101,8 +101,14 @@ class ObjectDetectionBot(Bot):
             client = pymongo.MongoClient("mongodb://mongo1:27017/")
 
             db = client["mongodb"]  # Replace with your actual database name
+            collection = db["prediction"]
             collections = db.list_collection_names()
             print(f'Collections in the database: {collections}')
+            cursor = collection.find()
+
+            # Print the retrieved data
+            for document in cursor:
+                print(document)
 
 
 

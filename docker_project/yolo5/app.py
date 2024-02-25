@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from pathlib import Path
 import boto3
 from flask import Flask, request, jsonify
@@ -87,20 +88,12 @@ def predict():
         }
 
         # Store the prediction_summary in MongoDB
-        # Replace with the appropriate service name
-        mongo_host = "mongo1"
-        mongo_port = 27017
-
-        # Construct the connection string
-        mongo_connection_string = f"mongodb://{mongo_host}:{mongo_port}/"
-
         # Connect to MongoDB
-        client = pymongo.MongoClient(mongo_connection_string)
+        client = pymongo.MongoClient("mongodb://mongo1:27017/")
         db = client["mongodb"]
         collection = db["prediction"]
 
         inserted_id = collection.insert_one(prediction_summary).inserted_id
-        logger.info(f'Inserted document with _id: {inserted_id}')
 
 
 
