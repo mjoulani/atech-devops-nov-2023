@@ -9,6 +9,8 @@ from loguru import logger
 import os
 import pymongo
 
+from docker.mongo_jenkins.app import MongoDBConnection
+
 images_bucket = os.environ['BUCKET_NAME']
 
 with open("data/coco128.yaml", "r") as stream:
@@ -85,14 +87,26 @@ def predict():
         }
 
         # Store the prediction_summary in MongoDB
-        client = pymongo.MongoClient("mongodb://mongo1:27017/")
+        # Replace with the appropriate service name
+        mongo_host = "mongo1"
+        mongo_port = 27017
+
+        # Construct the connection string
+        mongo_connection_string = f"mongodb://{mongo_host}:{mongo_port}/"
+
+        # Connect to MongoDB
+        client = pymongo.MongoClient(mongo_connection_string)
         db = client["mongodb"]
         collection = db["prediction"]
 
         inserted_id = collection.insert_one(prediction_summary).inserted_id
+        logger.info(f'Inserted document with _id: {inserted_id}')
+
+
 
         # Now convert the ObjectId to str for JSON serialization
         prediction_summary['_id'] = str(inserted_id)
+
 
         return jsonify(prediction_summary)
     else:

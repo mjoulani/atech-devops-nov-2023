@@ -1,7 +1,12 @@
+import json
+
+import pymongo
+import requests
 import telebot
 from loguru import logger
 import os
 import time
+import boto3
 from telebot.types import InputFile
 
 
@@ -17,8 +22,8 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url='https://04dc-2a00-a041-38e2-1f00-4cf5-5bff-e055-bcf4.ngrok-free.app/' + token + '/', timeout=60)
-
+        self.telegram_bot_client.set_webhook(
+            url='https://04dc-2a00-a041-38e2-1f00-4cf5-5bff-e055-bcf4.ngrok-free.app/' + token + '/', timeout=60)
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -43,12 +48,13 @@ class Bot:
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
         data = self.telegram_bot_client.download_file(file_info.file_path)
         folder_name = file_info.file_path.split('/')[0]
-        print(folder_name)
 
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
-        with open(file_info.file_path, 'wb') as photo:
+        file_name = os.path.basename(file_info.file_path)
+
+        with open(os.path.join(folder_name, file_name), 'wb') as photo:
             photo.write(data)
 
         return file_info.file_path
@@ -82,14 +88,28 @@ class ObjectDetectionBot(Bot):
 
         if self.is_current_msg_photo(msg):
             # TODO download the user photo (utilize download_user_photo)
-            self.download_user_photo(msg)
+            photo_path = self.download_user_photo(msg)
+            photo_key = os.path.basename(photo_path)
             # TODO upload the photo to S3
+            s3 = boto3.client('s3')
+            s3.upload_file(photo_path, "basharziv", photo_key)
+            print(f"Photo uploaded successfully to S3 bucket: {"basharziv"} with key: {photo_key}")
+            # TODO send a request to the `yolo5` service for prediction
+            url = "http://localhost:8081/predict"
+            params = {"imgName": photo_key}
+            response = requests.post(url, params=params)
+            client = pymongo.MongoClient("mongodb://mongo1:27017/")
+
+            db = client["mongodb"]  # Replace with your actual database name
+            collections = db.list_collection_names()
+            print(f'Collections in the database: {collections}')
+
+
+
 
         else:
-            print("bashar: "+msg)
+            print("bashar: " + msg)
 
-            #self.handle_message(msg)
 
-            # TODO upload the photo to S3
-            # TODO send a request to the `yolo5` service for prediction
+
             # TODO send results to the Telegram end-user
