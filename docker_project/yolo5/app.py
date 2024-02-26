@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from pathlib import Path
 import boto3
 from flask import Flask, request, jsonify
@@ -8,6 +9,8 @@ import yaml
 from loguru import logger
 import os
 import pymongo
+
+from docker.mongo_jenkins.app import MongoDBConnection
 
 images_bucket = os.environ['BUCKET_NAME']
 
@@ -85,14 +88,18 @@ def predict():
         }
 
         # Store the prediction_summary in MongoDB
+        # Connect to MongoDB
         client = pymongo.MongoClient("mongodb://mongo1:27017/")
         db = client["mongodb"]
         collection = db["prediction"]
 
         inserted_id = collection.insert_one(prediction_summary).inserted_id
 
+
+
         # Now convert the ObjectId to str for JSON serialization
         prediction_summary['_id'] = str(inserted_id)
+
 
         return jsonify(prediction_summary)
     else:

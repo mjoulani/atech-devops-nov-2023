@@ -1,14 +1,22 @@
 version: "3.9"
+
 services:
   mongo1:
     image: mongo:5
     container_name: mongo1
+    volumes:
+    - ./mongodb-entrypoint.sh:/mongodb-entrypoint.sh
     command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1
+    entrypoint: [ "/mongodb-entrypoint.sh"]
     ports:
       - "27017:27017"
     restart: always
     networks:
       - mongoCluster
+    depends_on:
+      - mongo2
+      - mongo3
+
   mongo2:
     image: mongo:5
     container_name: mongo2
@@ -27,6 +35,18 @@ services:
     restart: always
     networks:
       - mongoCluster
+  yolo5:
+    image: yolo5
+    container_name: yolo5
+    ports:
+        - "8081:8081"
+    environment:
+        - BUCKET_NAME=basharziv
+    networks:
+      - mongoCluster
+    volumes:
+        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
+    restart: always
 
 
 
