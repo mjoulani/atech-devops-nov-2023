@@ -16,6 +16,9 @@ with open("data/coco128.yaml", "r") as stream:
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def index():
+    return "Hello from yolo5"
 
 @app.route('/predict', methods=['POST'])
 def predict():

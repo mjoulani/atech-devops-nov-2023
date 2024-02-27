@@ -15,3 +15,11 @@ git reset --hard
 
 
 docker run -d --rm --name yolo_testing -p 8081:8081 -e BUCKET_NAME=oferbakria  -v C:\Users\User\.aws\credentials:/root/.aws/credentials yolo5
+
+
+C:\Users\User\Desktop\DevOps\ngrok.exe config add-authtoken <auth-token>  
+C:\Users\User\Desktop\DevOps\ngrok.exe http 8443
+
+
+tasklist | findstr /i "ngrok"
+taskkill /F /PID <PID>

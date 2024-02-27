@@ -5,6 +5,7 @@ services:
     container_name: mongo1
     volumes:
       - ./mnt:/mnt
+      - ./mongo:/data/db
     entrypoint: ["/mnt/mongodb-entrypoint.sh"]
     # command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1
     ports:
@@ -46,18 +47,13 @@ services:
     environment:
         - BUCKET_NAME=oferbakria
     volumes:
-        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
+        - C:\Users\User\.aws\credentials:/root/.aws/credentials
+        - ./yolo5/app.py:/usr/src/app/app.py
+    networks:
+      - mongoCluster
     restart: always
 
 networks:
   mongoCluster:
     driver: bridge
 
-
-# volumes:
-#   my_volume:
-#     driver: local
-#     driver_opts:
-#       type: none
-#       o: bind
-#       device: C:\Users\User\Desktop\DevOps\atech-devops-nov-2023\docker_project\mnt2
