@@ -1,3 +1,6 @@
+
+
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -55,6 +58,6 @@ resource "aws_key_pair" "generated_key" {
 }
 
 resource "local_file" "ssh_key" {
-  filename = "${aws_key_pair.generated_key.key_name}"
+  filename = aws_key_pair.generated_key.key_name
   content  = tls_private_key.private_key.private_key_pem
 }
