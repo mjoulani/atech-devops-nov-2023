@@ -5,7 +5,6 @@ import os
 import time
 import boto3
 from telebot.types import InputFile
-import pymongo
 
 class Bot:
 
@@ -68,7 +67,10 @@ class Bot:
     def handle_message(self, msg):
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
-        self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+        if 'text' in msg:
+            self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+        else:
+            self.send_text(msg['chat']['id'], "Sorry, I couldn't process your message.")
 
 
 class QuoteBot(Bot):
@@ -82,7 +84,6 @@ class QuoteBot(Bot):
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         # logger.info(f'Incoming message: {msg}')
-
         if self.is_current_msg_photo(msg):
             # TODO download the user photo (utilize download_user_photo)
             photo_path = self.download_user_photo(msg)
@@ -95,21 +96,17 @@ class ObjectDetectionBot(Bot):
             print(f"Photo uploaded successfully to S3 bucket: {'oferbakria'} with key: {photo_key}")
 
             # TODO send a request to the `yolo5` service for prediction
-            url = "http://localhost:8081/predict"
+            url = "http://yolo5:8081/predict"
             params = {"imgName": photo_key}
-            response = requests.post(url, params=params)
-
-            # client = pymongo.MongoClient("mongodb://mongo1:27017/")
-            # db = client["mongodb"]  # Replace with your actual database name
-            # collection = db["prediction"]
-            # collections = db.list_collection_names()
-            # print(f'Collections in the database: {collections}')
-            # cursor = collection.find()
-
-            # # Print the retrieved data
-            # for document in cursor:
-            #     print(document)
+            try:
+                response = requests.post(url, params=params)
+                # Handle response
+            except requests.exceptions.RequestException as e:
+                print("Error:", e)
             
             # TODO send results to the Telegram end-user
-            self.send_text(msg['chat']['id'], f'Your original message: {response}')
+            self.send_text(msg['chat']['id'], f'Your original message: {response} OK')
+        else:
+            super().handle_message(msg)
+        
 

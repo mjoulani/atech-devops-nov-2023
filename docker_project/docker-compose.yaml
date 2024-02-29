@@ -5,7 +5,7 @@ services:
     container_name: mongo1
     volumes:
       - ./mnt:/mnt
-      - ./mongo:/data/db
+      # - ./mongo:/data/db
     entrypoint: ["/mnt/mongodb-entrypoint.sh"]
     # command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1
     ports:
@@ -49,6 +49,23 @@ services:
     volumes:
         - C:\Users\User\.aws\credentials:/root/.aws/credentials
         - ./yolo5/app.py:/usr/src/app/app.py
+    networks:
+      - mongoCluster
+    restart: always
+
+
+  poly:
+    image: polybot
+    container_name: poly
+    ports:
+        - "8443:8443"
+    environment:
+        - TELEGRAM_TOKEN=6495261288:AAF-BAI6-_StTgp7dB-bKOyFHV0cSO7lqDk
+        - TELEGRAM_APP_URL=https://3384-213-57-29-164.ngrok-free.app
+    volumes:
+        - C:\Users\User\.aws\credentials:/root/.aws/credentials
+        - ./polybot/bot.py:/app/bot.py
+        - ./polybot/app.py:/app/app.py
     networks:
       - mongoCluster
     restart: always

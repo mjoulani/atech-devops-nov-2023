@@ -86,8 +86,8 @@ def predict():
             'labels': labels,
             'time': time.time()
         }
-
-        # Store the prediction_summary in MongoDB
+        
+        #Store the prediction_summary in MongoDB
         client = pymongo.MongoClient("mongodb://mongo1:27017/")
         db = client["mongodb"]
         collection = db["prediction"]
@@ -96,8 +96,8 @@ def predict():
 
         # Now convert the ObjectId to str for JSON serialization
         prediction_summary['_id'] = str(inserted_id)
-
         return jsonify(prediction_summary)
+        
     else:
         return jsonify({'error': f'prediction: {prediction_id}/{original_img_path}. prediction result not found'}), 404
 
