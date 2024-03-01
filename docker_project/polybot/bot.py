@@ -114,7 +114,7 @@ class ObjectDetectionBot(Bot):
 
 
         else:
-            print("bashar: " + msg)
+            print("ehab: " + msg)
 
 
 
