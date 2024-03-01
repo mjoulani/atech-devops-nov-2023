@@ -60,8 +60,8 @@ services:
     ports:
         - "8443:8443"
     environment:
-        - TELEGRAM_TOKEN=6495261288:AAF-BAI6-_StTgp7dB-bKOyFHV0cSO7lqDk
-        - TELEGRAM_APP_URL=https://3384-213-57-29-164.ngrok-free.app
+        - TELEGRAM_TOKEN=${TELE_TOKEN}
+        - TELEGRAM_APP_URL=${PUBLIC_IP}
     volumes:
         - C:\Users\User\.aws\credentials:/root/.aws/credentials
         - ./polybot/bot.py:/app/bot.py

@@ -1,3 +1,4 @@
+import json
 import requests
 import telebot
 from loguru import logger
@@ -98,14 +99,32 @@ class ObjectDetectionBot(Bot):
             # TODO send a request to the `yolo5` service for prediction
             url = "http://yolo5:8081/predict"
             params = {"imgName": photo_key}
+            headers = {"Content-Type": "application/json", "Accept": "application/json"}
             try:
-                response = requests.post(url, params=params)
+                response = requests.post(url, params=params , headers=headers)
                 # Handle response
             except requests.exceptions.RequestException as e:
                 print("Error:", e)
             
+
+            data = response.json()
+            # Initialize a dictionary to store counts of each class
+            class_counts = {}
+            # Iterate through the labels and count occurrences of each class
+            for item in data['labels']:
+                class_name = item['class']
+                if class_name in class_counts:
+                    class_counts[class_name] += 1
+                else:
+                    class_counts[class_name] = 1
+
+
+            class_counts_string = ""
+            for class_name, count in class_counts.items():
+                class_counts_string += f"{class_name}: {count}\n"
+                
             # TODO send results to the Telegram end-user
-            self.send_text(msg['chat']['id'], f'Your original message: {response} OK')
+            self.send_text(msg['chat']['id'], f'Your photo contains : \n {class_counts_string}')
         else:
             super().handle_message(msg)
         
