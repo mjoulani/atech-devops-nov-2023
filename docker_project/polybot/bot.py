@@ -3,10 +3,13 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+from collections import Counter
+import boto3
+import requests
 
 
 class Bot:
-
+    
     def __init__(self, token, telegram_chat_url):
         # create a new instance of the TeleBot class.
         # all communication with Telegram servers are done using self.telegram_bot_client
@@ -37,6 +40,9 @@ class Bot:
         :return:
         """
         if not self.is_current_msg_photo(msg):
+            text ="Hi upload photo please"
+            self.send_text(msg['chat']['id'], text)
+            
             raise RuntimeError(f'Message content of type \'photo\' expected')
 
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
@@ -45,7 +51,8 @@ class Bot:
 
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
-
+            
+         
         with open(file_info.file_path, 'wb') as photo:
             photo.write(data)
 
@@ -77,9 +84,39 @@ class QuoteBot(Bot):
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
+        # Download the user photo
+        img_path = self.download_user_photo(msg)
+        logger.info(f'Downloaded photo to {img_path}')
+            
+        # Upload the photo to S3
+        s3 = boto3.client('s3')
+        #bucket_name = os.getenv('BUCKET_NAME')
+        #bucket_name = os.environ['BUCKET_NAME']
+        bucket_name = 'mjoulani-bucket'
 
-        if self.is_current_msg_photo(msg):
-            pass
+        s3.upload_file(img_path, bucket_name,os.path.basename(img_path))
+        # Make a request to the yolo5 service
+        #yolo5_service_url = 'http://localhost:8081/predict'
+        yolo5_service_url = 'http://yolo5:8081/predict'
+        
+        
+        params = {'imgName': os.path.basename(img_path)}
+        response = requests.post(yolo5_service_url, params=params)
+   
+        predictions = response.json()
+        # Extract labels
+        labels = predictions.get('labels', [])
+
+        # Extract class names
+        class_names = [label.get('class') for label in labels]
+        result = "\n".join([f"{class_name} : {count}" for class_name, count in Counter(class_names).items()])
+
+        text = "Detected objects:\n" + result
+        self.send_text(msg['chat']['id'], text)
+
+        
+        
+        
             # TODO download the user photo (utilize download_user_photo)
             # TODO upload the photo to S3
             # TODO send a request to the `yolo5` service for prediction
