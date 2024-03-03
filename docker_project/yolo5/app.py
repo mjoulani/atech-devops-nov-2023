@@ -1,5 +1,4 @@
 import time
-from datetime import datetime
 from pathlib import Path
 import boto3
 from flask import Flask, request, jsonify
@@ -10,8 +9,6 @@ from loguru import logger
 import os
 import pymongo
 
-from docker.mongo_jenkins.app import MongoDBConnection
-
 images_bucket = os.environ['BUCKET_NAME']
 
 with open("data/coco128.yaml", "r") as stream:
@@ -19,6 +16,9 @@ with open("data/coco128.yaml", "r") as stream:
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def index():
+    return "Hello from yolo5"
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -86,22 +86,18 @@ def predict():
             'labels': labels,
             'time': time.time()
         }
-
-        # Store the prediction_summary in MongoDB
-        # Connect to MongoDB
+        
+        #Store the prediction_summary in MongoDB
         client = pymongo.MongoClient("mongodb://mongo1:27017/")
         db = client["mongodb"]
         collection = db["prediction"]
 
         inserted_id = collection.insert_one(prediction_summary).inserted_id
 
-
-
         # Now convert the ObjectId to str for JSON serialization
         prediction_summary['_id'] = str(inserted_id)
-
-
         return jsonify(prediction_summary)
+        
     else:
         return jsonify({'error': f'prediction: {prediction_id}/{original_img_path}. prediction result not found'}), 404
 

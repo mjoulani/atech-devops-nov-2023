@@ -4,11 +4,12 @@ set -e
 # Start MongoDB in the background
 mongod --replSet myReplicaSet --bind_ip localhost,mongo1 &
 
-# MongoDB takes a few seconds to start
+# Wait for MongoDB to start
 echo "Waiting for MongoDB to start..."
 sleep 10
 
-# Initiate the replica set
+# Initiate replica set
+echo "Initiating replica set..."
 mongosh --eval "rs.initiate({
   _id: 'myReplicaSet',
   members: [
@@ -18,5 +19,4 @@ mongosh --eval "rs.initiate({
   ]
 })"
 
-# Keep the script running to prevent the container from exiting
 wait

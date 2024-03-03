@@ -1,6 +1,4 @@
 import json
-
-import pymongo
 import requests
 import telebot
 from loguru import logger
@@ -9,10 +7,12 @@ import time
 import boto3
 from telebot.types import InputFile
 
-
 class Bot:
 
     def __init__(self, token, telegram_chat_url):
+        print(telegram_chat_url)
+        print(token)
+
         # create a new instance of the TeleBot class.
         # all communication with Telegram servers are done using self.telegram_bot_client
         self.telegram_bot_client = telebot.TeleBot(token)
@@ -22,8 +22,7 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(
-            url='https://04dc-2a00-a041-38e2-1f00-4cf5-5bff-e055-bcf4.ngrok-free.app/' + token + '/', timeout=60)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -52,9 +51,7 @@ class Bot:
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
-        file_name = os.path.basename(file_info.file_path)
-
-        with open(os.path.join(folder_name, file_name), 'wb') as photo:
+        with open(file_info.file_path, 'wb') as photo:
             photo.write(data)
 
         return file_info.file_path
@@ -71,7 +68,10 @@ class Bot:
     def handle_message(self, msg):
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
-        self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+        if 'text' in msg:
+            self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+        else:
+            self.send_text(msg['chat']['id'], "Sorry, I couldn't process your message.")
 
 
 class QuoteBot(Bot):
@@ -84,38 +84,47 @@ class QuoteBot(Bot):
 
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
-        logger.info(f'Incoming message: {msg}')
-
+        # logger.info(f'Incoming message: {msg}')
         if self.is_current_msg_photo(msg):
             # TODO download the user photo (utilize download_user_photo)
             photo_path = self.download_user_photo(msg)
             photo_key = os.path.basename(photo_path)
+
             # TODO upload the photo to S3
             s3 = boto3.client('s3')
-            s3.upload_file(photo_path, "basharziv", photo_key)
-            print(f"Photo uploaded successfully to S3 bucket: {"basharziv"} with key: {photo_key}")
+            s3.upload_file(photo_path, "oferbakria" , photo_key)
+
+            print(f"Photo uploaded successfully to S3 bucket: {'oferbakria'} with key: {photo_key}")
+
             # TODO send a request to the `yolo5` service for prediction
-            url = "http://localhost:8081/predict"
+            url = "http://yolo5:8081/predict"
             params = {"imgName": photo_key}
-            response = requests.post(url, params=params)
-            client = pymongo.MongoClient("mongodb://mongo1:27017/")
+            headers = {"Content-Type": "application/json", "Accept": "application/json"}
+            try:
+                response = requests.post(url, params=params , headers=headers)
+                # Handle response
+            except requests.exceptions.RequestException as e:
+                print("Error:", e)
+            
 
-            db = client["mongodb"]  # Replace with your actual database name
-            collection = db["prediction"]
-            collections = db.list_collection_names()
-            print(f'Collections in the database: {collections}')
-            cursor = collection.find()
-
-            # Print the retrieved data
-            for document in cursor:
-                print(document)
-
-
-
-
-        else:
-            print("ehab: " + msg)
+            data = response.json()
+            # Initialize a dictionary to store counts of each class
+            class_counts = {}
+            # Iterate through the labels and count occurrences of each class
+            for item in data['labels']:
+                class_name = item['class']
+                if class_name in class_counts:
+                    class_counts[class_name] += 1
+                else:
+                    class_counts[class_name] = 1
 
 
-
+            class_counts_string = ""
+            for class_name, count in class_counts.items():
+                class_counts_string += f"{class_name}: {count}\n"
+                
             # TODO send results to the Telegram end-user
+            self.send_text(msg['chat']['id'], f'Your photo contains : \n {class_counts_string}')
+        else:
+            super().handle_message(msg)
+        
