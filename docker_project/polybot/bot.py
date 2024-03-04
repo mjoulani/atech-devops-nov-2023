@@ -60,10 +60,7 @@ class Bot:
         if not os.path.exists(img_path):
             raise RuntimeError("Image path doesn't exist")
 
-        self.telegram_bot_client.send_photo(
-            chat_id,
-            InputFile(img_path)
-        )
+        self.telegram_bot_client.send_photo(chat_id,InputFile(img_path))
 
     def handle_message(self, msg):
         """Bot Main message handler"""
@@ -108,6 +105,8 @@ class ObjectDetectionBot(Bot):
             
 
             data = response.json()
+            logger.info(f'data\n\n{data}')
+
             # Initialize a dictionary to store counts of each class
             class_counts = {}
             # Iterate through the labels and count occurrences of each class
@@ -125,7 +124,15 @@ class ObjectDetectionBot(Bot):
                 
             # TODO send results to the Telegram end-user
             self.send_text(msg['chat']['id'], f'Your photo contains : \n {class_counts_string}')
+        elif self.custom_startswith(msg["text"], "pixabay:"):
+            # TODO download the user photo (utilize download_user_photo)
+            url2 = "http://pixabay:8082/getImage?imgName=flower"
+            data2 = requests.get(url2).content
+            self.send_text(msg['chat']['id'], f'Your Photo from Pixabay API :{data2} \n')
         else:
             super().handle_message(msg)
-        
+    
+    def custom_startswith(self,s, prefix):
+        return s[:len(prefix)] == prefix
+
 

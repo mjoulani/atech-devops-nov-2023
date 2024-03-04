@@ -70,6 +70,22 @@ services:
       - mongoCluster
     restart: always
 
+
+
+  pixabay:
+    image: pixabay
+    container_name: pixabay
+    ports:
+        - "8082:8082"
+    environment:
+      - PIXABAY_TOKEN=${PIXABAY_TOKEN}
+    volumes:
+        - ./pixabay/app.py:/app/app.py
+    networks:
+      - mongoCluster
+    restart: always
+
+
 networks:
   mongoCluster:
     driver: bridge
