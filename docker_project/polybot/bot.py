@@ -124,9 +124,11 @@ class ObjectDetectionBot(Bot):
                 
             # TODO send results to the Telegram end-user
             self.send_text(msg['chat']['id'], f'Your photo contains : \n {class_counts_string}')
+
         elif self.custom_startswith(msg["text"], "pixabay:"):
             # TODO download the user photo (utilize download_user_photo)
-            url2 = "http://pixabay:8082/getImage?imgName=flower"
+            obj=msg["text"][len("pixabay:"):]
+            url2 = f"http://pixabay:8082/getImage?imgName={obj}"
             data2 = requests.get(url2).content
             self.send_text(msg['chat']['id'], f'Your Photo from Pixabay API :{data2} \n')
         else:
