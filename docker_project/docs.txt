@@ -23,3 +23,10 @@ C:\Users\User\Desktop\DevOps\ngrok.exe http 8443
 
 tasklist | findstr /i "ngrok"
 taskkill /F /PID <PID>
+
+docker exec -it <container_name_or_id> mongo
+use <your_database_name>
+db.prediction.find()
+or
+db.prediction.find().pretty()
+
