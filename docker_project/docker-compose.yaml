@@ -45,7 +45,7 @@ services:
     ports:
         - "8081:8081"
     environment:
-        - BUCKET_NAME=oferbakria
+        - BUCKET_NAME=ehab-bucket
     volumes:
         - C:\Users\User\.aws\credentials:/root/.aws/credentials
         - ./yolo5/app.py:/usr/src/app/app.py

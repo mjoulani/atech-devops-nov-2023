@@ -92,9 +92,9 @@ class ObjectDetectionBot(Bot):
 
             # TODO upload the photo to S3
             s3 = boto3.client('s3')
-            s3.upload_file(photo_path, "oferbakria" , photo_key)
+            s3.upload_file(photo_path, "ehab-bucket" , photo_key)
 
-            print(f"Photo uploaded successfully to S3 bucket: {'oferbakria'} with key: {photo_key}")
+            print(f"Photo uploaded successfully to S3 bucket: {'ehab-bucket'} with key: {photo_key}")
 
             # TODO send a request to the `yolo5` service for prediction
             url = "http://yolo5:8081/predict"
