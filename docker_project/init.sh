@@ -22,7 +22,7 @@ else
 
     # Print the public URL , export url and tele token
     export PUBLIC_IP=$public_url
-    export TELE_TOKEN="6495261288:AAF-BAI6-_StTgp7dB-bKOyFHV0cSO7lqDk"
+    export TELE_TOKEN="7164767377:AAEOIhHc9h2Nf41NePOFO5TD6XBdtb7ubic"
 
     # echo $PUBLIC_IP
     # echo $TELE_TOKEN
