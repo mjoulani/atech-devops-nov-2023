@@ -9,6 +9,8 @@ import yaml
 from loguru import logger
 import os
 import pymongo
+import subprocess
+from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 
 # Set AWS credentials and region as environment variables
@@ -16,7 +18,27 @@ from pymongo.errors import ServerSelectionTimeoutError
 #os.environ["AWS_SECRET_ACCESS_KEY"] = "KEbFekzHbNJ9UynEtyMiABcaT5pz3BYgIGFi5PM4"
 #os.environ["AWS_DEFAULT_REGION"] = "ap-northeast-1"
 
+# Function to initiate the MongoDB replica set
+def initiate_replica_set():
+    # Wait for MongoDB containers to be up and running
+    time.sleep(5)
 
+    # Define the replica set name and members
+    replica_set_config = {
+        "_id": "myReplicaSet",
+        "members": [
+            {"_id": 0, "host": "mongo1:27017"},
+            {"_id": 1, "host": "mongo2:27017"},
+            {"_id": 2, "host": "mongo3:27017"}
+        ]
+    }
+
+    # Execute the MongoDB initiation script
+    #cmd = f'mongo mongo1:27017 --eval "rs.initiate({replica_set_config})"'
+    cmd = f'/usr/bin/mongo mongo1:27017 --eval "rs.initiate({replica_set_config})"'
+    subprocess.run(cmd, shell=True)
+    
+    
 images_bucket = os.environ['BUCKET_NAME']
 #images_bucket = os.environ['mjoulani-yolo']
 
@@ -96,8 +118,13 @@ def predict():
         # Store the prediction_summary in MongoDB
         #client = pymongo.MongoClient("mongodb://mongo1:27017/")
         #client = pymongo.MongoClient('mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaset=rs0')
-        # Define the replica set name and members
+
+        # Wait for MongoDB containers to be up and running
+        #initiate_replica_set()
         mongo_members = ["mongo1:27017", "mongo2:27017", "mongo3:27017"]
+        #mongo_uri = f"mongodb://{'mongodbCluster/,'.join(mongo_members)}/?replicaSet=myReplicaSet"
+       
+
         # Initialize the result variable with a default value
         result = {'ismaster': False}
 
@@ -107,7 +134,6 @@ def predict():
                 client = pymongo.MongoClient(f"mongodb://{mongo_member}/", serverSelectionTimeoutMS=5000)
                 result = client.admin.command('isMaster')
                 logger.info(f'the result_inside--------- :{result} ')
-                print("r1",result['ok'])
                 if result['ismaster'] == True:
                     break  # Successfully connected to MongoDB
             except ServerSelectionTimeoutError:

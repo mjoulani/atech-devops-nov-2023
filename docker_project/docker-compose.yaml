@@ -11,6 +11,7 @@ services:
       - "27017:27017"
     networks:
       - mongoCluster
+    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1
     #docker run -v db-data:/data/db
     volumes:
       - db-data-m1:/data/db #Named volumes
@@ -21,6 +22,7 @@ services:
       - "27018:27017"
     networks:
       - mongoCluster
+    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo2
     #docker run -v db-data:/data/db
     volumes:
       - db-data-m2:/data/db #Named volumes
@@ -31,11 +33,32 @@ services:
       - "27019:27017"
     networks:
       - mongoCluster
+    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo3
     #docker run -v db-data:/data/db
     volumes:
       - db-data-m3:/data/db #Named volumes
+
+  init-replica-set:
+    image: mongo:5
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    networks:
+      - mongoCluster  
+    command: >
+      bash -c 'sleep 10 &&
+      mongo mongo1:27017 --eval "rs.initiate({
+        _id: \"myReplicaSet\",
+        members: [
+          {_id: 0, host: \"mongo1:27017\"},
+          {_id: 1, host: \"mongo2:27017\"},
+          {_id: 2, host: \"mongo3:27017\"}
+        ]
+      })"'
+
   yolo5:
-    image: myolo8.1
+    image: myolo20
     container_name: yolo5
     ports:
       - "8081:8081"
@@ -50,6 +73,9 @@ services:
       #BUCKET_NAME: mjoulani-yolo
     networks:
       - mongoCluster
+
+
+
   polybot:
      #image: mjoulani/mybot:local1.1
      image: muh1
@@ -68,10 +94,9 @@ services:
       #- TELEGRAM_TOKEN=6671531875:AAG0nnI0XX_kneDgsOXNfclJi0V0tpuGwBU
        TELEGRAM_APP_URL: https://5711-93-173-73-255.ngrok-free.app
      #command: sh -c 'echo "TELEGRAM_TOKEN=$TELEGRAM_TOKEN" && echo "TELEGRAM_APP_URL=$TELEGRAM_APP_URL" && python /usr/src/app/app.py' 
-
-
+    
      networks:
-      - mongoCluster
+        - mongoCluster
      secrets:
        - telegram_token
 
