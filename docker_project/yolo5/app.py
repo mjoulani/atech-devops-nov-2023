@@ -25,6 +25,7 @@ def predict():
     img_name = request.args.get('imgName')
 
     # TODO download img_name from S3, store the local image path in original_img_path
+    # 123
     #  The bucket name should be provided as an env var BUCKET_NAME.
     original_img_path = ...
 
