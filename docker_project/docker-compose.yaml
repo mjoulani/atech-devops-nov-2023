@@ -35,7 +35,7 @@ services:
     volumes:
       - db-data-m3:/data/db #Named volumes
   yolo5:
-    image: mjoulani/yolo5:latest
+    image: myolo8.1
     container_name: yolo5
     ports:
       - "8081:8081"

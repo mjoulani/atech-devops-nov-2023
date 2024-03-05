@@ -9,6 +9,7 @@ import yaml
 from loguru import logger
 import os
 import pymongo
+from pymongo.errors import ServerSelectionTimeoutError
 
 # Set AWS credentials and region as environment variables
 #os.environ["AWS_ACCESS_KEY_ID"] = "AKIA5SPWCQVQKUH5Y2E7"
@@ -93,16 +94,54 @@ def predict():
         }
 
         # Store the prediction_summary in MongoDB
-        client = pymongo.MongoClient("mongodb://mongo1:27017/")
+        #client = pymongo.MongoClient("mongodb://mongo1:27017/")
+        #client = pymongo.MongoClient('mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaset=rs0')
+        # Define the replica set name and members
+        mongo_members = ["mongo1:27017", "mongo2:27017", "mongo3:27017"]
+        # Initialize the result variable with a default value
+        result = {'ismaster': False}
+
+        # Attempt to connect to MongoDB using the replica set
+        for mongo_member in mongo_members:
+            try:
+                client = pymongo.MongoClient(f"mongodb://{mongo_member}/", serverSelectionTimeoutMS=5000)
+                result = client.admin.command('isMaster')
+                logger.info(f'the result_inside--------- :{result} ')
+                print("r1",result['ok'])
+                if result['ismaster'] == True:
+                    break  # Successfully connected to MongoDB
+            except ServerSelectionTimeoutError:
+                pass  # Try the next MongoDB member
+
+        # Check if a valid MongoDB connection was established
+        logger.info(f'the result--------- :{result} ')
+        if result['ismaster'] == False :
+            logger.info(f'the result--------- :{result} ')
+            error={
+                    "prediction_id": " ",
+                    "original_img_path": " ",
+                    "predicted_img_path": " ",
+                    "labels": [
+                                {
+                                    "class": "No valid MongoDB connection established"
+                                }
+                            ],
+                    "time": " "
+                }
+            #return jsonify([{'class': 'No valid MongoDB connection established'}]), 500
+            return jsonify(error)
+        
+
         db = client["mongodb"]
         collection = db["prediction"]
-
+        
         inserted_id = collection.insert_one(prediction_summary).inserted_id
 
         # Now convert the ObjectId to str for JSON serialization
         prediction_summary['_id'] = str(inserted_id)
 
         return jsonify(prediction_summary)
+
     else:
         return jsonify({'error': f'prediction: {prediction_id}/{original_img_path}. prediction result not found'}), 404
 
