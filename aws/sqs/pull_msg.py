@@ -1,13 +1,13 @@
 import boto3
 
 # SQS queue name
-QUEUE_NAME = 'Alexey-demo-sqs'
+QUEUE_NAME = 'oferbakria-queue'
 
 # Create an SQS client
-sqs = boto3.client('sqs', region_name="ca-central-1")
+sqs = boto3.client('sqs', region_name="eu-west-1")
 
 # Get the queue URL by its name
-queue_url = 'https://sqs.ca-central-1.amazonaws.com/933060838752/Alexey-demo-sqs'
+queue_url = 'https://sqs.eu-west-1.amazonaws.com/933060838752/oferbakria-queue'
 
 
 # Receive a message from the SQS queue
