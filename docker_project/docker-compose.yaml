@@ -13,9 +13,6 @@ services:
     restart: always
     networks:
       - mongoCluster
-    depends_on:
-      - mongo2
-      - mongo3
 
   mongo2:
     image: mongo:5
@@ -42,12 +39,27 @@ services:
         - "8081:8081"
     environment:
         - BUCKET_NAME=basharziv
+    volumes:
+      - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
     networks:
       - mongoCluster
-    volumes:
-        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
     restart: always
 
+  poly:
+    image: polybot
+    container_name: poly
+    ports:
+        - "8443:8443"
+    environment:
+        - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+        - TELEGRAM_APP_URL=${TELEGRAM_APP_URL}
+    volumes:
+        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
+        - ./polybot/bot.py:/app/bot.py
+        - ./polybot/app.py:/app/app.py
+    networks:
+      - mongoCluster
+    restart: always
 
 
 
