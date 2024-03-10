@@ -40,7 +40,7 @@ services:
 
 
   yolo5:
-    image: oferbakria/yolo5
+    image: yolo5
     container_name: yolo5
     ports:
         - "8081:8081"
@@ -55,7 +55,7 @@ services:
 
 
   poly:
-    image: oferbakria/polybot
+    image: polybot
     container_name: poly
     ports:
         - "8443:8443"
@@ -73,7 +73,7 @@ services:
 
 
   pixabay:
-    image: oferbakria/pixabay
+    image: pixabay
     container_name: pixabay
     ports:
         - "8082:8082"
