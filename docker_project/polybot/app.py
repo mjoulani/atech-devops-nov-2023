@@ -1,3 +1,5 @@
+import logging
+
 import flask
 from flask import request
 import os
@@ -18,10 +20,9 @@ def index():
 def webhook():
     req = request.get_json()
     bot.handle_message(req['message'])
-    return 'Ok'
+    return 'Ok 2'
 
 
 if __name__ == "__main__":
-    bot = Bot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
-
+    bot = ObjectDetectionBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
     app.run(host='0.0.0.0', port=8443)
