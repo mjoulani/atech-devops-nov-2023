@@ -35,9 +35,38 @@ services:
       - mongoCluster
 
 
+  yolo5:
+      build: ./yolo5
+      image: yolo5
+      container_name: yolo5
+      ports:
+          - "8081:8081"
+      environment:
+          - BUCKET_NAME=hamad-bucket-docker-project
+      volumes:
+          - /Users/hamadfyad/.aws/credentials:/root/.aws/credentials
+          - ./yolo5/app.py:/usr/src/app/app.py
+      networks:
+        - mongoCluster
+      restart: always
 
-
-
+  polybot:
+      build: ./polybot
+      image: polybot
+      container_name: polybot
+      ports:
+          - "8443:8443"
+      environment:
+          - TELEGRAM_TOKEN=${TELE_TOKEN}
+          - TELEGRAM_APP_URL=${PUBLIC_IP}
+          - PIXABAY_TOKEN=${PICTURES_TOKEN}
+      volumes:
+          - /Users/hamadfyad/.aws/credentials:/root/.aws/credentials
+          - ./polybot/bot.py:/app/bot.py
+          - ./polybot/app.py:/app/app.py
+      networks:
+        - mongoCluster
+      restart: always
 networks:
   mongoCluster:
     driver: bridge
