@@ -6,11 +6,12 @@ import os
 import requests
 import time
 from telebot.types import InputFile
+import json
 
 pixabay_token = os.environ['PIXABAY_TOKEN']
 
-class Bot:
 
+class Bot:
 
     def __init__(self, token, telegram_chat_url):
         # create a new instance of the TeleBot class.
@@ -79,7 +80,7 @@ class QuoteBot(Bot):
             self.send_text_with_quote(msg['chat']['id'], msg["text"], quoted_msg_id=msg["message_id"])
 
 
-def get_photo(param:str):
+def get_photo(param: str):
     param.replace(" ", "")
     url = f"https://pixabay.com/api/?key={pixabay_token}&q={param[8:].lower()}&image_type=photo"
     try:
@@ -103,6 +104,26 @@ def get_photo(param:str):
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         return "Error: An issue occurred while attempting to fetch the photo."
+
+
+def get_info_of_currency(currency:str):
+    currency.replace(" ", "")
+    try:
+        url = f"https://api.coincap.io/v2/assets/{currency}"
+        data = requests.get(url)
+        return data.json()
+    except Exception as e:
+        print(f"could not get the url check if you typed the right currency {e}")
+        logger.info(f"error {e}")
+
+
+def get_activity():
+    try:
+        url="https://www.boredapi.com/api/activity?type=recreational"
+        res = requests.get(url)
+        return res.json()
+    except Exception as e:
+        logger.info(f"error has occurred {e}")
 
 
 class ObjectDetectionBot(Bot):
@@ -157,7 +178,19 @@ class ObjectDetectionBot(Bot):
             except Exception as e:
                 logger.error(f"Cannot get photo: {e}")
                 self.send_text(msg['chat']['id'], "An error occurred while fetching the photo.")
-
+        elif msg['text'].lower().startswith("crypto:"):
+            try:
+                data = get_info_of_currency(msg['text'].lower()[7:])
+                self.send_text(msg['chat']['id'],
+                               f"data for {msg['text'][7:]} is :\n {json.dumps(data['data'], indent=4)}")
+            except Exception as e:
+                logger.info(f"error has occurred : {e}")
+        elif "bored" in msg['text'].lower():
+            try:
+                activity = get_activity()
+                self.send_text(msg['chat']['id'], activity['activity'])
+            except Exception as e:
+                logger.info(f"error fetching data {e}")
         else:
             logger.info("helllloooooooo")
             super().handle_message(msg)
