@@ -6,6 +6,7 @@ import uuid
 import yaml
 from loguru import logger
 import os
+import boto3
 
 images_bucket = os.environ['BUCKET_NAME']
 
@@ -26,7 +27,7 @@ def predict():
 
     # TODO download img_name from S3, store the local image path in original_img_path
     #  The bucket name should be provided as an env var BUCKET_NAME.
-    original_img_path = ...
+    original_img_path = download_image(img_name)
 
     logger.info(f'prediction: {prediction_id}/{original_img_path}. Download img completed')
 
@@ -39,7 +40,7 @@ def predict():
         name=prediction_id,
         save_txt=True
     )
-
+    
     logger.info(f'prediction: {prediction_id}/{original_img_path}. done')
 
     # This is the path for the predicted image with labels
@@ -47,7 +48,9 @@ def predict():
     predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
 
     # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
-
+    name, extension = img_name.rsplit('.', 1)
+    image_name_after_prdeict=f'{name}_after_prdeict.{extension}'
+    upload_file_to_s3(image_name_after_prdeict,predicted_img_path)
     # Parse prediction labels and create a summary
     pred_summary_path = Path(f'static/data/{prediction_id}/labels/{original_img_path.split(".")[0]}.txt')
     if pred_summary_path.exists():
@@ -78,6 +81,29 @@ def predict():
     else:
         return f'prediction: {prediction_id}/{original_img_path}. prediction result not found', 404
 
+def download_image(image_name):
+    s3 = boto3.client('s3')
+    with open(image_name, 'wb') as f:
+        s3.download_fileobj(images_bucket,image_name, f)
+    return image_name
+
+def upload_file_to_s3(object_name,image_path):
+    # Upload the file
+    s3_client = boto3.client('s3')
+    print("image_path is " + str(image_path))
+    try:
+        s3_client.upload_file(image_path, images_bucket, object_name)
+        print(f"File {image_path} uploaded to {images_bucket}/{object_name}")
+        return True
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+    
+
+def 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8081)
