@@ -45,9 +45,9 @@ services:
     ports:
         - "8081:8081"
     environment:
-        - BUCKET_NAME=oferbakria
+        - BUCKET_NAME=basharziv
     volumes:
-        - C:\Users\User\.aws\credentials:/root/.aws/credentials
+        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
         - ./yolo5/app.py:/usr/src/app/app.py
     networks:
       - mongoCluster
@@ -63,7 +63,7 @@ services:
         - TELEGRAM_TOKEN=${TELE_TOKEN}
         - TELEGRAM_APP_URL=${PUBLIC_IP}
     volumes:
-        - C:\Users\User\.aws\credentials:/root/.aws/credentials
+        - C:\Users\bshar\.aws\credentials:/root/.aws/credentials
         - ./polybot/bot.py:/app/bot.py
         - ./polybot/app.py:/app/app.py
     networks:

@@ -1,6 +1,9 @@
 import json
+
+import pymongo
 import requests
 import telebot
+from bson import ObjectId
 from loguru import logger
 import os
 import time
@@ -82,6 +85,7 @@ class QuoteBot(Bot):
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         # logger.info(f'Incoming message: {msg}')
+        message = ""
         if self.is_current_msg_photo(msg):
             # TODO download the user photo (utilize download_user_photo)
             photo_path = self.download_user_photo(msg)
@@ -89,9 +93,9 @@ class ObjectDetectionBot(Bot):
 
             # TODO upload the photo to S3
             s3 = boto3.client('s3')
-            s3.upload_file(photo_path, "oferbakria" , photo_key)
+            s3.upload_file(photo_path, "basharziv" , photo_key)
 
-            print(f"Photo uploaded successfully to S3 bucket: {'oferbakria'} with key: {photo_key}")
+            print(f"Photo uploaded successfully to S3 bucket: {'basharziv'} with key: {photo_key}")
 
             # TODO send a request to the `yolo5` service for prediction
             url = "http://yolo5:8081/predict"
@@ -105,25 +109,36 @@ class ObjectDetectionBot(Bot):
             
 
             data = response.json()
-            logger.info(f'data\n\n{data}')
+            client = pymongo.MongoClient("mongodb://mongo1:27017/")
 
-            # Initialize a dictionary to store counts of each class
-            class_counts = {}
-            # Iterate through the labels and count occurrences of each class
-            for item in data['labels']:
-                class_name = item['class']
-                if class_name in class_counts:
-                    class_counts[class_name] += 1
-                else:
-                    class_counts[class_name] = 1
+            db = client["mongodb"]  # Replace with your actual database name
+            collection = db["prediction"]
+            collections = db.list_collection_names()
+            print(f'Collections in the database: {collections}')
+            if '_id' in data:
+                target_id = ObjectId(data['_id'])
+                cursor = collection.find({'_id': target_id})
 
+                # Print the retrieved data
+                for document in cursor:
+                    # Extract the 'labels' list
+                    labels = document.get('labels', [])
 
-            class_counts_string = ""
-            for class_name, count in class_counts.items():
-                class_counts_string += f"{class_name}: {count}\n"
-                
+                    # Count the occurrences of each class
+                    class_counts = {}
+                    for label in labels:
+                        class_name = label.get('class')
+                        if class_name:
+                            class_counts[class_name] = class_counts.get(class_name, 0) + 1
+
+                    for class_name, count in class_counts.items():
+                        message += f"{class_name}: {count}\n"
+            else:
+                # Handle the case where '_id' is not present in the 'data' dictionary
+                message = "nothing."
+
             # TODO send results to the Telegram end-user
-            self.send_text(msg['chat']['id'], f'Your photo contains : \n {class_counts_string}')
+            self.send_text(msg['chat']['id'], f'Your photo contains : \n {message}')
 
         elif self.custom_startswith(msg["text"], "pixabay:"):
             # TODO download the user photo (utilize download_user_photo)
