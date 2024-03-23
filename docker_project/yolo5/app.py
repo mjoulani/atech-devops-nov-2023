@@ -1,18 +1,55 @@
 import time
 from pathlib import Path
 from flask import Flask, request
-from detect import run
+#from detect import run
 import uuid
 import yaml
 from loguru import logger
 import os
+import boto3
+from pymongo import MongoClient
+from pymongo.errors import OperationFailure
 
-images_bucket = os.environ['BUCKET_NAME']
+# images_bucket = os.environ['BUCKET_NAME']
+images_bucket = "qasem-bucket"
+image_name = ""
+#14225
+
+# connect to s3 and download an img
+def download_image_from_s3(image_key):
+    s3 = boto3.client('s3')
+
+    global image_name
+    image_name = image_key
+
+    local_path = f'{image_key}'
+    try:
+        s3.download_file(images_bucket, image_key, local_path)
+        logger.info(f"Image '{image_key}' downloaded successfully to '{local_path}'")
+        return local_path
+    except Exception as e:
+        logger.info(f"Error downloading image '{image_key}': {e}")
+
+
+def upload_img_to_s3(image_path, prefix):
+    s3 = boto3.client('s3')
+    try:
+        s3.upload_file(image_path, images_bucket, prefix + image_name)
+        logger.info('image uploaded successfuly!')
+    except Exception as e:
+        logger.info(f"Error downloading image '{image_path}': {e}")
+
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
 
 app = Flask(__name__)
+
+
+@app.route('/', methods=['GET'])
+def index():
+    return "the server is working!!"
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -23,11 +60,12 @@ def predict():
 
     # Receives a URL parameter representing the image to download from S3
     img_name = request.args.get('imgName')
+    # original_img_path = ...
 
     # TODO download img_name from S3, store the local image path in original_img_path
-    # 123
+    original_img_path = download_image_from_s3(img_name)
+
     #  The bucket name should be provided as an env var BUCKET_NAME.
-    original_img_path = ...
 
     logger.info(f'prediction: {prediction_id}/{original_img_path}. Download img completed')
 
@@ -48,6 +86,7 @@ def predict():
     predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
 
     # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
+    upload_img_to_s3(predicted_img_path, "predicted_")
 
     # Parse prediction labels and create a summary
     pred_summary_path = Path(f'static/data/{prediction_id}/labels/{original_img_path.split(".")[0]}.txt')
@@ -74,6 +113,23 @@ def predict():
         }
 
         # TODO store the prediction_summary in MongoDB
+
+        # By Khader: We are here => connect to mongodb and store the data!!!
+        replica_set_uri = "mongodb://localhost:27017,localhost:27018,localhost:27019/?replicaSet=myReplicaSet"
+        try:
+            # Connect to the replica set
+            client = MongoClient(replica_set_uri)
+
+            # Create a database
+            db = client['yolov3_db']
+
+            # Create a collection
+            collection = db['predicted_data']
+
+            collection.insert_one(prediction_summary)
+
+        except  OperationFailure as e:
+            print("Error:", e)
 
         return prediction_summary
     else:
