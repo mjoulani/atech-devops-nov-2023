@@ -21,4 +21,4 @@ echo 'pass for start jenkins: ' $(/var/jenkins_home/secrets/initialAdminPassword
 # show endpoint
 echo 'Jenkins installed'
 echo 'You should now be able to access jenkins at: http://'$(curl -s ifconfig.co)':8080'
-echo 'If You running this script on vertual host You should  be able to access jenkins at: http://localhost:8080'
+echo 'If You running this script on vertual host You should  be able to acces sjenkins at: http://localhost:8080'
