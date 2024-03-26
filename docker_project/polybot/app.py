@@ -3,6 +3,9 @@ from flask import request
 from loguru import logger
 import os
 from bot import ObjectDetectionBot, Bot, QuoteBot
+import requests
+import json
+import time
 
 app = flask.Flask(__name__)
 
@@ -23,6 +26,8 @@ else:
     except Exception as e:
         print(f"Error: {e}")
         exit
+    
+
 
 TELEGRAM_APP_URL = os.environ.get('TELEGRAM_APP_URL')
 logger.info(f"TELEGRAM_TOKEN: {TELEGRAM_TOKEN}")
@@ -58,6 +63,8 @@ def webhook():
 if __name__ == "__main__":
     #bot = Bot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
     #bot = QuoteBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
+
     bot = ObjectDetectionBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
+
 
     app.run(host='0.0.0.0', port=8443)

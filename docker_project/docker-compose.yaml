@@ -1,6 +1,18 @@
 version: '3.9'
 services:
-#     https://www.mongodb.com/compatibility/docker
+  # ngrok:
+  #   image: ngrok/ngrok
+  #   container_name: ngrokUrl
+  #   command: http polybot:8443 
+  #   environment:
+  #     - NGROK_AUTHTOKEN="2ce1WBeaagxaT4PFIClSa0EAgmU_7VjKZJRMocRC5akJzqofu"
+  #   ports:
+  #     - "4040:4040"
+  #   networks:
+  #     - mongoCluster
+
+
+    # https://www.mongodb.com/compatibility/docker
 #docker run -d  -p 27017:27017 --name mongo1 --network mongoCluster mongo:5 
 #docker run -d  -p 27018:27017 --name mongo2 --network mongoCluster mongo:5  
 #docker run -d  -p 27019:27017 --name mongo3 --network mongoCluster mongo:5  
@@ -109,7 +121,10 @@ secrets:
   #TELEGRAM_TOKEN:
   telegram_token:
     file: telegram_token.txt
-    #file: TELEGRAM_TOKEN.txt
+  
+
+
+
 # container can share data between others mongo1,mongo2,mongo3
    
 volumes:
