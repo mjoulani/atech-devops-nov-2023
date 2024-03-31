@@ -8,7 +8,6 @@ PROP['branch'] = 'triggers'
 
 
 
-
 pipeline {
     agent any
         triggers {
