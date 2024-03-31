@@ -36,9 +36,15 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
+        stage('Print params') {
             steps {
-                echo 'Building..'
+                 script {
+                 println("=====================================${STAGE_NAME}=====================================")
+
+                 println("+++++++++++++++++++++++++++++++++++++++++++++++++BRANCHE: ${refsb}")
+
+                 }
+
             }
         }
         stage('Test') {
