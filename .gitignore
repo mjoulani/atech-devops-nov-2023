@@ -189,7 +189,6 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
-!/docker_project/mongo/docker-compose.yaml
-!/docker_project/mongo/docker-compose.yaml
 !/docker_project/polybot/docker-compose.yaml
 !/docker_project/yolo5/docker-compose.yaml
+!/docker_project/mongo/docker-compose.yaml
