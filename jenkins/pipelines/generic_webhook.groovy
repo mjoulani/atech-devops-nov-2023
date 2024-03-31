@@ -19,7 +19,7 @@ pipeline {
                         [key: 'type', value: '$.changes[0].type'],
                 ],
 
-                token: "abc123",
+                token: "123456",
                 tokenCredentialId: '',
                 printContributedVariables: true,
                 printPostContent: true,
