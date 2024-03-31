@@ -23,10 +23,32 @@ pipeline {
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
-                regexpFilterText: '$refsb',
-                regexpFilterExpression: 'refs/heads/triggers',
+                regexpFilterText: '$refsb $pusher $change_files',
+                regexpFilterExpression: 'refs/heads/triggers ',
         )
     }
+//  triggers {
+//         GenericTrigger(
+//                 genericVariables: [
+//                         [key: 'ref', value: '$.ref'],
+//                         [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
+//                 ],
+
+//                 token: 'bot_dev',
+//                 tokenCredentialId: '',
+
+//                 printContributedVariables: true,
+//                 printPostContent: true,
+
+//                 silentResponse: false,
+
+//                 shouldNotFlattern: false,
+
+//                 regexpFilterText: '$ref $changed_files',
+//                 regexpFilterExpression: '^(refs/heads/dev|refs/remotes/origin/dev) .*common/+?.*|.*services/bot/+?.*'
+//         )
+//     }
+
     stages {
         stage('Git clone') {
             steps {
