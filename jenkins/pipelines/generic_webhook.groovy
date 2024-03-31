@@ -11,10 +11,10 @@ pipeline {
         triggers {
         GenericTrigger(
                 genericVariables: [
-                        [key: 'refsb', value: '$.changes[0].ref.id'],
-                        [key: 'repository_slug', value: '$.repository.slug'],
-                        [key: 'actor', value: '$.actor.name'],
-                        [key: 'type', value: '$.changes[0].type'],
+                        [key: 'refsb', value: '$.ref'],
+                        // [key: 'repository_slug', value: '$.repository.slug'],
+                        // [key: 'actor', value: '$.actor.name'],
+                        // [key: 'type', value: '$.changes[0].type'],
                 ],
 
                 token: "123456",
@@ -23,7 +23,7 @@ pipeline {
                 printPostContent: true,
                 silentResponse: false,
                 regexpFilterText: '$refsb',
-                regexpFilterExpression: '*',
+                regexpFilterExpression: 'refs/heads/triggers',
         )
     }
     stages {
