@@ -12,8 +12,8 @@ pipeline {
         GenericTrigger(
                 genericVariables: [
                         [key: 'refsb', value: '$.ref'],
-                        // [key: 'repository_slug', value: '$.repository.slug'],
-                        // [key: 'actor', value: '$.actor.name'],
+                        [key: 'pusher', value: '$.pusher.name'],
+                        [key: 'change_files', value: '$.commits[0].modified[0]'],
                         // [key: 'type', value: '$.changes[0].type'],
                 ],
 
@@ -42,6 +42,8 @@ pipeline {
                  println("=====================================${STAGE_NAME}=====================================")
 
                  println("+++++++++++++++++++++++++++++++++++++++++++++++++BRANCHE: ${refsb}")
+                 println("+++++++++++++++++++++++++++++++++++++++++++++++++PUSHER: ${pusher}")
+                    println("+++++++++++++++++++++++++++++++++++++++++++++++++CHANGE FILES: ${change_files}")
 
                  }
 
