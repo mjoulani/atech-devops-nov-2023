@@ -3,8 +3,7 @@
 PROP = [:]
 
 PROP['git_cred'] = 'github_ssh_key'
-PROP['branch'] = 'main'
-
+PROP['branch'] = 'triggers'
 
 
 pipeline {
