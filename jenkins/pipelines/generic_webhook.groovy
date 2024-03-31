@@ -1,29 +1,75 @@
 //http://localhost:8080/jenkins/generic-webhook-trigger/invoke?token=abc123
 
+
+PROP = [:]
+
+PROP['git_cred'] = 'github_ssh_key'
+PROP['branch'] = 'triggers'
+
+
 pipeline {
     agent any
-    triggers {
+        triggers {
         GenericTrigger(
                 genericVariables: [
-                        [key: 'refsb', value: '$.changes[0].ref.id'],
-                        [key: 'repository_slug', value: '$.repository.slug'],
-                        [key: 'actor', value: '$.actor.name'],
-                        [key: 'type', value: '$.changes[0].type'],
+                        [key: 'refsb', value: '$.ref'],
+                        [key: 'pusher', value: '$.pusher.name'],
+                        [key: 'change_files', value: '$.commits[0].modified[0]'],
+                        // [key: 'type', value: '$.changes[0].type'],
                 ],
 
-                token: abc123,
+                token: "123456",
                 tokenCredentialId: '',
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
-                regexpFilterText: '$refsb',
-                regexpFilterExpression: '^(.*/main)',
+                regexpFilterText: '$refsb $pusher $change_files',
+                regexpFilterExpression: 'refs/heads/triggers ',
         )
     }
+//  triggers {
+//         GenericTrigger(
+//                 genericVariables: [
+//                         [key: 'ref', value: '$.ref'],
+//                         [key: 'changed_files', value: '$.commits[*].[\'modified\',\'added\',\'removed\'][*]']
+//                 ],
+
+//                 token: 'bot_dev',
+//                 tokenCredentialId: '',
+
+//                 printContributedVariables: true,
+//                 printPostContent: true,
+
+//                 silentResponse: false,
+
+//                 shouldNotFlattern: false,
+
+//                 regexpFilterText: '$ref $changed_files',
+//                 regexpFilterExpression: '^(refs/heads/dev|refs/remotes/origin/dev) .*common/+?.*|.*services/bot/+?.*'
+//         )
+//     }
+
     stages {
-        stage('Build') {
+        stage('Git clone') {
             steps {
-                echo 'Building..'
+                script{
+                    println("=====================================${STAGE_NAME}=====================================")
+                    println("Cloning from branch ${PROP.branch} and using credentials ${PROP.git_cred}")
+                    git branch: PROP.branch, credentialsId: PROP.git_cred, url: 'git@github.com:AlexeyMihaylovDev/atech-devops-nov-2023.git'
+                }
+            }
+        }
+        stage('Print params') {
+            steps {
+                 script {
+                 println("=====================================${STAGE_NAME}=====================================")
+
+                 println("+++++++++++++++++++++++++++++++++++++++++++++++++BRANCHE: ${refsb}")
+                 println("+++++++++++++++++++++++++++++++++++++++++++++++++PUSHER: ${pusher}")
+                    println("+++++++++++++++++++++++++++++++++++++++++++++++++CHANGE FILES: ${change_files}")
+
+                 }
+
             }
         }
         stage('Test') {
