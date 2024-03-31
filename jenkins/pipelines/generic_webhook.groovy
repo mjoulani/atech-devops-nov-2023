@@ -4,7 +4,7 @@
 PROP = [:]
 
 PROP['git_cred'] = 'github_ssh_key'
-PROP['branch'] = 'main'
+PROP['branch'] = 'triggers'
 
 
 
@@ -19,13 +19,13 @@ pipeline {
                         [key: 'type', value: '$.changes[0].type'],
                 ],
 
-                token: abc123,
+                token: "abc123",
                 tokenCredentialId: '',
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
                 regexpFilterText: '$refsb',
-                regexpFilterExpression: '^(.*/main)',
+                regexpFilterExpression: '^(.*/triggers)',
         )
     }
     stages {
