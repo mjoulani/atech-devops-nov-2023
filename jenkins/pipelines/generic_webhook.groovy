@@ -6,7 +6,6 @@ PROP = [:]
 PROP['git_cred'] = 'github_ssh_key'
 PROP['branch'] = 'triggers'
 
-
 pipeline {
     agent any
         triggers {
@@ -24,7 +23,7 @@ pipeline {
                 printPostContent: true,
                 silentResponse: false,
                 regexpFilterText: '$refsb',
-                regexpFilterExpression: '^(.*/triggers)',
+                regexpFilterExpression: '*',
         )
     }
     stages {
