@@ -1,8 +1,14 @@
+import uuid
+import requests
 import telebot
+from botocore.exceptions import NoCredentialsError
 from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+import boto3
+
+images_bucket = "daniel-yolo"
 
 
 class Bot:
@@ -79,8 +85,81 @@ class ObjectDetectionBot(Bot):
         logger.info(f'Incoming message: {msg}')
 
         if self.is_current_msg_photo(msg):
-            pass
             # TODO download the user photo (utilize download_user_photo)
+            photo_path = self.download_user_photo(msg)
             # TODO upload the photo to S3
+            logger.info(f'Photo uploaded to S3. S3 URL started : s3://{images_bucket}/{photo_path}')
+            image_id = self.upload_to_s3(photo_path, images_bucket)
             # TODO send a request to the `yolo5` service for prediction
+            logger.info(f'Photo is sending to yolov')
+            prediction_result = self.predict_with_yolov(image_id)
+            logger.info(f'sleep mode on ')
+            time.sleep(10)
+            logger.info(f'sleep mode off ')
+
             # TODO send results to the Telegram end-user
+            self.send_text(msg['chat']['id'], f'Prediction Result: {prediction_result}')
+            logger.info(f'image_id_outside {image_id}')
+            image_id_new = image_id[:-4] + "_predicted.jpg"
+            #download image and send image path = photos/
+            predict_img_path = photo_path.split('/')[0]
+            final_image_predict_path = predict_img_path +"/"+ image_id_new
+
+            s3 = boto3.client('s3')
+            try:
+                s3.download_file(images_bucket, image_id_new, final_image_predict_path)
+                self.send_photo(msg['chat']['id'],final_image_predict_path)
+            except Exception as e:
+                logger.error(f"Error downloading predicted photo to S3: {e}")
+
+    def upload_to_s3(self, local_path, images_bucket):
+        s3 = boto3.client('s3')
+
+        image_id = str(uuid.uuid4())
+        image_id = f'{image_id}.jpeg'
+        try:
+            s3.upload_file(local_path, images_bucket, image_id)
+            logger.info(f'Photo uploaded to S3. S3 URL: s3://{images_bucket}/{image_id}')
+
+            return image_id
+        except NoCredentialsError:
+            logger.error("AWS credentials not available.")
+            return None
+        except Exception as e:
+            logger.error(f"Error uploading photo to S3: {e}")
+            return None
+
+    def predict_with_yolov(self, image_id):
+        # Initialize prediction_result with a default value
+        prediction_result = None
+        logger.info(f'Sending Photo to yolov inside method. S3 URL: s3://{images_bucket}/{image_id}')
+        # Define the base URL of your Flask applicationubu
+        base_url = "http://yolov:8081"
+        #base_url = "http://10.0.0.5:8081"
+
+        # Define the endpoint
+        endpoint = "/predict"
+
+        # Combine the base URL and endpoint
+        url = base_url + endpoint
+
+        # Set the image name as a URL parameter
+        params = {'imgName': image_id}
+
+        try:
+            # Send a POST request to the /predict endpoint
+            response = requests.post(url, params=params)
+
+            # Check if the request was successful (status code 200)
+            if response.status_code == 200:
+                # Print the response JSON
+                prediction_result = response.json()
+                logger.info(f'Response 200: ****{prediction_result}******/')
+
+            else:
+                # Print an error message if the request was not successful
+                print(f"Error: {response.status_code} - {response.text}")
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error sending request: {e}")
+        return prediction_result

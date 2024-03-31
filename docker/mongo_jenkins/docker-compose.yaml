@@ -38,4 +38,4 @@ networks:
 
 
 
-# use docker-compose up -d
+# use docker-compose.yaml up -d

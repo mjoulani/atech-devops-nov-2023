@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  ngrok:
+      network_mode: host
+      environment:
+        - NGROK_AUTHTOKEN=2cVG3vFfx4mFysFGxGIL1aEQ22E_77xkeJ2LusqLrVMVDK2NS
+      image: ngrok/ngrok:latest
+      command: http --log stdout --domain=yak-assured-owl.ngrok-free.app 8443 
+        
+  polybot:
+    image: danielmak1/polybotdaniel:2
+    container_name: polybot
+    ports:
+      - 8443:8443
+    environment:
+      - TELEGRAM_TOKEN=7021677018:AAGj_WVTTzizDLYFRtzGV44bdZXedFe0yTU
+      - TELEGRAM_APP_URL=https://yak-assured-owl.ngrok-free.app
+    volumes:
+      - /credentials:/root/:ro
+    networks:
+      - mongoCluster
+    depends_on:
+      - ngrok
+
+  yolov:
+    image: danielmak1/yolovdaniel:2
+    container_name: yolov
+    ports:
+      - "8081:8081"
+    environment:
+      - BUCKET_NAME=daniel-yolo
+    volumes:
+      - /credentials:/root/:ro
+
+    networks:
+      - mongoCluster
+
+  mongo1:
+    image: mongo:5
+    container_name: mongo1
+    ports:
+      - "27017:27017"
+    entrypoint: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo1"]
+    volumes:
+      - /config/mongo/mongo1:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+      - mongoCluster
+    restart: unless-stopped
+  mongo2:
+    image: mongo:5
+    container_name: mongo2
+    ports:
+      - "27018:27017"
+    entrypoint: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo2"]
+    volumes:
+      - /config/mongo/mongo2:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    networks:
+       - mongoCluster
+    restart: unless-stopped
+  mongo3:
+      image: mongo:5
+      container_name: mongo3
+      ports:
+        - "27019:27017"
+      entrypoint: ["mongod", "--replSet", "myReplicaSet", "--bind_ip", "localhost,mongo3"]
+      volumes:
+        - /config/mongo/mongo3:/data/db
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: password
+      networks:
+        - mongoCluster
+      restart: unless-stopped
+  mongosetup:
+    image: mongo:5
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    volumes:
+      - /root:/scripts
+    restart: "no"
+    entrypoint: [ "bash", "/scripts/mongo_setup.sh" ]
+    networks:
+      - mongoCluster
+
+networks:
+  mongoCluster:
+    driver: bridge

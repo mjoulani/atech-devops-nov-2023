@@ -12,13 +12,12 @@ RUN apt update && \
 WORKDIR /app     
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+COPY . .
 
 RUN apt install nano
 RUN pip install -r requirements.txt
 
-EXPOSE 5000
-EXPOSE 6000
+EXPOSE 8080
 
 CMD ["python", "app.py"]
  
