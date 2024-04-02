@@ -23,7 +23,7 @@ pipeline {
                 printPostContent: true,
                 silentResponse: false,
                 regexpFilterText: '$refsb $change_files',
-                regexpFilterExpression: '^(refs/heads/triggers|refs/remotes/origin/triggers)',
+                regexpFilterExpression: '^(refs/heads/triasdggers|refs/remotes/origin/trasdiggers)',
                 
         )
     }
