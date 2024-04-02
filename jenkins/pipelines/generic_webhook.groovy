@@ -18,6 +18,8 @@ pipeline {
                         // [key: 'type', value: '$.changes[0].type'],
                 ],
 
+
+
             
                 token: "123456",
                 tokenCredentialId: '',
