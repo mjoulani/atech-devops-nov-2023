@@ -1,4 +1,4 @@
-//http://localhost:8080/jenkins/generic-webhook-trigger/invoke?token=abc123
+//http://localhost:8080/generic-webhook-trigger/invoke?token=abc123
 
 
 PROP = [:]
@@ -17,14 +17,13 @@ pipeline {
                         [key: 'change_files', value: '$.commits[0].modified[0]'],
                         // [key: 'type', value: '$.changes[0].type'],
                 ],
-
                 token: "123456",
                 tokenCredentialId: '',
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
                 regexpFilterText: '$refsb $pusher $change_files',
-                regexpFilterExpression: 'refs/heads/triggers ',
+                regexpFilterExpression: 'refs/heads/triggers',
         )
     }
 //  triggers {
