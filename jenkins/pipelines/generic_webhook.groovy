@@ -22,8 +22,9 @@ pipeline {
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
-                regexpFilterText: '$refsb $pusher $change_files',
-                regexpFilterExpression: 'refs/heads/triggers',
+                regexpFilterText: '$refsb $change_files',
+                regexpFilterExpression: '^(refs/heads/triggers|refs/remotes/origin/triggers)',
+                
         )
     }
 //  triggers {
