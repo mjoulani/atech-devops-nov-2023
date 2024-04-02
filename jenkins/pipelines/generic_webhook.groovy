@@ -16,6 +16,7 @@ pipeline {
                         [key: 'pusher', value: '$.pusher.name'],
                         [key: 'change_files', value: '$.commits[0].modified[0]'],
                         // [key: 'type', value: '$.changes[0].type'],
+                    
                 ],
 
             
