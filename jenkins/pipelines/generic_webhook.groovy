@@ -22,8 +22,8 @@ pipeline {
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
-                regexpFilterText: '$refsb',
-                regexpFilterExpression: '^refs/heads/tasdfriggers$',
+                // regexpFilterText: '$refsb',
+                regexpFilterExpression: '^refs/heads/trigфasdgers$',
                 
         )
     }
