@@ -17,7 +17,8 @@ pipeline {
                         [key: 'change_files', value: '$.commits[0].modified[0]'],
                         // [key: 'type', value: '$.changes[0].type'],
                 ],
-                
+
+            
                 token: "123456",
                 tokenCredentialId: '',
                 printContributedVariables: true,
