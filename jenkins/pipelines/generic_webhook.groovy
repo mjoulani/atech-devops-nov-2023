@@ -17,13 +17,14 @@ pipeline {
                         [key: 'change_files', value: '$.commits[0].modified[0]'],
                         // [key: 'type', value: '$.changes[0].type'],
                 ],
+                
                 token: "123456",
                 tokenCredentialId: '',
                 printContributedVariables: true,
-                printPostContent: true,
+                printPostContent: false,
                 silentResponse: false,
-                // regexpFilterText: '$refsb',
-                regexpFilterExpression: '^refs/heads/trigфasdgers$',
+                regexpFilterText: '$ref $changed_files',
+                regexpFilterExpression: '^(refs/heads/triggers|refs/remotes/origin/triggers) .*common/+?.*|.*services/bot/+?.*'
                 
         )
     }
