@@ -23,7 +23,7 @@ pipeline {
                 printPostContent: true,
                 silentResponse: false,
                 regexpFilterText: '$refsb',
-                regexpFilterExpression: 'triasdasdasdggers',
+                regexpFilterExpression: '^refs/heads/tasdfriggers$',
                 
         )
     }
