@@ -22,7 +22,7 @@ pipeline {
                 printContributedVariables: true,
                 printPostContent: true,
                 silentResponse: false,
-                regexpFilterText: '$refsb $change_files',
+                regexpFilterText: '$refsb',
                 regexpFilterExpression: 'triasdasdasdggers',
                 
         )
