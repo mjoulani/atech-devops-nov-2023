@@ -3,6 +3,10 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+import boto3
+from botocore.exceptions import NoCredentialsError
+import requests
+import json
 
 
 class Bot:
@@ -33,23 +37,24 @@ class Bot:
 
     def download_user_photo(self, msg):
         """
-        Downloads the photos that sent to the Bot to `photos` directory (should be existed)
-        :return:
+        Downloads the photos that are sent to the Bot to the current working directory
+        :param msg: The message object containing the photo
+        :return: The path to the downloaded photo
         """
         if not self.is_current_msg_photo(msg):
             raise RuntimeError(f'Message content of type \'photo\' expected')
 
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
         data = self.telegram_bot_client.download_file(file_info.file_path)
-        folder_name = file_info.file_path.split('/')[0]
+        file_extension = os.path.splitext(file_info.file_path)[1]  # Get the file extension
+        # file_extension = "." + file_info.file_path.split(".")[-1]  # Get the file extension
+        file_name = f"{msg['message_id']}{file_extension}"  # Create a custom file name
+        file_path = os.path.join(os.getcwd(), file_name)  # Save the photo in the current working directory
 
-        if not os.path.exists(folder_name):
-            os.makedirs(folder_name)
-
-        with open(file_info.file_path, 'wb') as photo:
+        with open(file_path, 'wb') as photo:
             photo.write(data)
 
-        return file_info.file_path
+        return file_path
 
     def send_photo(self, chat_id, img_path):
         if not os.path.exists(img_path):
@@ -63,24 +68,96 @@ class Bot:
     def handle_message(self, msg):
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
-        self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
-
+        # Check if the message contains text
+        if 'text' in msg:
+            original_message = msg['text']
+        else:
+            original_message = "This message doesn't contain any text."
+        self.send_text(msg['chat']['id'], f'Your original message: {original_message}')
 
 class QuoteBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-
         if msg["text"] != 'Please don\'t quote me':
             self.send_text_with_quote(msg['chat']['id'], msg["text"], quoted_msg_id=msg["message_id"])
 
 
 class ObjectDetectionBot(Bot):
-    def handle_message(self, msg):
-        logger.info(f'Incoming message: {msg}')
+    def __init__(self, token, telegram_chat_url, s3_bucket_name):
+        super().__init__(token, telegram_chat_url)
+        self.s3 = boto3.client('s3')
+        self.s3_bucket_name = s3_bucket_name
+        self.file_name = ''
+        self.msg = ''
+        self.file_path = ''
 
+    def upload_to_s3(self):
+        try:
+            self.s3.upload_file(self.file_path, self.s3_bucket_name, self.file_name)
+            return True
+        except FileNotFoundError:
+            logger.error("The file was not found")
+            return False
+        except NoCredentialsError:
+            logger.error("Credentials not available")
+            return False
+
+
+    def handle_message(self, msg):
+        self.msg = msg  # update the message every time
+        if not msg:
+            return
+        logger.info(msg)
+        logger.info(f'Incoming message: {msg}')
         if self.is_current_msg_photo(msg):
-            pass
-            # TODO download the user photo (utilize download_user_photo)
-            # TODO upload the photo to S3
-            # TODO send a request to the `yolo5` service for prediction
-            # TODO send results to the Telegram end-user
+            try:
+                # Download the user photo
+                self.file_path = self.download_user_photo(msg)
+                # Extract file name
+                self.file_name = os.path.basename(self.file_path)
+                # Upload the photo to S3
+                if self.upload_to_s3():  # Ensure self.file_path is assigned before calling upload_to_s3()
+                    self.send_text(msg['chat']['id'], "Photo uploaded to S3 successfully!")
+                else:
+                    self.send_text(msg['chat']['id'], "Failed to upload photo to S3.")
+            except Exception as e:
+                logger.error(f"Error handling message: {e}")
+                self.send_text(msg['chat']['id'], "An error occurred while processing the photo.")
+
+    def send_prediction_request(self):
+        if not self.msg:
+            return
+        yolo_api_url = "http://yolo5:8081/predict"  # Update with the correct YOLO API URL
+        params = {'imgName': self.file_name}  # Pass the image URL as a query parameter
+        logger.info("----------------------------------------")
+        try:
+            response = requests.post(yolo_api_url, params=params)
+            print(response, response.content)
+            if response.status_code == 200:
+                prediction_results = response.json()
+                prediction_results = self.get_detected_objects_count(prediction_results)
+                self.send_text(self.msg['chat']['id'], f" {prediction_results}")
+            else:
+                self.send_text(self.msg['chat']['id'], "Failed to get object detection results")
+        except Exception as e:
+            logger.error(f"Error sending prediction request: {e}")
+            self.send_text(self.msg['chat']['id'], "An error occurred while processing object detection")
+
+    def get_detected_objects_count(self, detection_results):
+        # Initialize a dictionary to store the count of each detected object class
+        detected_objects_count = {}
+
+        # Iterate through the labels in the detection results and count each object class
+        for label in detection_results['labels']:
+            object_class = label['class']
+            if object_class in detected_objects_count:
+                detected_objects_count[object_class] += 1
+            else:
+                detected_objects_count[object_class] = 1
+
+        # Generate the response string
+        response = "Objects detected:\n"
+        for obj_class, count in detected_objects_count.items():
+            response += f"{obj_class} = {count}\n"
+
+        return response
