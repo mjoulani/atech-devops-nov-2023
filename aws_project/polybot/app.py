@@ -52,7 +52,25 @@ def webhook():
     bot.handle_message(req['message'])
     return 'Ok'
 
+@app.route(f'/results/', methods=['GET'])
+def results():
+    prediction_id = request.args.get('predictionId')
 
+    # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
+
+    chat_id = ...
+    text_results = ...
+
+    bot.send_text(chat_id, text_results)
+    return 'Ok'
+
+
+@app.route(f'/loadTest/', methods=['POST'])
+def load_test():
+    req = request.get_json()
+    bot.handle_message(req['message'])
+    return 'Ok'
+    
 if __name__ == "__main__":
     bot = ObjectDetectionBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
 
