@@ -1,20 +1,27 @@
 import time
 from pathlib import Path
+import boto3
+from flask import Flask, request, jsonify
 from detect import run
+import uuid
 import yaml
 from loguru import logger
 import os
-import boto3
+import pymongo
 import json
 
 images_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
 
-sqs_client = boto3.client('sqs', region_name='YOUR_REGION_HERE')
+sqs_client = boto3.client('sqs', region_name='eu-west-1')
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
 
+# app = Flask(__name__)
+# @app.route('/', methods=['GET'])
+# def index():
+#     return "Hello from yolo5"
 
 def consume():
     while True:
@@ -29,10 +36,8 @@ def consume():
 
             logger.info(f'prediction: {prediction_id}. start processing')
 
-
-
             # Assuming message_body contains the JSON string received from SQS
-            message_body = '{"param1": "value1", "param2": "value2"}'
+            message_body = message
             # Deserialize the JSON string into a Python dictionary
             params = json.loads(message_body)
 
@@ -104,4 +109,5 @@ def consume():
 
 
 if __name__ == "__main__":
+    # app.run(host='0.0.0.0', port=8081)
     consume()
