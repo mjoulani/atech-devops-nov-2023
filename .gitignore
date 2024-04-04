@@ -191,4 +191,5 @@ out/
 
 #don't push any .pem file
 *.pem
+*.key
 docker_project/init.sh
