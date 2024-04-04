@@ -8,6 +8,7 @@ services:
         
     environment:
         - BUCKET_NAME=oferbakria
+        - SQS_QUEUE_NAME=oferbakria_aws_sqs
         
     volumes:
         - ./.aws/credentials:/root/.aws/credentials
