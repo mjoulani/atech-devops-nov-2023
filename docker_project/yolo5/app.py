@@ -29,9 +29,9 @@ def predict():
     # TODO download img_name from S3, store the local image path in original_img_path
     #  The bucket name should be provided as an env var BUCKET_NAME.
 
-    bucket_name = os.environ('BUCKET_NAME')
+    bucket_name = os.environ['BUCKET_NAME']
 
-    original_img_path = str(img_name)
+    original_img_path = os.path.join(".", img_name)
 
     s3 = boto3.client('s3')
     s3.download_file(bucket_name, img_name, original_img_path)
