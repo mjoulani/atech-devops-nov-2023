@@ -9,7 +9,7 @@ from loguru import logger
 import os
 from pymongo import MongoClient
 
-images_bucket = os.environ['BUCKET_NAME']
+#images_bucket = os.environ['BUCKET_NAME']
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
@@ -29,7 +29,7 @@ def predict():
     # TODO download img_name from S3, store the local image path in original_img_path
     #  The bucket name should be provided as an env var BUCKET_NAME.
 
-    bucket_name = os.getenv('BUCKET_NAME')
+    bucket_name = os.environ('BUCKET_NAME')
 
     original_img_path = str(img_name)
 
@@ -52,7 +52,8 @@ def predict():
 
     # This is the path for the predicted image with labels
     # The predicted image typically includes bounding boxes drawn around the detected objects, along with class labels and possibly confidence scores.
-    predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
+    #predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
+    predicted_img_path = Path(f'static/data/{prediction_id}/predicted_{original_img_path}')
 
     # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
 
@@ -85,11 +86,12 @@ def predict():
 
         # TODO store the prediction_summary in MongoDB
 
-        client = MongoClient("mongodb://127.0.0.1:27017/")
+        client = MongoClient("mongodb://127.0.0.1:27018/")
         db = client["projectdb"]
-        collection = db["your_collection_name"]
+        collection = db["projectcollection"]
 
-        collection.insert_one(my_dict)
+        #collection.insert_one(my_dict)
+        collection.insert_one(prediction_summary)
 
         return prediction_summary
     else:
