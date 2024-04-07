@@ -9,6 +9,7 @@ from loguru import logger
 import os
 import pymongo
 import json
+import requests
 
 images_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
@@ -102,10 +103,42 @@ def consume():
                 }
 
                 # TODO store the prediction_summary in a DynamoDB table
+                insertData(prediction_id,img_name,labels,chat_id)
+
                 # TODO perform a GET request to Polybot to `/results` endpoint
+                url = f"https://oferbakria-loadbalancer-1920523343.eu-west-1.elb.amazonaws.com/results/?predictionId={prediction_id}"
+                # Send a GET request to the URL
+                response = requests.get(url, verify=False)  # Set verify=False to ignore SSL certificate validation
 
             # Delete the message from the queue as the job is considered as DONE
             sqs_client.delete_message(QueueUrl=queue_name, ReceiptHandle=receipt_handle)
+
+def insertData(prediction_id,filename,data,chat_id):
+
+    # Create a DynamoDB client
+    dynamodb = boto3.client('dynamodb',region_name='eu-west-1')
+
+    # Specify the name of the DynamoDB table
+    table_name = 'oferbakria_awsproject'
+
+    # Create an item to store in the table
+    item = {
+        'prediction_id': {'S': prediction_id},
+        'chat_id': {'S': str(chat_id)},
+        'description': {'S': json.dumps(data)}
+    }
+
+    # Store the item in the DynamoDB table
+    response = dynamodb.put_item(
+        TableName=table_name,
+        Item=item
+    )
+
+    # Check if the item was stored successfully
+    if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+        print("Item stored successfully")
+    else:
+        print("Failed to store item:", response['ResponseMetadata']['HTTPStatusCode'])
 
 
 if __name__ == "__main__":
