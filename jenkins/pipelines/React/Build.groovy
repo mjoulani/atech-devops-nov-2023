@@ -78,7 +78,7 @@ pipeline {
     post {
         always {
             script {
-                currentBuild.description = ("Branch : ${PROP.branch}")
+                currentBuild.description = ("Branch : ${PROP.branch}\n Image Name : ${PROP.image_name}\n Docker Tag : ${PROP.docker_tag}\n ECR Registry : ${PROP.ecr_registry}")
                 EMAIL_MAP = [
                         "Job Name"      : JOB_NAME,
                         "Build Number"  : BUILD_NUMBER,

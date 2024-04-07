@@ -61,6 +61,20 @@ def global_docker_run(def cred, String regionName = "ca-central-1", def dockerRe
     // Forming the SSH command to run on the remote host
     def sshCmd = "ssh -o StrictHostKeyChecking=no -i ${sshKey} -p ${sshPort} ${sshUser}@${sshHost}"
     
+
+if (deleteAll) {
+    try {
+        println "Stopping and deleting all Containers and Images on the remote host"
+        def stopAndDeleteCmd = "docker stop \$(docker ps -a -q) && docker rm \$(docker ps -a -q) && docker rmi \$(docker images -q)"
+        println "running command ${sshCmd} '${stopAndDeleteCmd}'"
+        sh(script: sshCmd + " '" + stopAndDeleteCmd + "'")    
+    } catch (Exception e) {
+        println "Error while stopping and deleting all Containers and Images on the remote host"
+        e.printStackTrace()
+    }
+}
+
+
   // AWS CLI command to retrieve ECR authorization token
     def awsCliCmd = "aws ecr get-login-password --region ${regionName}"
 
