@@ -19,7 +19,6 @@ pipeline {
                 script {
                     println("=====================================${STAGE_NAME}=====================================")
                     global_s3_dowload("aws_cli_cred","eu-central-1","alexey-yolo","alexey_atech.pem","${WORKSPACE}/alexey_atech.pem")
-
                     }
                 }
             }
@@ -29,7 +28,7 @@ pipeline {
                     println("=====================================${STAGE_NAME}=====================================")
 
                     def DOCKER_REGISTRY = "933060838752.dkr.ecr.eu-central-1.amazonaws.com"
-                    def EC2_INSTANCES = ["18.196.125.238"]
+                    def EC2_INSTANCES = ["3.123.253.127"]
                     // def IMAGE_NAME = "hello-world-app"
                     def TAG = "latest"
                     def ENVIROMENT = [:] 
