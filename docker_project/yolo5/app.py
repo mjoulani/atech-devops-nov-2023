@@ -31,7 +31,7 @@ def predict():
 
     bucket_name = os.environ['BUCKET_NAME']
 
-    original_img_path = os.path.join(".", img_name)
+    original_img_path = img_name
 
     s3 = boto3.client('s3')
     s3.download_file(bucket_name, img_name, original_img_path)
