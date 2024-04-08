@@ -86,7 +86,7 @@ def predict():
 
         # TODO store the prediction_summary in MongoDB
 
-        client = MongoClient("mongodb://127.0.0.1:27017/")
+        client = MongoClient("mongodb://mongo1:27017/")
         db = client["projectdb"]
         collection = db["projectcollection"]
 
