@@ -53,12 +53,12 @@ def predict():
     # This is the path for the predicted image with labels
     # The predicted image typically includes bounding boxes drawn around the detected objects, along with class labels and possibly confidence scores.
     #predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
-    predicted_img_path = Path(f'static/data/{prediction_id}/predicted_{original_img_path}')
+    predicted_img_path = Path(f'static/data/{prediction_id}/{original_img_path}')
 
     # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
 
     the_image = original_img_path[:-4] + "predicted.jpg"
-    s3.upload_file(str(predicted_img_path), bucket_name, the_image)
+    s3.upload_file(predicted_img_path, bucket_name, the_image)
 
     # Parse prediction labels and create a summary
     pred_summary_path = Path(f'static/data/{prediction_id}/labels/{original_img_path.split(".")[0]}.txt')
