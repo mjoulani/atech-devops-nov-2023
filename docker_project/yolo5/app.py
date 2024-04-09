@@ -101,8 +101,8 @@ def predict():
             #if is_primary:
             db = client["projectdb"]
             collection = db["projectcollection"]
-            #inserted_id = collection.insert_one(prediction_summary).inserted_id
-            #prediction_summary['_id'] = str(inserted_id)
+            inserted_id = collection.insert_one(prediction_summary).inserted_id
+            prediction_summary['_id'] = str(inserted_id)
             collection.insert_one(prediction_summary)
         except Exception as e:
             try:
@@ -112,8 +112,8 @@ def predict():
                 #if is_primary:
                 db = client["projectdb"]
                 collection = db["projectcollection"]
-                #inserted_id = collection.insert_one(prediction_summary).inserted_id
-                #prediction_summary['_id'] = str(inserted_id)
+                inserted_id = collection.insert_one(prediction_summary).inserted_id
+                prediction_summary['_id'] = str(inserted_id)
                 collection.insert_one(prediction_summary)
             except Exception as e:
                 try:
@@ -123,8 +123,8 @@ def predict():
                     #if is_primary:
                     db = client["projectdb"]
                     collection = db["projectcollection"]
-                    #inserted_id = collection.insert_one(prediction_summary).inserted_id
-                    #prediction_summary['_id'] = str(inserted_id)
+                    inserted_id = collection.insert_one(prediction_summary).inserted_id
+                    prediction_summary['_id'] = str(inserted_id)
                     collection.insert_one(prediction_summary)
                 except Exception as e:
                     print("failed")
