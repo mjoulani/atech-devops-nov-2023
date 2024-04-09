@@ -19,7 +19,6 @@ pipeline {
                 script {
                     println("=====================================${STAGE_NAME}=====================================")
                     global_s3_dowload("aws_cli_cred","eu-central-1","alexey-yolo","alexey_atech.pem","${WORKSPACE}/alexey_atech.pem")
-
                     }
                 }
             }
@@ -29,7 +28,7 @@ pipeline {
                     println("=====================================${STAGE_NAME}=====================================")
 
                     def DOCKER_REGISTRY = "933060838752.dkr.ecr.eu-central-1.amazonaws.com"
-                    def EC2_INSTANCES = ["18.196.125.238"]
+                    def EC2_INSTANCES = ["3.123.253.127"]
                     // def IMAGE_NAME = "hello-world-app"
                     def TAG = "latest"
                     def ENVIROMENT = [:] 
@@ -62,6 +61,20 @@ def global_docker_run(def cred, String regionName = "ca-central-1", def dockerRe
     // Forming the SSH command to run on the remote host
     def sshCmd = "ssh -o StrictHostKeyChecking=no -i ${sshKey} -p ${sshPort} ${sshUser}@${sshHost}"
     
+
+if (deleteAll) {
+    try {
+        println "Stopping and deleting all Containers and Images on the remote host"
+        def stopAndDeleteCmd = "docker stop \$(docker ps -a -q) && docker rm \$(docker ps -a -q) && docker rmi \$(docker images -q)"
+        println "running command ${sshCmd} '${stopAndDeleteCmd}'"
+        sh(script: sshCmd + " '" + stopAndDeleteCmd + "'")    
+    } catch (Exception e) {
+        println "Error while stopping and deleting all Containers and Images on the remote host"
+        e.printStackTrace()
+    }
+}
+
+
   // AWS CLI command to retrieve ECR authorization token
     def awsCliCmd = "aws ecr get-login-password --region ${regionName}"
 
