@@ -96,36 +96,36 @@ def predict():
 
         try:
             client = MongoClient("mongodb://mongo1:27017/")
-            server_status = client.admin.command("hello")
-            is_primary = server_status['repl']['isWritablePrimary']
-            if is_primary:
+            #server_status = client.admin.command("hello")
+            #is_primary = server_status['repl']['isWritablePrimary']
+            #if is_primary:
+            db = client["projectdb"]
+            collection = db["projectcollection"]
+            inserted_id = collection.insert_one(prediction_summary).inserted_id
+            prediction_summary['_id'] = str(inserted_id)
+            collection.insert_one(prediction_summary)
+        except Exception as e:
+            try:
+                client = MongoClient("mongodb://mongo2:27017/")
+                #server_status = client.admin.command("hello")
+                #is_primary = server_status['repl']['isWritablePrimary']
+                #if is_primary:
                 db = client["projectdb"]
                 collection = db["projectcollection"]
                 inserted_id = collection.insert_one(prediction_summary).inserted_id
                 prediction_summary['_id'] = str(inserted_id)
                 collection.insert_one(prediction_summary)
-        except Exception as e:
-            try:
-                client = MongoClient("mongodb://mongo2:27017/")
-                server_status = client.admin.command("hello")
-                is_primary = server_status['repl']['isWritablePrimary']
-                if is_primary:
+            except Exception as e:
+                try:
+                    client = MongoClient("mongodb://mongo3:27017/")
+                    #server_status = client.admin.command("hello")
+                    #is_primary = server_status['repl']['isWritablePrimary']
+                    #if is_primary:
                     db = client["projectdb"]
                     collection = db["projectcollection"]
                     inserted_id = collection.insert_one(prediction_summary).inserted_id
                     prediction_summary['_id'] = str(inserted_id)
                     collection.insert_one(prediction_summary)
-            except Exception as e:
-                try:
-                    client = MongoClient("mongodb://mongo3:27017/")
-                    server_status = client.admin.command("hello")
-                    is_primary = server_status['repl']['isWritablePrimary']
-                    if is_primary:
-                        db = client["projectdb"]
-                        collection = db["projectcollection"]
-                        inserted_id = collection.insert_one(prediction_summary).inserted_id
-                        prediction_summary['_id'] = str(inserted_id)
-                        collection.insert_one(prediction_summary)
                 except Exception as e:
                     print("failed")
 
