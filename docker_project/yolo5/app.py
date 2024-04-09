@@ -103,6 +103,7 @@ def predict():
                 collection = db["projectcollection"]
                 inserted_id = collection.insert_one(prediction_summary).inserted_id
                 prediction_summary['_id'] = str(inserted_id)
+
         except Exception as e:
             try:
                 client = MongoClient("mongodb://mongo2:27017/", serverSelectionTimeoutMS=2000)
