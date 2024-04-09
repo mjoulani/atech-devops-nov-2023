@@ -9,6 +9,7 @@ from loguru import logger
 import os
 from pymongo import MongoClient
 from bson import ObjectId
+from pymongo.errors import ServerSelectionTimeoutError
 
 #images_bucket = os.environ['BUCKET_NAME']
 
@@ -87,9 +88,44 @@ def predict():
 
         # TODO store the prediction_summary in MongoDB
 
-        client = MongoClient("mongodb://mongo1:27017/")
-        db = client["projectdb"]
-        collection = db["projectcollection"]
+        #client = MongoClient("mongodb://mongo1:27017/")
+        #db = client["projectdb"]
+        #collection = db["projectcollection"]
+        #inserted_id = collection.insert_one(prediction_summary).inserted_id
+        #prediction_summary['_id'] = str(inserted_id)
+
+        try:
+            client = MongoClient("mongodb://mongo1:27017/", serverSelectionTimeoutMS=2000)
+            server_status = client.admin.command("hello")
+            is_primary = server_status['repl']['isWritablePrimary']
+            if is_primary:
+                db = client["projectdb"]
+                collection = db["projectcollection"]
+                inserted_id = collection.insert_one(prediction_summary).inserted_id
+                prediction_summary['_id'] = str(inserted_id)
+        except Exception as e:
+            try:
+                client = MongoClient("mongodb://mongo2:27017/", serverSelectionTimeoutMS=2000)
+                server_status = client.admin.command("hello")
+                is_primary = server_status['repl']['isWritablePrimary']
+                if is_primary:
+                    db = client["projectdb"]
+                    collection = db["projectcollection"]
+                    inserted_id = collection.insert_one(prediction_summary).inserted_id
+                    prediction_summary['_id'] = str(inserted_id)
+            except Exception as e:
+                try:
+                    client = MongoClient("mongodb://mongo3:27017/", serverSelectionTimeoutMS=2000)
+                    server_status = client.admin.command("hello")
+                    is_primary = server_status['repl']['isWritablePrimary']
+                    if is_primary:
+                        db = client["projectdb"]
+                        collection = db["projectcollection"]
+                        inserted_id = collection.insert_one(prediction_summary).inserted_id
+                        prediction_summary['_id'] = str(inserted_id)
+                except Exception as e:
+                    print("failed")
+
 
         collection.insert_one(prediction_summary)
 
