@@ -8,6 +8,7 @@ import yaml
 from loguru import logger
 import os
 from pymongo import MongoClient
+from bson import ObjectId
 
 #images_bucket = os.environ['BUCKET_NAME']
 
@@ -90,10 +91,11 @@ def predict():
         db = client["projectdb"]
         collection = db["projectcollection"]
 
-        #collection.insert_one(my_dict)
+        prediction_summary['_id'] = str(prediction_summary['_id'])
+
         collection.insert_one(prediction_summary)
 
-        return prediction_summary
+        return jsonify(prediction_summary)
     else:
         return f'prediction: {prediction_id}/{original_img_path}. prediction result not found', 404
 
