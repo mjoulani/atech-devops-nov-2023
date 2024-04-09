@@ -5,6 +5,7 @@ from bot import ObjectDetectionBot, Bot
 import boto3
 from botocore.exceptions import ClientError
 import json
+from loguru import logger
 
 app = flask.Flask(__name__)
 
@@ -37,7 +38,27 @@ def get_secret():
     telebot_value = secret_data['teleBot']
     
     return telebot_value
-  
+
+
+def getSummrize(data):
+    # Initialize a dictionary to store counts of each class
+    class_counts = {}
+    # Iterate through the labels and count occurrences of each class
+    for item in data:
+        class_name = item['class']
+        if class_name in class_counts:
+            class_counts[class_name] += 1
+        else:
+            class_counts[class_name] = 1
+
+
+    class_counts_string = ""
+    for class_name, count in class_counts.items():
+        class_counts_string += f"{class_name}: {count}\n"
+        
+    # TODO send results to the Telegram end-user
+    return f'Your photo contains : \n{class_counts_string}'
+
 TELEGRAM_TOKEN = get_secret()
 TELEGRAM_APP_URL = "https://oferbakria-loadbalancer-1920523343.eu-west-1.elb.amazonaws.com"
   
@@ -79,7 +100,7 @@ def results():
     else:
         print(f"No item found with prediction_id: {prediction_id}")
 
-    bot.send_text(chat_id, text_results)
+    bot.send_text(chat_id, getSummrize(text_results))
     return prediction_id
 
 

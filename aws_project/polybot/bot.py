@@ -104,9 +104,6 @@ class ObjectDetectionBot(Bot):
             }
             
             self.send_message_to_sqs(json.dumps(message))
-            
-            # TODO send results to the Telegram end-user
-            self.send_text(msg['chat']['id'], f'Your photo contains : \n')
 
         elif self.custom_startswith(msg["text"], "pixabay:"):
             # TODO download the user photo (utilize download_user_photo)
