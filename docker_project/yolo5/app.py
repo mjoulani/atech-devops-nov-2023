@@ -129,8 +129,6 @@ def predict():
                 except Exception as e:
                     print("failed")
 
-        collection.insert_one(prediction_summary)
-
         return jsonify(prediction_summary)
     else:
         return f'prediction: {prediction_id}/{original_img_path}. prediction result not found', 404
