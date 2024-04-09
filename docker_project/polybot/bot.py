@@ -87,7 +87,9 @@ class ObjectDetectionBot(Bot):
             # TODO upload the photo to S3
             bucket_name = os.environ['BUCKET_NAME']
             s3_key = f'photos/{photo_file}'
-            upload_to_s3(photo_file, bucket_name, s3_key)
+            s3 = boto3.client('s3')
+            s3.upload_file(photo_file, bucket_name, s3_key)
+            #upload_to_s3(photo_file, bucket_name, s3_key)
             # TODO send a request to the `yolo5` service for prediction
             yolo5_service_url = 'localhost:8081/predict'
             payload = {'photo_key': s3_key}
@@ -96,6 +98,6 @@ class ObjectDetectionBot(Bot):
             # TODO send results to the Telegram end-user
             self.send_message(prediction_results)
 
-        def upload_to_s3(photo_file, bucket_name, s3_key):
-            s3 = boto3.client('s3')
-            s3.upload_file(photo_file, bucket_name, s3_key)
+        #def upload_to_s3(photo_file, bucket_name, s3_key):
+            #s3 = boto3.client('s3')
+            #s3.upload_file(photo_file, bucket_name, s3_key)
