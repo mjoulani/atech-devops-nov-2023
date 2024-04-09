@@ -91,8 +91,6 @@ def predict():
         db = client["projectdb"]
         collection = db["projectcollection"]
 
-        prediction_summary['_id'] = str(prediction_summary['_id'])
-
         collection.insert_one(prediction_summary)
 
         return jsonify(prediction_summary)
