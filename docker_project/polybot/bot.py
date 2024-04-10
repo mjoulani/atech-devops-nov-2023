@@ -39,8 +39,8 @@ class Bot:
         :return:
         """
         if not self.is_current_msg_photo(msg):
-            text = "Provide Only photos"
-            self.send_text(msg['chat']['id'], text)
+            #text = "Provide Only photos"
+            #self.send_text(msg['chat']['id'], text)
             raise RuntimeError(f'Message content of type \'photo\' expected')
 
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
@@ -66,12 +66,8 @@ class Bot:
 
     def handle_message(self, msg):
         """Bot Main message handler"""
-        if 'text' in msg:
-            self.handle_text_message(msg)
-        elif self.is_current_msg_photo(msg):
-            self.handle_photo_message(msg)
-        #logger.info(f'Incoming message: {msg}')
-        #self.send_text(msg['chat']['id'], f'Your original message: {msg}')
+        logger.info(f'Incoming message: {msg}')
+        self.send_text(msg['chat']['id'], f'Your original message: {msg}')
 
 
 class QuoteBot(Bot):
@@ -83,13 +79,13 @@ class QuoteBot(Bot):
 
 
 class ObjectDetectionBot(Bot):
-    #def handle_message(self, msg):
-        #logger.info(f'Incoming message: {msg}')
+    def handle_message(self, msg):
+        logger.info(f'Incoming message: {msg}')
 
-        #if 'text' in msg:
-            #self.handle_text_message(msg)
-        #elif self.is_current_msg_photo(msg):
-            #self.handle_photo_message(msg)
+        if 'text' in msg:
+            self.handle_text_message(msg)
+        elif self.is_current_msg_photo(msg):
+            self.handle_photo_message(msg)
         #if self.is_current_msg_photo(msg):
             #self.handle_photo_message(msg)
         #else:
