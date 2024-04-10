@@ -5,7 +5,7 @@ import time
 from telebot.types import InputFile
 import boto3
 import requests
-from loguru import logger
+
 
 class Bot:
 
@@ -81,7 +81,7 @@ class ObjectDetectionBot(Bot):
         logger.info(f'Incoming message: {msg}')
 
         if self.is_current_msg_photo(msg):
-            pass
+            #pass
             # TODO download the user photo (utilize download_user_photo)
             photo_file = self.download_user_photo(msg)
             # TODO upload the photo to S3
@@ -97,7 +97,8 @@ class ObjectDetectionBot(Bot):
             prediction_results = response.json()
             # TODO send results to the Telegram end-user
             self.send_message(prediction_results)
-
+        else:
+            self.send_text(msg['chat']['id'], f'Your original message: {msg.get("text", "No text message")}')
         #def upload_to_s3(photo_file, bucket_name, s3_key):
             #s3 = boto3.client('s3')
             #s3.upload_file(photo_file, bucket_name, s3_key)
