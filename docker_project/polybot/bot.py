@@ -39,6 +39,8 @@ class Bot:
         :return:
         """
         if not self.is_current_msg_photo(msg):
+            text = "Provide Only photos"
+            self.send_text(msg['chat']['id'], text)
             raise RuntimeError(f'Message content of type \'photo\' expected')
 
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
@@ -80,14 +82,14 @@ class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
 
-        if 'text' in msg:
-            self.handle_text_message(msg)
-        elif self.is_current_msg_photo(msg):
-            self.handle_photo_message(msg)
-        #if self.is_current_msg_photo(msg):
-            #self.handle_photo_message(msg)
-        #else:
+        #if 'text' in msg:
             #self.handle_text_message(msg)
+        #elif self.is_current_msg_photo(msg):
+            #self.handle_photo_message(msg)
+        if self.is_current_msg_photo(msg):
+            self.handle_photo_message(msg)
+        else:
+            self.handle_text_message(msg)
         #if self.is_current_msg_photo(msg):
             #pass
         def handle_photo_message(self, msg):
