@@ -1,11 +1,14 @@
 import telebot
-from loguru import logger
 import os
 import time
+import uuid
+import requests
+from botocore.exceptions import NoCredentialsError
+from loguru import logger
 from telebot.types import InputFile
 import boto3
-import requests
 
+bucket_name = os.environ['BUCKET_NAME']
 class Bot:
 
     def __init__(self, token, telegram_chat_url):
@@ -38,8 +41,6 @@ class Bot:
         :return:
         """
         if not self.is_current_msg_photo(msg):
-            #text = "Provide Only photos"
-            #self.send_text(msg['chat']['id'], text)
             raise RuntimeError(f'Message content of type \'photo\' expected')
 
         file_info = self.telegram_bot_client.get_file(msg['photo'][-1]['file_id'])
@@ -66,7 +67,9 @@ class Bot:
     def handle_message(self, msg):
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
-        self.send_text(msg['chat']['id'], f'Your original message: {msg}')
+        self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+
+
 class QuoteBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
@@ -79,39 +82,64 @@ class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
 
-        if 'photo' in msg:
-            self.handle_photo_message(msg)  # Call photo-specific handling method
-        else:
-            super().handle_message(msg)  # Call parent class's handling method for other cases
-        #if 'text' in msg:
-            #self.handle_text_message(msg)
-        #elif self.is_current_msg_photo(msg):
-            #self.handle_photo_message(msg)
-        #if self.is_current_msg_photo(msg):
-            #self.handle_photo_message(msg)
-        #else:
-            #self.handle_text_message(msg)
-        #if self.is_current_msg_photo(msg):
-            #pass
-    def handle_photo_message(self, msg):
-        # TODO download the user photo (utilize download_user_photo)
-        photo_file = self.download_user_photo(msg)
-        # TODO upload the photo to S3
-        bucket_name = os.environ['BUCKET_NAME']
-        s3_key = f'photos/{photo_file}'
+        if self.is_current_msg_photo(msg):
+            # TODO download the user photo (utilize download_user_photo)
+            photo_path = self.download_user_photo(msg)
+            # TODO upload the photo to S3
+            image_id = self.upload_to_s3(photo_path, bucket_name)
+            logger.info(f'Photo uploaded to S3')
+            # TODO send a request to the `yolo5` service for prediction
+            prediction_result = self.predict_with_yolo5(image_id)
+            time.sleep(10)
+            # TODO send results to the Telegram end-user
+            self.send_text(msg['chat']['id'], f'Prediction Result: {prediction_result}')
+            image_id_new = image_id[:-4] + "_predicted.jpg"
+            predict_img_path = photo_path.split('/')[0]
+            final_image_predict_path = predict_img_path +"/"+ image_id_new
+
+            s3 = boto3.client('s3')
+            try:
+                s3.download_file(bucket_name, image_id_new, final_image_predict_path)
+                self.send_photo(msg['chat']['id'],final_image_predict_path)
+            except Exception as e:
+                logger.error(f"downloading predicted photo to S3 Failed: {e}")
+
+    def upload_to_s3(self, local_path, bucket_name):
         s3 = boto3.client('s3')
-        s3.upload_file(photo_file, bucket_name, s3_key)
-        #upload_to_s3(photo_file, bucket_name, s3_key)
-        # TODO send a request to the `yolo5` service for prediction
-        yolo5_service_url = 'localhost:8081/predict'
-        payload = {'photo_key': s3_key}
-        response = requests.post(yolo5_service_url, json=payload)
-        prediction_results = response.json()
-        # TODO send results to the Telegram end-user
-        self.send_text(msg['chat']['id'], f'Prediction results: {prediction_results}')
-        #self.send_message(prediction_results)
-    def handle_text_message(self, msg):
-        self.send_text(msg['chat']['id'], f'Your original message: {msg.get("text", "No text message")}')
-        #def upload_to_s3(photo_file, bucket_name, s3_key):
-            #s3 = boto3.client('s3')
-            #s3.upload_file(photo_file, bucket_name, s3_key)
+
+        image_id = str(uuid.uuid4())
+        image_id = f'{image_id}.jpeg'
+        try:
+            s3.upload_file(local_path, bucket_name, image_id)
+            logger.info(f'Photo uploaded to S3. S3 URL: s3://{bucket_name}/{image_id}')
+
+            return image_id
+        except NoCredentialsError:
+            logger.error("AWS credentials not available.")
+            return None
+        except Exception as e:
+            logger.error(f"uploading photo to S3 Failed: {e}")
+            return None
+
+    def predict_with_yolo5(self, image_id):
+        prediction_result = None
+        logger.info(f'Sending Photo to yolo5, S3 URL: s3://{bucket_name}/{image_id}')
+        base_url = "http://yolo5:8081"
+        endpoint = "/predict"
+        url = base_url + endpoint
+        params = {'imgName': image_id}
+
+        try:
+
+            response = requests.post(url, params=params)
+
+            if response.status_code == 200:
+                prediction_result = response.json()
+                logger.info(f'Response 200: ****{prediction_result}******/')
+
+            else:
+                print(f"Error: {response.status_code} - {response.text}")
+
+        except requests.exceptions.RequestException as e:
+            print(f"Error sending request: {e}")
+        return prediction_result
