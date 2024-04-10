@@ -70,9 +70,10 @@ class Bot:
             self.handle_text_message(msg)
         elif self.is_current_msg_photo(msg):
             self.handle_photo_message(msg)
+        else:
+            print("ERROR")
+            pass
         self.send_text(msg['chat']['id'], f'Your original message: {msg}')
-
-
 class QuoteBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
