@@ -68,11 +68,8 @@ class Bot:
         logger.info(f'Incoming message: {msg}')
         if 'text' in msg:
             self.handle_text_message(msg)
-        elif self.is_current_msg_photo(msg):
-            self.handle_photo_message(msg)
         else:
-            print("ERROR")
-            pass
+            print("ERROR: No text message received")  # Handle non-text messages here
         self.send_text(msg['chat']['id'], f'Your original message: {msg}')
 class QuoteBot(Bot):
     def handle_message(self, msg):
@@ -85,10 +82,11 @@ class QuoteBot(Bot):
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-        if 'text' in msg:
-            self.handle_text_message(msg)
-        elif self.is_current_msg_photo(msg):
-            self.handle_photo_message(msg)
+
+        if 'photo' in msg:
+            self.handle_photo_message(msg)  # Call photo-specific handling method
+        else:
+            super().handle_message(msg)  # Call parent class's handling method for other cases
         #if 'text' in msg:
             #self.handle_text_message(msg)
         #elif self.is_current_msg_photo(msg):
