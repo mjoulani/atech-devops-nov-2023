@@ -67,8 +67,6 @@ class Bot:
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
         if 'text' in msg:
-            self.handle_text_message(msg)
-        else:
             print("ERROR: No text message received")  # Handle non-text messages here
         self.send_text(msg['chat']['id'], f'Your original message: {msg}')
 class QuoteBot(Bot):
