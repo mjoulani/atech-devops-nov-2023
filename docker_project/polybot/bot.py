@@ -68,10 +68,10 @@ class Bot:
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
         if 'text' in msg:
-            self.send_text(msg['chat']['id'], f'Your original message: {msg}')
-        else:
-            self.ObjectDetectionBot.handle_photo_message(msg)
-        #self.send_text(msg['chat']['id'], f'Your original message: {msg}')
+            ObjectDetectionBot(Bot).handle_text_message(msg)
+        elif self.is_current_msg_photo(msg):
+            ObjectDetectionBot(Bot).handle_photo_message(msg)
+        self.send_text(msg['chat']['id'], f'Your original message: {msg}')
 
 
 class QuoteBot(Bot):
