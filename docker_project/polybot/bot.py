@@ -70,7 +70,7 @@ class Bot:
         if 'text' in msg:
             self.send_text(msg['chat']['id'], f'Your original message: {msg}')
         else:
-            self.handle_photo_message(msg)
+            self.ObjectDetectionBot.handle_photo_message(msg)
         #self.send_text(msg['chat']['id'], f'Your original message: {msg}')
 
 
