@@ -6,6 +6,34 @@ from telebot.types import InputFile
 import boto3
 import requests
 
+class ObjectDetectionBot(Bot):
+    def handle_message(self, msg):
+        logger.info(f'Incoming message: {msg}')
+        if self.is_current_msg_photo(msg):
+            self.handle_photo_message(msg)
+        else:
+            self.handle_text_message(msg)
+
+    def handle_photo_message(self, msg):
+        # TODO download the user photo (utilize download_user_photo)
+        photo_file = self.download_user_photo(msg)
+        # TODO upload the photo to S3
+        bucket_name = os.environ['BUCKET_NAME']
+        s3_key = f'photos/{photo_file}'
+        s3 = boto3.client('s3')
+        s3.upload_file(photo_file, bucket_name, s3_key)
+        # upload_to_s3(photo_file, bucket_name, s3_key)
+        # TODO send a request to the `yolo5` service for prediction
+        yolo5_service_url = 'localhost:8081/predict'
+        payload = {'photo_key': s3_key}
+        response = requests.post(yolo5_service_url, json=payload)
+        prediction_results = response.json()
+        # TODO send results to the Telegram end-user
+        self.send_text(msg['chat']['id'], f'Prediction results: {prediction_results}')
+        # self.send_message(prediction_results)
+
+    def handle_text_message(self, msg):
+        self.send_text(msg['chat']['id'], f'Your original message: {msg.get("text", "No text message")}')
 
 class Bot:
 
@@ -81,7 +109,7 @@ class QuoteBot(Bot):
         if msg["text"] != 'Please don\'t quote me':
             self.send_text_with_quote(msg['chat']['id'], msg["text"], quoted_msg_id=msg["message_id"])
 
-
+"""
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
@@ -118,3 +146,4 @@ class ObjectDetectionBot(Bot):
         #def upload_to_s3(photo_file, bucket_name, s3_key):
             #s3 = boto3.client('s3')
             #s3.upload_file(photo_file, bucket_name, s3_key)
+"""
