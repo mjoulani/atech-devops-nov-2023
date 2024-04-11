@@ -102,10 +102,12 @@ class ObjectDetectionBot(Bot):
                 else:
                     class_counts[class_name] = 1
 
-            response = []
-            for class_name, count in class_counts.items():
-                response.append({'class': class_name, 'count': count})
-            response_to_enduser = json.dumps(response)
+            #response = []
+            #for class_name, count in class_counts.items():
+                #response.append({'class': class_name, 'count': count})
+            #response_to_enduser = json.dumps(response)
+            response = [f"{class_name}: {count}" for class_name, count in class_counts.items()]
+            response_to_enduser = '\n'.join(response)
 
             self.send_text(msg['chat']['id'], f'Prediction Result: {response_to_enduser}')
             image_id_new = image_id[:-4] + "_predicted.jpg"
