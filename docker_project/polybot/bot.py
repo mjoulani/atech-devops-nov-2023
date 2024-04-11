@@ -7,6 +7,7 @@ from botocore.exceptions import NoCredentialsError
 from loguru import logger
 from telebot.types import InputFile
 import boto3
+import json
 
 bucket_name = os.environ['BUCKET_NAME']
 class Bot:
@@ -67,7 +68,10 @@ class Bot:
     def handle_message(self, msg):
         """Bot Main message handler"""
         logger.info(f'Incoming message: {msg}')
-        self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+        if 'text' in msg:
+            self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
+        else:
+            self.send_text(msg['chat']['id'], "Sorry, I couldn't process your message.")
 
 
 class QuoteBot(Bot):
