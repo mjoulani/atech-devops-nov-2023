@@ -91,7 +91,7 @@ class ObjectDetectionBot(Bot):
             logger.info(f'Photo uploaded to S3')
             # TODO send a request to the `yolo5` service for prediction
             prediction_result = self.predict_with_yolo5(image_id)
-            time.sleep(10)
+            time.sleep(5)
             # TODO send results to the Telegram end-user
             response_data = json.loads(prediction_result)
             class_counts = {}
