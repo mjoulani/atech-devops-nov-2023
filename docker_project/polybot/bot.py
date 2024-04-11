@@ -93,7 +93,22 @@ class ObjectDetectionBot(Bot):
             prediction_result = self.predict_with_yolo5(image_id)
             time.sleep(10)
             # TODO send results to the Telegram end-user
-            self.send_text(msg['chat']['id'], f'Prediction Result: {prediction_result}')
+            response_data = json.loads(prediction_result)
+            class_counts = {}
+            for label in response_data['labels']:
+                class_name = label['class']
+                if class_name in class_counts:
+                    class_counts[class_name] += 1
+                else:
+                    class_counts[class_name] = 1
+
+            response = []
+            for class_name, count in class_counts.items():
+                response.append({'class': class_name, 'count': count})
+
+            response_to_enduser = json.dumps(response)
+
+            self.send_text(msg['chat']['id'], f'Prediction Result: {response_to_enduser}')
             image_id_new = image_id[:-4] + "_predicted.jpg"
             predict_img_path = photo_path.split('/')[0]
             final_image_predict_path = predict_img_path +"/"+ image_id_new
