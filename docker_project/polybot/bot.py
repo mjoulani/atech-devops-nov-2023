@@ -109,7 +109,7 @@ class ObjectDetectionBot(Bot):
             response = [f"{class_name}: {count}" for class_name, count in class_counts.items()]
             response_to_enduser = '\n'.join(response)
 
-            self.send_text(msg['chat']['id'], f'Prediction Result: {response_to_enduser}')
+            self.send_text(msg['chat']['id'], f'Prediction Results: \n {response_to_enduser}')
             image_id_new = image_id[:-4] + "_predicted.jpg"
             predict_img_path = photo_path.split('/')[0]
             final_image_predict_path = predict_img_path +"/"+ image_id_new
