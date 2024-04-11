@@ -82,7 +82,7 @@ class QuoteBot(Bot):
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-        self.send_text(msg['chat']['id'], f'Only Send Photos')
+
         if self.is_current_msg_photo(msg):
             # TODO download the user photo (utilize download_user_photo)
             photo_path = self.download_user_photo(msg)
@@ -93,16 +93,18 @@ class ObjectDetectionBot(Bot):
             prediction_result = self.predict_with_yolo5(image_id)
             time.sleep(5)
             # TODO send results to the Telegram end-user
-            response_data = json.loads(prediction_result)
+            #response_data = json.loads(prediction_result)
             class_counts = {}
-            for label in response_data['labels']:
+            for label in prediction_result['labels']:
                 class_name = label['class']
                 if class_name in class_counts:
                     class_counts[class_name] += 1
                 else:
                     class_counts[class_name] = 1
 
-            response = [{'class': class_name, 'count': count} for class_name, count in class_counts.items()]
+            response = []
+            for class_name, count in class_counts.items():
+                response.append({'class': class_name, 'count': count})
             response_to_enduser = json.dumps(response)
 
             self.send_text(msg['chat']['id'], f'Prediction Result: {response_to_enduser}')
