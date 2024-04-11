@@ -82,7 +82,7 @@ class QuoteBot(Bot):
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
-
+        self.send_text(msg['chat']['id'], f'Only Send Photos')
         if self.is_current_msg_photo(msg):
             # TODO download the user photo (utilize download_user_photo)
             photo_path = self.download_user_photo(msg)
@@ -102,10 +102,7 @@ class ObjectDetectionBot(Bot):
                 else:
                     class_counts[class_name] = 1
 
-            response = []
-            for class_name, count in class_counts.items():
-                response.append({'class': class_name, 'count': count})
-
+            response = [{'class': class_name, 'count': count} for class_name, count in class_counts.items()]
             response_to_enduser = json.dumps(response)
 
             self.send_text(msg['chat']['id'], f'Prediction Result: {response_to_enduser}')
