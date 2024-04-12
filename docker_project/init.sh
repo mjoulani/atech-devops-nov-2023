@@ -23,8 +23,9 @@ else
     # Print the public URL , export url and tele token
     export TELEGRAM_APP_URL=$public_url
     export TELEGRAM_TOKEN="6810278453:AAHAp9L-0y4t0WupwoL_hBzaZQDzISSCYkI"
-
-    # echo $PUBLIC_IP
+     echo $public_url
+     echo $public_url
+     echo $public_url
     # echo $TELE_TOKEN
     
     echo "Running Docker containers..."
