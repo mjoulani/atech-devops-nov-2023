@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "3.38.0"
+      version = "5.45.0"
     }
 
 }
@@ -12,6 +12,7 @@ terraform {
 provider "aws" {
     region = "ca-central-1"
 }
+
 
 # Create a VPC
 resource "aws_vpc" "vpc_demo" {
@@ -28,6 +29,7 @@ resource "aws_subnet" "subnet1" {
      tags = {
       "Name" = "demo1"
     }
+    depends_on = [ aws_vpc.vpc_demo ]
 }
 
 # Create a ec2 instance 
@@ -51,7 +53,16 @@ resource "aws_security_group" "secure-group_demo" {
   description = "Allow TLS inbound traffic"
   vpc_id      = aws_vpc.vpc_demo.id
 
-
+# Egress rule
+dynamic "ingress" {
+  for_each = ["80", "443", "8080", "8081", "9000"]
+  content {
+    from_port = ingress.value
+    to_port = ingress.value
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
 # Inbound rule
   ingress {
     from_port   = 22
