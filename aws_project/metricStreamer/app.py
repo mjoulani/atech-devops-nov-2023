@@ -1,54 +1,54 @@
-import boto3 
 import time
+import boto3
+from loguru import logger
 
-
-sqs_client = boto3.resource('sqs', region_name='eu-west-1')
-asg_client = boto3.client('autoscaling', region_name='eu-west-1')
+autoscaling_client = boto3.client('autoscaling', region_name='eu-west-1')
+cloudwatch_client = boto3.client('cloudwatch', region_name='eu-west-1')
 
 AUTOSCALING_GROUP_NAME = 'oferbakria_awsproject'
 QUEUE_NAME = 'oferbakria_aws_sqs'
-THRESHOLD_MESSAGES_PER_INSTANCE=10
-def calculate():
 
 
+# Function to get backlog per instance
+def get_backlog_per_instance():
+    sqs_client = boto3.resource('sqs', region_name='eu-west-1')
     queue = sqs_client.get_queue_by_name(QueueName=QUEUE_NAME)
     msgs_in_queue = int(queue.attributes.get('ApproximateNumberOfMessages'))
-    asg_groups = asg_client.describe_auto_scaling_groups(AutoScalingGroupNames=[AUTOSCALING_GROUP_NAME])['AutoScalingGroups']
 
+    asg_groups = autoscaling_client.describe_auto_scaling_groups(AutoScalingGroupNames=[AUTOSCALING_GROUP_NAME])[
+        'AutoScalingGroups']
     if not asg_groups:
         raise RuntimeError('Autoscaling group not found')
     else:
         asg_size = asg_groups[0]['DesiredCapacity']
-        print(f' {msgs_in_queue} | {asg_size}')
 
-    if (THRESHOLD_MESSAGES_PER_INSTANCE * asg_size) - msgs_in_queue < 0:
-        scale_up(AUTOSCALING_GROUP_NAME,asg_size)
+    if (asg_size == 0):
+        asg_size = 1
 
-    elif ((THRESHOLD_MESSAGES_PER_INSTANCE * asg_size) - msgs_in_queue ) > THRESHOLD_MESSAGES_PER_INSTANCE:
-        scale_down(AUTOSCALING_GROUP_NAME,asg_size)
+    backlog_per_instance = msgs_in_queue / asg_size
+    return backlog_per_instance
 
-    elif msgs_in_queue == 0 and asg_size>0 :
-        scale_down(AUTOSCALING_GROUP_NAME,asg_size)
 
-        
-    # TODO send backlog_per_instance to cloudwatch...
+# Main function
+def main():
+    backlog_per_instance = get_backlog_per_instance()
 
-def scale_up(auto_scaling_group_name,asg_size):
-    print('Scaling up...')
-    asg_client.set_desired_capacity(
-        AutoScalingGroupName=auto_scaling_group_name,
-        DesiredCapacity=asg_size + 1
+    # Send custom metric to CloudWatch
+    cloudwatch_client.put_metric_data(
+        Namespace='CustomMetrics',
+        MetricData=[
+            {
+                'MetricName': 'OferAwsProject',
+                'Value': backlog_per_instance,
+                'Unit': 'Count'
+            }
+        ]
     )
 
-def scale_down(auto_scaling_group_name,asg_size):
-    if(asg_size>0):
-        print('Scaling down...')
-        asg_client.set_desired_capacity(
-            AutoScalingGroupName=auto_scaling_group_name,
-            DesiredCapacity=asg_size - 1
-        )
+    logger.info(f'BacklogPerInstance metric sent to CloudWatch with value: {backlog_per_instance}')
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     while True:
-        calculate()
+        main()
         time.sleep(30)
