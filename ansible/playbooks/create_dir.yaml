@@ -1,7 +1,13 @@
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: false
   tasks:
+    
+    - name: Ping hosts
+      ping:
+      register: result
+
+
     - name: Create directory
       file:
         path: /home/ubuntu/ansible_test
@@ -9,4 +15,18 @@
         owner: ubuntu
         group: ubuntu
         mode: '0755'
+      when: result is success
+
+    - name: Create file
+      file:
+        path: /home/ubuntu/ansible_test/test.txt
+        state: touch
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+      when: 
+      - result is success 
+
+
+
 
