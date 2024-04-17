@@ -1,13 +1,13 @@
 import boto3
 
 # SQS queue name
-QUEUE_NAME = 'Alexey-demo-sqs'
+QUEUE_NAME = 'hamad_test_sqs'
 
 # Create an SQS client
-sqs = boto3.client('sqs', region_name="ca-central-1")
+sqs = boto3.client('sqs', region_name="eu-north-1")
 
 # Get the queue URL by its name
-queue_url = 'https://sqs.ca-central-1.amazonaws.com/933060838752/Alexey-demo-sqs'
+queue_url = 'https://sqs.eu-north-1.amazonaws.com/933060838752/hamad_test_sqs'
 
 
 # Receive a message from the SQS queue
@@ -23,7 +23,7 @@ def receive_message_from_sqs():
         if 'Messages' in response:
             message = response['Messages'][0]
             receipt_handle = message['ReceiptHandle']
-            print("Received message from SQS:", message['Body'])
+            print("Received message from SQS:", message['Body'].split(","))
 
             # Delete the message from the SQS queue
             sqs.delete_message(

@@ -14,7 +14,7 @@ def send_requests(url, num_requests, interval):
             print(f"An error occurred while sending request to {url}: {e}")
         time.sleep(interval)
 
-
+#polybot-lb-933060838752.eu-north-1.elb.amazonaws.com
 # Example usage
 url = "http://alexey-alb-393258063.eu-central-1.elb.amazonaws.com/"
 num_requests = 5000
