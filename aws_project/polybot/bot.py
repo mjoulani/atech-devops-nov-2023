@@ -1,9 +1,11 @@
+import json
+
 import telebot
 from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-
+import boto3
 
 class Bot:
 
@@ -72,6 +74,28 @@ class ObjectDetectionBot(Bot):
         if self.is_current_msg_photo(msg):
             photo_path = self.download_user_photo(msg)
 
+            def __init__(self, token, telegram_chat_url, s3_bucket_name, sqs_queue_name):
+                super().__init__(token, telegram_chat_url)
+                self.s3_bucket_name = s3_bucket_name
+                self.sqs_queue_name = sqs_queue_name
+                self.sqs_client = boto3.client('sqs')
+                self.s3_client = boto3.client('s3')
+
             # TODO upload the photo to S3
+            photo_key = os.path.basename(photo_path)
+            self.s3_client.upload_file(photo_path, self.s3_bucket_name, photo_key)
+            logger.info(f'Uploaded photo to S3: {photo_key}')
+
             # TODO send a job to the SQS queue
+            # Send a job to the SQS queue
+            sqs_message = {
+                'chat_id': msg['chat']['id'],
+                'img_name': photo_key
+            }
+            sqs_response = self.sqs_client.send_message(
+                QueueUrl=self.sqs_queue_name,
+                MessageBody=json.dumps(sqs_message)
+            )
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
+            self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
+
