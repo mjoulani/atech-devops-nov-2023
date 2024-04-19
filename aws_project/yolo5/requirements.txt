@@ -1,7 +1,0 @@
-flask
-pyyaml
-loguru
-boto3
-pymongo
-pylint
-pytest
