@@ -1,3 +1,4 @@
+import json
 import uuid
 
 import boto3
@@ -86,6 +87,16 @@ class ObjectDetectionBot(Bot):
             image_id = self.upload_to_s3(photo_path, images_bucket)
 
             # TODO send a job to the SQS queue
+            message = {
+                'image': image_id,
+                'chat_id': msg['chat']['id']
+            }
+            message = json.dumps(message)
+            queue_name = 'Daniel-sqs'
+            sqs_client = boto3.client('sqs', region_name='eu-west-1')
+            response = sqs_client.send_message(QueueUrl=queue_name, MessageBody=message)
+            logger.info(f'Sending to SQS ://{queue_name}/{response}')
+
 
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             self.send_text(msg['chat']['id'], f'Your image is being processed. Please wait...')
