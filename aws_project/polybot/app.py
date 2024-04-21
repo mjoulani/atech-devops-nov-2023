@@ -5,9 +5,38 @@ from bot import ObjectDetectionBot
 
 app = flask.Flask(__name__)
 
+import boto3
+from botocore.exceptions import ClientError
+
+
+def get_secret():
+    secret_name = "daniel-telegram"
+    region_name = "eu-west-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        get_secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        # For a list of exceptions thrown, see
+        # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+        raise e
+
+    secret = get_secret_value_response['SecretString']
+    return secret
+
 
 # TODO load TELEGRAM_TOKEN value from Secret Manager
-TELEGRAM_TOKEN = '6521616754:AAGPxWVhiBfOKZSwWJ4THvVreggYD5S9Keg'
+# TELEGRAM_TOKEN = '6521616754:AAGPxWVhiBfOKZSwWJ4THvVreggYD5S9Keg'
+TELEGRAM_TOKEN = get_secret()
+logger.info(f'yourkey{TELEGRAM_TOKEN}')
 
 TELEGRAM_APP_URL = 'https://Daniel-LB-1354148717.eu-west-1.elb.amazonaws.com'
 
