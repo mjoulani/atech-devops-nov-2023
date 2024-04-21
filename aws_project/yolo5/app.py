@@ -1,3 +1,4 @@
+import json
 import time
 from pathlib import Path
 from detect import run
@@ -31,9 +32,11 @@ def consume():
             logger.info(f'prediction: {prediction_id}. start processing')
 
             # Receives a URL parameter representing the image to download from S3
-            img_name = ...  # TODO extract from `message`
-            chat_id = ...  # TODO extract from `message`
-            original_img_path = ...  # TODO download img_name from S3, store the local image path in original_img_path
+            message = json.loads(message)
+
+            img_name = message['image']  # TODO extract from `message` DONE
+            chat_id = message['chat_id']  # TODO extract from `message` DONE
+            # TODO download img_name from S3, store the local image path in original_img_path
             s3 = boto3.client('s3')
             original_img_path = str(img_name)
 
