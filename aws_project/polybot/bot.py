@@ -1,8 +1,14 @@
+import uuid
+
+import boto3
 import telebot
+from botocore.exceptions import NoCredentialsError
 from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+
+images_bucket = "daniel-polybotaws"
 
 
 class Bot:
@@ -17,8 +23,9 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open("YOURPUBLIC.pem", 'r'), timeout=60)
-#certificate=open("YOURPUBLIC.pem", 'r'),
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/',
+                                             certificate=open("YOURPUBLIC.pem", 'r'), timeout=60)
+
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
     def send_text(self, chat_id, text):
@@ -68,10 +75,33 @@ class Bot:
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
         logger.info(f'Incoming message: {msg}')
+        # for testing only to send back the message
+        # self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
 
         if self.is_current_msg_photo(msg):
             photo_path = self.download_user_photo(msg)
 
             # TODO upload the photo to S3
+            logger.info(f'Photo uploaded to S3. S3 URL started : s3://{images_bucket}/{photo_path}')
+            image_id = self.upload_to_s3(photo_path, images_bucket)
+
             # TODO send a job to the SQS queue
+
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
+            self.send_text(msg['chat']['id'], f'Your image is being processed. Please wait...')
+
+    def upload_to_s3(self, local_path, images_bucket):
+        s3 = boto3.client('s3')
+        image_id = str(uuid.uuid4())
+        image_id = f'{image_id}.jpeg'
+        try:
+            s3.upload_file(local_path, images_bucket, image_id)
+            logger.info(f'Photo uploaded to S3. S3 URL: s3://{images_bucket}/{image_id}')
+
+            return image_id
+        except NoCredentialsError:
+            logger.error("AWS credentials not available.")
+            return None
+        except Exception as e:
+            logger.error(f"Error uploading photo to S3: {e}")
+            return None
