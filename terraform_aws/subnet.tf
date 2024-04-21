@@ -6,7 +6,7 @@ resource "aws_subnet" "public-subnet-1a" {
   map_public_ip_on_launch = true
   availability_zone       = var.availability_zone_a
   tags = {
-    Name = format("%s-tf", var.tagging)
+    Name = format("%s-daniel-tf", var.tagging)
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_subnet" "public-subnet-2a" {
   map_public_ip_on_launch = true
   availability_zone       = var.availability_zone_b
   tags = {
-    Name = format("%s-tf", var.tagging)
+    Name = format("%s-daniel-tf", var.tagging)
   }
   
 }

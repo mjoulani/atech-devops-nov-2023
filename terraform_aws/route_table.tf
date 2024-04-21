@@ -8,7 +8,7 @@ resource "aws_route_table" "public-route-table" {
     gateway_id = aws_internet_gateway.my_ig.id
   }
   tags = {
-    Name =   format("%s-Public Route Table-terraform", var.tagging)
+    Name =   format("%s-Public Route Table-daniel-terraform", var.tagging)
   }
 }
 

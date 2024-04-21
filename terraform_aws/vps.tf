@@ -4,6 +4,6 @@ resource "aws_vpc" "vpc" {
   instance_tenancy = "default"
 
   tags = {
-    Name = format("%s-tf", var.tagging)
+    Name = format("%s-daniel-tf", var.tagging)
   }
 }

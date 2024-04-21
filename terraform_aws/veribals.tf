@@ -40,7 +40,7 @@ variable "availability_zone_b" {
 variable "tagging" {
   description = "The availability_zone where the virtual network is created."
   type = string
-  default     = "demo2"
+  default     = "daniel-tf-demo"
   
 }
 

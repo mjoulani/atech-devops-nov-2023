@@ -26,7 +26,7 @@ resource "aws_security_group" "polybot-secure-group" {
   }
 
   tags = {
-        Name =   format("%s-tf", var.tagging)
+        Name =   format("%s-daniel-tf", var.tagging)
 
   }
 }

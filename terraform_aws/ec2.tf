@@ -28,7 +28,7 @@ resource "aws_instance" "ubuntu_public_linux_1" {
   key_name                    = "polybot_master"
   user_data                   = file("userdata.sh")
   tags = {
-    Name        =  format("%s-tf", var.tagging)
+    Name        =  format("%s-daniel-tf", var.tagging)
     environment = "tf"
   }
   
