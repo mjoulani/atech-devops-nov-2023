@@ -1,13 +1,14 @@
+import json
 import flask
 from flask import request
 import os
 from bot import ObjectDetectionBot
-
-app = flask.Flask(__name__)
-
+from loguru import logger
 import boto3
 from botocore.exceptions import ClientError
 
+
+app = flask.Flask(__name__)
 
 def get_secret():
     secret_name = "daniel-telegram"
@@ -30,13 +31,16 @@ def get_secret():
         raise e
 
     secret = get_secret_value_response['SecretString']
-    return secret
+    secret = json.loads(secret)
+
+    return secret['TELEGRAM_TOKEN']
 
 
 # TODO load TELEGRAM_TOKEN value from Secret Manager
-# TELEGRAM_TOKEN = '6521616754:AAGPxWVhiBfOKZSwWJ4THvVreggYD5S9Keg'
+#TELEGRAM_TOKEN = '6521616754:AAGPxWVhiBfOKZSwWJ4THvVreggYD5S9Keg'
 TELEGRAM_TOKEN = get_secret()
-logger.info(f'yourkey{TELEGRAM_TOKEN}')
+logger.info(f'yourkey {TELEGRAM_TOKEN}')
+
 
 TELEGRAM_APP_URL = 'https://Daniel-LB-1354148717.eu-west-1.elb.amazonaws.com'
 
