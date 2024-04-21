@@ -5,22 +5,20 @@ from bot import ObjectDetectionBot
 import boto3
 
 app = flask.Flask(__name__)
-
 dynamodb_table = os.environ['Dynamodb_table']
 s3_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
-region_name = os.environ['AWS_REGION']
+TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
+#region_name = os.environ['AWS_REGION']
 
 # TODO load TELEGRAM_TOKEN value from Secret Manager
 # Initialize a Secrets Manager client
 secrets_manager_client = boto3.client('secretsmanager')
-
 # Retrieve the TELEGRAM_TOKEN value from Secret Manager
-response = secrets_manager_client.get_secret_value(SecretId='TELEGRAM_TOKEN_SECRET_ID')
+response = secrets_manager_client.get_secret_value(SecretId='telegram-bot-token')
 TELEGRAM_TOKEN = response['SecretString']
 
 
-TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
 
 # @app.before_first_request
 # def load_telegram_token():

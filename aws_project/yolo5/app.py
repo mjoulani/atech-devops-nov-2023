@@ -8,13 +8,14 @@ import boto3
 import json
 import requests
 
+dynamodb_table = os.environ['Dynamodb_table']
 images_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
-region_name = os.environ['AWS_REGION']
-dynamodb_table = os.environ['Dynamodb_table']
+#region_name = os.environ['AWS_REGION']
 
-sqs_client = boto3.client('sqs', region_name=region_name)
-s3_client = boto3.client('s3', region_name=region_name)
+
+sqs_client = boto3.client('sqs')
+s3_client = boto3.client('s3')
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
@@ -97,7 +98,7 @@ def consume():
 
                 # TODO store the prediction_summary in a DynamoDB table
                 # Initialize DynamoDB client and table resource
-                dynamodb = boto3.resource('dynamodb', region_name=region_name)
+                dynamodb = boto3.resource('dynamodb')
                 table = dynamodb.Table(dynamodb_table)
 
                 # Put item into DynamoDB table
