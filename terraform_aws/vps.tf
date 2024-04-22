@@ -5,5 +5,6 @@ resource "aws_vpc" "vpc" {
 
   tags = {
     Name = format("%s-daniel-tf", var.tagging)
+
   }
 }
