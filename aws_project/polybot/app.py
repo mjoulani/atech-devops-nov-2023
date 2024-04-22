@@ -62,9 +62,16 @@ def results():
     prediction_id = request.args.get('predictionId')
 
     # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
+    dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
+    table = dynamodb.Table('Daniel-polybot')
+    response = table.get_item(
+        Key={
+            'prediction_id': prediction_id
+        }
+    )
 
-    chat_id = ...
-    text_results = ...
+    chat_id = response['Item']['chat_id']
+    text_results = response['Item']['labels']
 
     bot.send_text(chat_id, text_results)
     return 'Ok'

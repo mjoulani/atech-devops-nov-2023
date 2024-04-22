@@ -91,11 +91,27 @@ def consume():
                     'prediction_id': prediction_id,
                     'original_img_path': original_img_path,
                     'predicted_img_path': predicted_img_path,
+                    'chat_id': chat_id,
                     'labels': labels,
                     'time': time.time()
                 }
 
                 # TODO store the prediction_summary in a DynamoDB table
+                # we need to save the prediction_summary in a DynamoDB table using boto3
+                # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html#DynamoDB.Client.put_item
+                dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
+                table = dynamodb.Table('Daniel-polybot')
+                table.put_item(
+                    Item={
+                        'prediction_id': prediction_id,
+                        'original_img_path': original_img_path,
+                        'predicted_img_path': predicted_img_path,
+                        'chat_id': chat_id,
+                        'labels': labels
+                    }
+                )
+                logger.info(f'prediction: {prediction_id}/{original_img_path}. prediction summary:\n\n{labels}')
+                logger.info(f'prediction: {prediction_id}/{original_img_path}. prediction summary:\n\n{prediction_summary}')
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
 
