@@ -11,10 +11,10 @@ import requests
 dynamodb_table = os.environ['Dynamodb_table']
 images_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
-#region_name = os.environ['AWS_REGION']
+region_sqs = os.environ['Region_SQS']
 
 
-sqs_client = boto3.client('sqs')
+sqs_client = boto3.client('sqs', region_name=region_sqs)
 s3_client = boto3.client('s3')
 
 with open("data/coco128.yaml", "r") as stream:

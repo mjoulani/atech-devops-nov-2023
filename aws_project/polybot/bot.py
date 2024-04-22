@@ -9,9 +9,14 @@ import boto3
 
 class Bot:
 
-    def __init__(self, token, telegram_chat_url):
+    def __init__(self, token, telegram_chat_url, s3_bucket_name, sqs_queue_name):
         # create a new instance of the TeleBot class.
         # all communication with Telegram servers are done using self.telegram_bot_client
+        print(token)
+        print(telegram_chat_url)
+        print(s3_bucket_name)
+        print(sqs_queue_name)
+
         self.telegram_bot_client = telebot.TeleBot(token)
 
         # remove any existing webhooks configured in Telegram servers
