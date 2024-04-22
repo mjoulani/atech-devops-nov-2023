@@ -60,7 +60,7 @@ def webhook():
 @app.route(f'/results/', methods=['GET'])
 def results():
     prediction_id = request.args.get('predictionId')
-
+    logger.info(f'prediction: {prediction_id}. start processing')
     # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
     dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
     table = dynamodb.Table('Daniel-polybot')
@@ -69,12 +69,14 @@ def results():
             'prediction_id': prediction_id
         }
     )
+    logger.info(f'results: {response}. end processing')
 
     chat_id = response['Item']['chat_id']
     text_results = response['Item']['labels']
+    logger.info(f'chat_id :{chat_id}, text_results : {text_results}')
 
     bot.send_text(chat_id, text_results)
-    return 'Ok'
+    return 'Ok results'
 
 
 @app.route(f'/loadTest/', methods=['POST'])

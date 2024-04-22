@@ -30,6 +30,7 @@ class Bot:
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
     def send_text(self, chat_id, text):
+        logger.info(f'Sending text to chat_id: {chat_id}, text {text}\n')
         self.telegram_bot_client.send_message(chat_id, text)
 
     def send_text_with_quote(self, chat_id, text, quoted_msg_id):

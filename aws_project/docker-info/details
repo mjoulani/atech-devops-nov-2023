@@ -28,6 +28,11 @@ req
 sudo apt install python3-pip
 
 
+#helpfull commands
+
+docker build -t daniel-yolo-aws .
+
+docker run -d --name daniel-yolo-aws daniel-yolo-aws
 
 
 #security group

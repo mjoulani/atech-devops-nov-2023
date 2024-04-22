@@ -1,0 +1,66 @@
+Fusing layers...
+YOLOv5s summary: 213 layers, 7225885 parameters, 0 gradients, 16.4 GFLOPs
+image 1/1 /usr/src/app/f76b052f-41fe-43c1-bfed-1250996d765d.jpeg: 640x480 6 persons, 1 backpack, 236.3ms
+Speed: 1.7ms pre-process, 236.3ms inference, 2.5ms NMS per image at shape (1, 3, 640, 640)
+Results saved to static/data/63f4d0a2-0dcb-492a-88ef-53c07765e40b
+1 labels saved to static/data/63f4d0a2-0dcb-492a-88ef-53c07765e40b/labels
+2024-04-22 20:02:19.321 | INFO     | __main__:consume:71 -
+
+
+**********************prediction: 63f4d0a2-0dcb-492a-88ef-53c07765e40b/f76b052f-41fe-43c1-bfed-1250996d765d.jpeg. done**********************
+2024-04-22 20:02:19.321 | INFO     | __main__:consume:80 - Start uploading the image
+2024-04-22 20:02:19.413 | INFO     | __main__:consume:83 - s3 upload *****
+
+
+image: f76b052f-41fe-43c1-bfed-1250996d765d._predicted.jpg/uploaded to daniel-polybotaws. done uploading the image
+2024-04-22 20:02:19.414 | INFO     | __main__:consume:101 - prediction: 63f4d0a2-0dcb-492a-88ef-53c07765e40b/f76b052f-41fe-43c1-bfed-1250996d765d.jpeg. prediction summary:
+
+[{'class': 'backpack', 'cx': 0.873438, 'cy': 0.476953, 'width': 0.0989583, 'height': 0.108594}, {'class': 'person', 'cx': 0.346354, 'cy': 0.455078, 'width': 0.040625, 'height': 0.0835937}, {'class': 'person', 'cx': 0.641146, 'cy': 0.463281, 'width': 0.0322917, 'height': 0.08125}, {'class': 'person', 'cx': 0.404167, 'cy': 0.475781, 'width': 0.04375, 'height': 0.103125}, {'class': 'person', 'cx': 0.604688, 'cy': 0.464063, 'width': 0.0385417, 'height': 0.084375}, {'class': 'person', 'cx': 0.820312, 'cy': 0.548828, 'width': 0.155208, 'height': 0.377344}, {'class': 'person', 'cx': 0.440104, 'cy': 0.473437, 'width': 0.0385417, 'height': 0.104687}]
+Traceback (most recent call last):
+  File "/usr/src/app/app.py", line 154, in <module>
+    consume()
+  File "/usr/src/app/app.py", line 117, in consume
+    table.put_item(
+  File "/usr/local/lib/python3.11/dist-packages/boto3/resources/factory.py", line 581, in do_action
+    response = action(self, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/boto3/resources/action.py", line 88, in __call__
+    response = getattr(parent.meta.client, operation_name)(*args, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/botocore/client.py", line 565, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/botocore/client.py", line 958, in _make_api_call
+    api_params = self._emit_api_params(
+                 ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/botocore/client.py", line 1084, in _emit_api_params
+    self.meta.events.emit(
+  File "/usr/local/lib/python3.11/dist-packages/botocore/hooks.py", line 412, in emit
+    return self._emitter.emit(aliased_event_name, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/botocore/hooks.py", line 256, in emit
+    return self._emit(event_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/botocore/hooks.py", line 239, in _emit
+    response = handler(**kwargs)
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/transform.py", line 217, in inject_attribute_value_input
+    self._transformer.transform(
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/transform.py", line 289, in transform
+    self._transform_parameters(model, params, transformation, target_shape)
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/transform.py", line 296, in _transform_parameters
+    getattr(self, f'_transform_{type_name}')(
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/transform.py", line 312, in _transform_structure
+    self._transform_parameters(
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/transform.py", line 296, in _transform_parameters
+    getattr(self, f'_transform_{type_name}')(
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/transform.py", line 326, in _transform_map
+    params[key] = transformation(value)
+                  ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/types.py", line 114, in serialize
+    dynamodb_type = self._get_dynamodb_type(value)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/boto3/dynamodb/types.py", line 153, in _get_dynamodb_type
+    raise TypeError(msg)
+TypeError: Unsupported type "<class 'pathlib.PosixPath'>" for value "static/data/63f4d0a2-0dcb-492a-88ef-53c07765e40b/f76b052f-41fe-43c1-bfed-1250996d765d.jpeg"
+ *  Terminal will be reused by tasks, press any key to close it.
