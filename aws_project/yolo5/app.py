@@ -95,6 +95,7 @@ def consume():
                     'text_results': f"The predicted image is stored in S3 as: {predicted_img_name}",
                     'chat_id': chat_id  # Include chat_id if available
                 }
+                logger.info(f'prediction summary : {prediction_summary}')
 
                 # TODO store the prediction_summary in a DynamoDB table
                 # Initialize DynamoDB client and table resource
@@ -103,6 +104,8 @@ def consume():
 
                 # Put item into DynamoDB table
                 table.put_item(Item=prediction_summary)
+                logger.info(f'putted in DynamoDB table: {prediction_summary}')
+
                 # TODO perform a GET request to Polybot to `/results` endpoint
                 polybot_url = "http://polybot:8443/results"
                 response = requests.get(polybot_url, params={'prediction_id': prediction_id})
