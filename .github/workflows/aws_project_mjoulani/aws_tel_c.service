@@ -1,0 +1,23 @@
+#how to start the container when EC2 started
+# 1. sudo nano /etc/systemd/system/aws_tel_c.service
+# 2. copy pass the follow command in the file of the container EC1_polybot EC2_polybot EC2_yolo5
+# the code
+[Unit]
+Description=Start aws_tel_c Docker container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a aws_tel_c
+ExecStop=/usr/bin/docker stop -t 2 aws_tel_c
+
+[Install]
+WantedBy=multi-user.target
+# 3. sudo systemctl enable aws_tel_c.service
+# 4. sudo systemctl start aws_tel_c.service
+# after complete all these steps the container will start running when the EC2 started
+# In case stopping the autostart container follow these steps :
+# 1. sudo systemctl stop aws_tel_c.service
+# 2. sudo systemctl disable aws_tel_c.service
+# im my case my container name is aws_tel_c
