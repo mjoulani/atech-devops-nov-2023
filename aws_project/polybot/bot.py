@@ -4,9 +4,14 @@ import os
 import time
 import boto3
 import json
+import requests
+from botocore.exceptions import NoCredentialsError
+from pathlib import Path
+import pymongo
+
 
 class Bot:
-    def __init__(self, token, telegram_chat_url, s3_bucket_name, sqs_queue_name):
+    def __init__(self, token, telegram_chat_url, s3_bucket_name, region_s3, sqs_queue_name,region_sqs):
         # Initialize Telegram Bot client
         self.telegram_bot_client = telebot.TeleBot(token)
         self.telegram_bot_client.remove_webhook()
@@ -53,11 +58,17 @@ class ObjectDetectionBot(Bot):
         if self.is_current_msg_photo(msg):
             # Upload photo to S3 and send job to SQS queue
             photo_path = self.download_user_photo(msg)
-            sqs_client = boto3.client('sqs', region_name=os.environ.get('Region_SQS'))
-            s3_client = boto3.client('s3', region_name=os.environ.get('Region_S3'))
+            print('Photo successfully downloaded')
+            sqs_client = boto3.client('sqs', region_name=self.region_s3)
+            s3_client = boto3.client('s3', region_name=self.region_sqs)
             photo_key = os.path.basename(photo_path)
-            s3_client.upload_file(photo_path, self.s3_bucket_name, photo_key)
-            logger.info(f'Uploaded photo to S3: {photo_key}')
+            print('Uploading...')
+            try:
+                s3_client.upload_file(photo_path, self.s3_bucket_name, photo_key)
+                print('File successfully uploaded')
+                logger.info(f'Uploaded photo to S3: {photo_key}')
+            except NoCredentialsError:
+                print('Credentials not available')
             sqs_message = {'chat_id': msg['chat']['id'], 'img_name': photo_key}
             sqs_client.send_message(QueueUrl=self.sqs_queue_name, MessageBody=json.dumps(sqs_message))
             self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
