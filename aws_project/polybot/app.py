@@ -37,7 +37,6 @@ def get_secret():
 
 
 # TODO load TELEGRAM_TOKEN value from Secret Manager
-#TELEGRAM_TOKEN = '6521616754:AAGPxWVhiBfOKZSwWJ4THvVreggYD5S9Keg'
 TELEGRAM_TOKEN = get_secret()
 logger.info(f'yourkey {TELEGRAM_TOKEN}')
 
