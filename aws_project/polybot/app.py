@@ -38,7 +38,6 @@ def get_telegram_token_from_secret_manager():
 
     secret = json.loads(response)
 
-
     return secret['TelegramToken']
 
 #TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
@@ -50,7 +49,7 @@ TELEGRAM_APP_URL ='abedallahjo-polybot-alb-1663808701.ap-northeast-1.elb.amazona
 # sqs_client = boto3.client('sqs', region_name='YOUR_REGION_HERE')
 # Initialize DynamoDB client
 dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-1')
-table_name = 'ObjectDetectionResults'  # Replace with your DynamoDB table name
+table_name = 'abedallahjo-table'  # Replace with your DynamoDB table name
 table = dynamodb.Table(table_name)
 
 
@@ -62,6 +61,7 @@ def index():
 
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
 def webhook():
+    logger.info(f'webhook\n\n')
     req = request.get_json()
     bot.handle_message(req['message'])
     return 'Ok'
@@ -74,10 +74,11 @@ def results():
     # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
     # Retrieve results from DynamoDB
     response = table.get_item(Key={'prediction_id': prediction_id})
-    item = response.get('Item', {})
-    text_results = item.get('results', 'Results not found')  # Replace 'results' with your attribute name
 
+    logger.info(f'results: {response}. end processing')
+    
     chat_id = response['Item']['chat_id']
+    text_results = response['Item']['labels']
     logger.info(f'chat_id :{chat_id}, text_results : {text_results}')
 
     bot.send_text(chat_id, text_results)
@@ -86,6 +87,7 @@ def results():
 
 @app.route(f'/loadTest/', methods=['POST'])
 def load_test():
+    logger.info(f'load_test\n\n')
     req = request.get_json()
     bot.handle_message(req['message'])
     return 'Ok'

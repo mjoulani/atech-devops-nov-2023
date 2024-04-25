@@ -107,12 +107,19 @@ class ObjectDetectionBot(Bot):
 
         if self.is_current_msg_photo(msg):
             # TODO upload the photo to S3
+            logger.info(f'download_user_photo\n\n')
             photo_path = self.download_user_photo(msg)
+
+            logger.info(f'upload the photo to S3\n\n')
             self.upload_photo_to_s3(photo_path)
+
             # TODO send a job to the SQS queue
             # prediction_results = self.get_object_detection_predictions(photo_path)
+            logger.info(f'send a job to the SQS queue\n\n')
             self.send_job_to_sqs(photo_path)
+            
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             # self.send_results_to_user(msg['chat']['id'], prediction_results)
+            logger.info(f'send message to the Telegram end-user\n\n')
             self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
 
