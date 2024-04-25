@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flask import request
 import os
 from bot import ObjectDetectionBot
+from bot import Bot
 from loguru import logger
 import boto3
 import json
@@ -41,10 +42,11 @@ def get_telegram_token_from_secret_manager():
     return secret['TelegramToken']
 
 #TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-TELEGRAM_TOKEN = get_telegram_token_from_secret_manager()
+TELEGRAM_TOKEN = "6782214342:AAHfconU3WhLBNau2NiB7umZpK8dteWfnxk"
+#get_telegram_token_from_secret_manager()
 print(TELEGRAM_TOKEN)
 
-TELEGRAM_APP_URL ='abedallahjo-polybot-alb-1663808701.ap-northeast-1.elb.amazonaws.com'
+TELEGRAM_APP_URL ="abedallahjo-polybot-alb-1663808701.ap-northeast-1.elb.amazonaws.com"
 
 # sqs_client = boto3.client('sqs', region_name='YOUR_REGION_HERE')
 # Initialize DynamoDB client
@@ -61,6 +63,7 @@ def index():
 
 @app.route(f'/{TELEGRAM_TOKEN}/', methods=['POST'])
 def webhook():
+    print("%$%$")
     logger.info(f'webhook\n\n')
     req = request.get_json()
     bot.handle_message(req['message'])
@@ -95,5 +98,6 @@ def load_test():
 
 if __name__ == "__main__":
     bot = ObjectDetectionBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
+    #bot = Bot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
     #print(get_telegram_token_from_secret_manager())
     app.run(host='0.0.0.0', port=8443)
