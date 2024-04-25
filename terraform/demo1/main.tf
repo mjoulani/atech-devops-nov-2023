@@ -10,7 +10,7 @@ terraform {
 
 # Create a VPC with a /16 CIDR block and a subnet with a /24 CIDR block within the VPC  aws
 provider "aws" {
-    region = "ca-central-1"
+    region = "ap-northeast-1"
 }
 
 
