@@ -6,6 +6,8 @@ from flask import request
 import os
 from bot import ObjectDetectionBot
 from loguru import logger
+import boto3
+import json
 
 app = flask.Flask(__name__)
 
@@ -13,7 +15,7 @@ load_dotenv()
 
 def get_telegram_token_from_secret_manager():
 
-    secret_name = "TelegramToken"
+    secret_name = "abedallahjo-TelegramToken"
     region_name = "ap-northeast-1"
 
     # Create a Secrets Manager client
@@ -22,7 +24,7 @@ def get_telegram_token_from_secret_manager():
         service_name='secretsmanager',
         region_name=region_name
     )
-
+    
     try:
         get_secret_value_response = client.get_secret_value(
             SecretId=secret_name
@@ -32,13 +34,18 @@ def get_telegram_token_from_secret_manager():
         # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
         raise e
 
-    secret = get_secret_value_response['SecretString']
-    return secret
+    response = get_secret_value_response['SecretString']
 
-TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-#TELEGRAM_TOKEN = get_telegram_token_from_secret_manager()
+    secret = json.loads(response)
 
-TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
+
+    return secret['TelegramToken']
+
+#TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+TELEGRAM_TOKEN = get_telegram_token_from_secret_manager()
+print(TELEGRAM_TOKEN)
+
+TELEGRAM_APP_URL ='abedallahjo-polybot-alb-1663808701.ap-northeast-1.elb.amazonaws.com'
 
 # sqs_client = boto3.client('sqs', region_name='YOUR_REGION_HERE')
 # Initialize DynamoDB client
@@ -86,5 +93,5 @@ def load_test():
 
 if __name__ == "__main__":
     bot = ObjectDetectionBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
-
+    #print(get_telegram_token_from_secret_manager())
     app.run(host='0.0.0.0', port=8443)

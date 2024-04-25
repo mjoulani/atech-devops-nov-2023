@@ -18,7 +18,8 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60,certificate=open('abedallahjo-polybot.pem', 'rb'))
+
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -72,9 +73,6 @@ class ObjectDetectionBot(Bot):
         self.s3_client = boto3.client('s3')
         self.sqs_client = boto3.client('sqs', region_name='ap-northeast-1')
         self.queue_url = 'https://sqs.ap-northeast-1.amazonaws.com/933060838752/abedallahjo-polybot-sqs'
-        """
-        self.telegram_bot_client.set_webhook(..., certificate=open(CERTIFICATE_FILE_NAME, 'r')))
-        """
 
     def upload_photo_to_s3(self, photo_path):
         self.s3_client.upload_file(photo_path, 'abedallah-joulany-bucket', f'{photo_path}')
@@ -113,9 +111,8 @@ class ObjectDetectionBot(Bot):
             self.upload_photo_to_s3(photo_path)
             # TODO send a job to the SQS queue
             # prediction_results = self.get_object_detection_predictions(photo_path)
-
+            self.send_job_to_sqs(photo_path)
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             # self.send_results_to_user(msg['chat']['id'], prediction_results)
-            self.send_job_to_sqs(photo_path)
             self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
 
