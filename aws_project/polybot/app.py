@@ -9,6 +9,8 @@ from bot import ObjectDetectionBot, Bot, QuoteBot
 app = flask.Flask(__name__)
 
 # Retrieve environment variables
+region_db = os.environ['Region_Dynamodb']
+dynamodb_table = os.environ['Dynamodb_table']
 s3_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
 TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
