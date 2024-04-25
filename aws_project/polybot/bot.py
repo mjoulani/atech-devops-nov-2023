@@ -11,8 +11,12 @@ import pymongo
 
 
 class Bot:
-    def __init__(self, token, telegram_chat_url, s3_bucket_name, region_s3, sqs_queue_name,region_sqs):
+    def __init__(self, token, telegram_chat_url, s3_bucket_name, region_s3, sqs_queue_name, region_sqs):
         # Initialize Telegram Bot client
+        self.region_sqs = region_sqs
+        self.sqs_queue_name = sqs_queue_name
+        self.region_s3 = region_s3
+        self.s3_bucket_name = s3_bucket_name
         self.telegram_bot_client = telebot.TeleBot(token)
         self.telegram_bot_client.remove_webhook()
         time.sleep(0.5)
@@ -59,8 +63,8 @@ class ObjectDetectionBot(Bot):
             # Upload photo to S3 and send job to SQS queue
             photo_path = self.download_user_photo(msg)
             print('Photo successfully downloaded')
-            sqs_client = boto3.client('sqs', region_name=self.region_s3)
-            s3_client = boto3.client('s3', region_name=self.region_sqs)
+            sqs_client = boto3.client('sqs', region_name=self.region_sqs)
+            s3_client = boto3.client('s3', region_name=self.region_s3)
             photo_key = os.path.basename(photo_path)
             print('Uploading...')
             try:
