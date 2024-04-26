@@ -59,7 +59,7 @@ def results():
     dynamodb_client = boto3.client('dynamodb', region_name=region_db)
     response = dynamodb_client.get_item(
         TableName=dynamodb_table,
-        Key={'prediction_id': {'S': prediction_id}}
+        Key={'prediction_id': {'S': str(prediction_id)}}
     )
     chat_id = response['Item']['chat_id']['S']
     # Format and send text results to the user

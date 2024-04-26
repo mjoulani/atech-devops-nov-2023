@@ -22,13 +22,14 @@ class Bot:
         print(region_sqs)
         print(region_s3)
         print(s3_bucket_name)
-        print(region_sqs)
+        print(sqs_queue_name)
         print(token)
         print(telegram_chat_url)
 
 
         time.sleep(0.5)
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        print(self.telegram_bot_client.webhook_listener)
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
     # Method to send text message

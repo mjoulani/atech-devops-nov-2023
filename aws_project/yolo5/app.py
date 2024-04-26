@@ -129,15 +129,7 @@ def consume():
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
                 polybot_url = "http://polybot:8443/results"
-                response = requests.get(polybot_url, params={'prediction_id': prediction_id})
-                if response.status_code == 200:
-                    # Request was successful, process response content
-                    response_data = response.json()  # Convert response content to JSON
-                    print(f"Request passed {response_data}")
-                else:
-                    # Request failed, handle the error
-                    print(f"Request failed with status code {response.status_code}")
-                # Delete the message from the queue as the job is considered as DONE
+                response = requests.get(polybot_url, params={'predictionId': str(prediction_id)})
                 sqs_client.delete_message(QueueUrl=queue_name, ReceiptHandle=receipt_handle)
 
 
