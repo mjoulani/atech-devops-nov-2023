@@ -19,6 +19,14 @@ class Bot:
         self.s3_bucket_name = s3_bucket_name
         self.telegram_bot_client = telebot.TeleBot(token)
         self.telegram_bot_client.remove_webhook()
+        print(region_sqs)
+        print(region_s3)
+        print(s3_bucket_name)
+        print(region_sqs)
+        print(token)
+        print(telegram_chat_url)
+
+
         time.sleep(0.5)
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
