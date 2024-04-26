@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  metricStreamer:
+    build: .
+    image: metricstreamer #this cant be uppercase or it wont work
+    container_name: metricStreamer
+    volumes:
+      - /home/ubuntu/metricStreamer/app.py:/usr/src/app/app.py
+      - /home/ubuntu/.aws:/root/.aws
+    environment:
+      - ASG-NAME=hamad-yolo5-ASG
+      - SQS_QUEUE_NAME=hamad-aws-project-sqs
+    restart: always
+    
