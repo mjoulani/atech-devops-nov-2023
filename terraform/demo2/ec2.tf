@@ -26,7 +26,7 @@ resource "aws_instance" "ubuntu_public_linux_1" {
   subnet_id                   = aws_subnet.public-subnet-1a.id
   associate_public_ip_address = true
   key_name                    = "polybot_master"
-  # user_data                   = file("userdata.sh")
+  user_data                   = file("userdata.sh")
   tags = {
     Name        =  format("%s-tf", var.tagging)
     environment = "tf"
@@ -41,7 +41,7 @@ resource "aws_instance" "ubuntu_public_linux_2" {
   vpc_security_group_ids  = [aws_security_group.polybot-secure-group.id]
   subnet_id               = aws_subnet.public-subnet-1a.id
   key_name                = "polybot_master"
-  # user_data               = base64encode(file("userdata.sh"))
+  user_data               = base64encode(file("userdata.sh"))
   tags = {
     Name        =  format("%s-tf", var.tagging)  
     environment = "tf"

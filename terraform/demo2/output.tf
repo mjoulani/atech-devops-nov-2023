@@ -39,7 +39,16 @@ output "ec2-2" {
   value       = aws_instance.ubuntu_public_linux_2.id
 }
 
+output "ec2-1-public_ip" {
+  description = "The public IP of the ec2."
+  value       = aws_instance.ubuntu_public_linux_1.public_ip
+}
+
+output "ec2-2-public_ip" {
+  description = "The public IP of the ec2."
+  value       = aws_instance.ubuntu_public_linux_2.public_ip
+}
 
 
 
-
+# If yo want to see the output to json of the terraform code, you can run the following command: "terraform output -json > output.json"
