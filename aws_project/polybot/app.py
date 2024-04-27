@@ -9,6 +9,7 @@ from bot import Bot
 from loguru import logger
 import boto3
 import json
+from collections import Counter
 
 app = flask.Flask(__name__)
 
@@ -80,12 +81,26 @@ def results():
 
     logger.info(f'results: {response}. end processing')
     
-    chat_id = response['Item']['chat_id']
-    text_results = response['Item']['labels']
-    logger.info(f'chat_id :{chat_id}, text_results : {text_results}')
-
-    bot.send_text(chat_id, text_results)
-    return 'Ok'
+    if 'Item' in response:
+        labels = response['Item']['labels'].split(', ')
+        
+        # Count the occurrences of each class
+        class_counts = Counter(labels)
+        
+        # Construct the message
+        message = "Detected Objects:\n"
+        for class_name, count in class_counts.items():
+            message += f"{class_name}: {count}\n"
+        
+        # Extract chat ID
+        chat_id = response['Item']['chat_id']
+        
+        # Send the message to the user
+        bot.send_text(chat_id, message)
+        
+        return 'Ok'
+    else:
+        return 'Prediction ID not found'
 
 
 @app.route(f'/loadTest/', methods=['POST'])

@@ -4,7 +4,8 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
-
+import uuid
+import json
 
 class Bot:
 
@@ -75,8 +76,13 @@ class ObjectDetectionBot(Bot):
         self.queue_url = 'https://sqs.ap-northeast-1.amazonaws.com/933060838752/abedallahjo-polybot-sqs'
 
     def upload_photo_to_s3(self, photo_path):
-        self.s3_client.upload_file(photo_path, 'abedallah-joulany-bucket', f'{photo_path}')
-        logger.info(f'Uploaded photo to S3: {photo_path}')
+
+        image_id = str(uuid.uuid4())
+        image_id = f'{image_id}.jpeg'
+
+        self.s3_client.upload_file(photo_path, 'abedallah-joulany-bucket', f'{image_id}')
+        logger.info(f'Uploaded photo to S3: {image_id}')
+        return image_id
 
     def send_results_to_user(self, chat_id, results):
         # Format the results into a user-friendly message
@@ -85,13 +91,18 @@ class ObjectDetectionBot(Bot):
             formatted_results += f"- {object_name} (confidence: {confidence:.2f})\n"
         self.send_text(chat_id, formatted_results)
 
-    def send_job_to_sqs(self, photo_path):
-        with open(photo_path, 'rb') as photo:
-            photo_data = photo.read()
+    def send_job_to_sqs(self, photo_path, msg):
+
+        # TODO send a job to the SQS queue
+        message = {
+            'image': photo_path,
+            'chat_id': msg['chat']['id']
+        }
+        message = json.dumps(message)
 
         response = self.sqs_client.send_message(
             QueueUrl=self.queue_url,
-            MessageBody=photo_data.decode('utf-8')
+            MessageBody=message
         )
         logger.info(f'Sent job to SQS: {response["MessageId"]}')
 
@@ -111,15 +122,17 @@ class ObjectDetectionBot(Bot):
             photo_path = self.download_user_photo(msg)
 
             logger.info(f'upload the photo to S3\n\n')
-            self.upload_photo_to_s3(photo_path)
+            image_id  = self.upload_photo_to_s3(photo_path)
 
             # TODO send a job to the SQS queue
-            # prediction_results = self.get_object_detection_predictions(photo_path)
             logger.info(f'send a job to the SQS queue\n\n')
-            self.send_job_to_sqs(photo_path)
+            self.send_job_to_sqs(image_id, msg)
             
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             # self.send_results_to_user(msg['chat']['id'], prediction_results)
             logger.info(f'send message to the Telegram end-user\n\n')
             self.send_text(msg['chat']['id'], 'Your image is being processed. Please wait...')
 
+
+# docker build -t polybot-image .
+# docker run --restart=always -it -d -p 8443:8443 -v $HOME/.aws/credentials:/root/.aws/credentials  --name poltbot-container polybot-image
