@@ -30,6 +30,7 @@ region_sqs = os.environ.get('Region_SQS')
 # region_secret = os.environ.get('Region_SECRET')check name please
 # region_s3=os.environ.get('Region_SQS')
 # region_sqs=os.environ.get('Region_S3')
+#cert generate :openssl req -newkey rsa:2048 -sha256 -nodes -keyout PRIVATE.key -x509 -days 40 -out PUBLIC.pem -subj "/C=US/O=Example Brooklyn Company/CN=polybotlb-2005455536.eu-central-1.elb.amazonaws.com"
 
 
 # Retrieve the TELEGRAM_TOKEN value from Secrets Manager
