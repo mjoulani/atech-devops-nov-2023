@@ -20,12 +20,6 @@ class Bot:
         self.telegram_bot_client = telebot.TeleBot(token)
         self.telegram_bot_client.remove_webhook()
         self.path_cert = path_cert
-        print(region_sqs)
-        print(region_s3)
-        print(s3_bucket_name)
-        print(sqs_queue_name)
-        print(token)
-        print(telegram_chat_url)
         time.sleep(0.5)
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60, certificate=open(self.path_cert, 'rb'))
 

@@ -9,27 +9,29 @@ from bot import ObjectDetectionBot, Bot, QuoteBot
 app = flask.Flask(__name__)
 
 # Retrieve environment variables
-region_db = os.environ['Region_Dynamodb']
-dynamodb_table = os.environ['Dynamodb_table']
-s3_bucket = os.environ['BUCKET_NAME']
-queue_name = os.environ['SQS_QUEUE_NAME']
-TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
-path_cert = os.environ['path_cert']
-region_secret = os.environ.get('Region_secret')
-region_s3 = os.environ.get('Region_S3')
-region_sqs = os.environ.get('Region_SQS')
+# region_db = os.environ['Region_Dynamodb']
+# dynamodb_table = os.environ['Dynamodb_table']
+# s3_bucket = os.environ['BUCKET_NAME']
+# queue_name = os.environ['SQS_QUEUE_NAME']
+# TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
+# path_cert = os.environ['path_cert']
+# region_secret = os.environ.get('Region_secret')
+# region_s3 = os.environ.get('Region_S3')
+# region_sqs = os.environ.get('Region_SQS')
 
-# region_db = 'us-west-2'
-# dynamodb_table = 'Sabaa_dynamodb2'
-# s3_bucket = 'naghambucket'
-# queue_name = 'Sabaa_SQS'
-# TELEGRAM_APP_URL = 'https://9df9-77-126-174-121.ngrok-free.app'
-# region_secret = 'eu-central-1'
-# region_s3 = 'us-east-2'
-# region_sqs = 'us-east-1'
-# region_secret = os.environ.get('Region_SECRET')check name please
-# region_s3=os.environ.get('Region_SQS')
-# region_sqs=os.environ.get('Region_S3')
+#==============================
+
+region_db = 'us-west-2'
+dynamodb_table = 'Sabaa_dynamodb2'
+s3_bucket = 'naghambucket'
+queue_name = 'Sabaa_SQS'
+TELEGRAM_APP_URL = 'https://polybotlb-2005455536.eu-central-1.elb.amazonaws.com'
+region_secret = 'eu-central-1'
+region_s3 = 'us-east-2'
+region_sqs = 'us-east-1'
+region_s3=os.environ.get('Region_SQS')
+region_sqs=os.environ.get('Region_S3')
+#path_cert =
 #cert generate :openssl req -newkey rsa:2048 -sha256 -nodes -keyout PRIVATE.key -x509 -days 40 -out PUBLIC.pem -subj "/C=US/O=Example Brooklyn Company/CN=polybotlb-2005455536.eu-central-1.elb.amazonaws.com"
 
 

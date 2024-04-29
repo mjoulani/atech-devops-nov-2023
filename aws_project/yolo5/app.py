@@ -8,12 +8,24 @@ import boto3
 import json
 import requests
 from decimal import Decimal
+#
+# region_db = os.environ['Region_Dynamodb']
+# dynamodb_table = os.environ['Dynamodb_table']
+# images_bucket = os.environ['BUCKET_NAME']
+# queue_name = os.environ['SQS_QUEUE_NAME']
+# region_sqs = os.environ['Region_SQS']
 
-region_db = os.environ['Region_Dynamodb']
-dynamodb_table = os.environ['Dynamodb_table']
-images_bucket = os.environ['BUCKET_NAME']
-queue_name = os.environ['SQS_QUEUE_NAME']
-region_sqs = os.environ['Region_SQS']
+
+region_db = 'us-west-2'
+dynamodb_table = 'Sabaa_dynamodb2'
+s3_bucket = 'naghambucket'
+queue_name = 'Sabaa_SQS'
+region_secret = 'eu-central-1'
+region_s3 = 'us-east-2'
+region_sqs = 'us-east-1'
+region_s3=os.environ.get('Region_SQS')
+region_sqs=os.environ.get('Region_S3')
+#path_cert =
 
 sqs_client = boto3.client('sqs', region_name=region_sqs)
 s3_client = boto3.client('s3')
