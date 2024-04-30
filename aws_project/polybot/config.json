@@ -1,0 +1,15 @@
+{
+   "TargetValue": 10,
+   "CustomizedMetricSpecification": {
+      "MetricName": "BacklogPerInstance",
+      "Namespace": "AbedGZ-CloudWatch",
+      "Dimensions":[
+         {
+            "Name":"AutoScalingGroupName",
+            "Value":"ASG-abedg-worker"
+         }
+      ],
+      "Statistic": "Average",
+      "Unit": "Count"
+   }
+}
