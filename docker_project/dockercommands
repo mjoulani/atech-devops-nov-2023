@@ -1,0 +1,51 @@
+
+
+docker network create DATA
+docker run --rm -it -d -p 8081:8081 -v $HOME/.aws/credentials:/root/.aws/credentials --network DATA --name yolo yoloim
+docker run --rm -it -d -p 8443:8443 -v $HOME/.aws/credentials:/root/.aws/credentials --network DATA --name bot-app botimage33
+docker run --rm --name myngrok --network DATA -it -e NGROK_AUTHTOKEN=2cBcWaBI5CE7ZE73iWmPDtPNnCy_4PT8nqds9MoAQ3eAwEtrG ngrok/ngrok:alpine http http://bot-app:8443
+docker rm -vf $(docker ps -aq)
+
+docker network create mongoCluster
+docker run -d --rm -p 27017:27017 --name mongo1 --network mongoCluster mongo:5 mongod --replSet myReplicaSet --bind_ip localhost,mongo1
+docker run -d --rm -p 27018:27017 --name mongo2 --network mongoCluster mongo:5 mongod --replSet myReplicaSet --bind_ip localhost,mongo2
+docker run -d --rm -p 27019:27017 --name mongo3 --network mongoCluster mongo:5 mongod --replSet myReplicaSet --bind_ip localhost,mongo3
+
+####Test and Verify the Replica Set
+docker exec -it mongo1 mongosh --eval "rs.initiate({
+    _id: \"myReplicaSet\",
+        members: [
+        {_id: 0, host: \"mongo1\"},
+        {_id: 1, host: \"mongo2\"},
+        {_id: 2, host: \"mongo3\"}
+    ]
+})"
+docker stop mongo1
+docker exec -it mongo2 mongosh --eval "rs.status()"
+
+
+Unix
+To delete all containers including its volumes use,
+docker rm -vf $(docker ps -aq)
+To delete all the images,
+docker rmi -f $(docker images -aq)
+
+# Log in to Docker Hub
+docker login
+
+1648  docker build -t botapp:1.1 .
+ 1649  docker tag botapp:1.1 abedgm/botapp:1.1
+ 1650  docker push abedgm/botapp:1.1
+# Tag the local image
+docker tag local_image:tag dockerhub_username/repository_name:tag
+
+# Push the image to Docker Hub
+docker push dockerhub_username/repository_name:tag
+
+docker system df
+docker volume prune 
+docker volume ls
+
+docker context : 
+docker logs sd 2>&1 | grep -E '2024-02'
+https://github.com/louislam/dockge

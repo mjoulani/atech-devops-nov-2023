@@ -1,0 +1,114 @@
+version: "3.9"
+services:
+  ngrok:
+    image: ngrok/ngrok:alpine
+    container_name: ngrok
+    environment:
+      - NGROK_AUTHTOKEN="2cBcWaBI5CE7ZE73iWmPDtPNnCy_4PT8nqds9MoAQ3eAwEtrG"
+    command: http http://botapp:8443
+    ports:
+      - "4040:4040"
+    networks:
+      - DATA
+
+  web-app:
+    image: abedgm/botapp:1.1
+    container_name: botapp
+    ports:
+      - "8443:8443"
+    networks:
+      - DATA
+    env_file:
+      - env_file.env
+    secrets:
+      - telegram_token
+    volumes:
+      - $HOME/.aws/credentials:/root/.aws/credentials
+    depends_on:
+      - ngrok
+
+  Yolo5-app:
+    image : abedgm/yoloapp:1.2
+    container_name: yoloapp
+    ports :
+      - 8081:8081
+    volumes:
+      - $HOME/.aws/credentials:/root/.aws/credentials
+    networks:
+      - DATA
+      - mongoCluster
+    env_file:
+      - env_file.env
+    
+  mongodb1:
+    image: mongo:5
+    hostname: mongo1
+    container_name: mongo1
+    ports:
+      - "27017:27017"
+    networks:
+      - mongoCluster
+      - DATA
+    volumes:
+      - mongo1-data:/data/db
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
+  mongodb2:
+    image: mongo:5
+    hostname: mongo2
+    container_name: mongo2
+    ports:
+      - "27018:27017"
+    networks:
+      - mongoCluster
+      - DATA
+    volumes:
+      - mongo2-data:/data/db
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+    #command: ["--replSet", "myReplicaSet"]
+
+  mongodb3:
+    image: mongo:5
+    hostname: mongo3
+    container_name: mongo3
+    ports:
+      - "27019:27017"
+    networks:
+      - mongoCluster
+      - DATA
+    volumes:
+      - mongo3-data:/data/db
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+
+  mongosetup:
+    image: mongo
+    depends_on:
+      - mongodb1
+      - mongodb2
+      - mongodb3
+    volumes:
+      - ./scripts:/scripts
+    restart: "no"
+    networks:
+      - mongoCluster
+    #entrypoint: [ "bash", "/scripts/mongo_setup.sh"]
+    entrypoint: ["bash", "-c", "sleep 10 && mongosh --host mongo1:27017 /scripts/initiate.js"]
+
+volumes:
+  mongo1-data:
+  mongo2-data:
+  mongo3-data:
+  
+
+networks:
+  mongoCluster:
+    driver: bridge
+  DATA:
+    driver: bridge
+
+secrets:
+  telegram_token:
+    file : ./env_file.env
