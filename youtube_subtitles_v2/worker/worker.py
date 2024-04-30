@@ -5,9 +5,9 @@ from moviepy.editor import AudioFileClip
 from transformers import pipeline
 from loguru import logger
 
-queue_name = 'YOUR_SQS_QUEUE_NAME_HERE'
+queue_name = 'Abed2Queue'
 
-sqs_client = boto3.client('sqs', region_name='YOUR_REGION_HERE')
+sqs_client = boto3.client('sqs', region_name='eu-central-1')
 
 
 def consume():
