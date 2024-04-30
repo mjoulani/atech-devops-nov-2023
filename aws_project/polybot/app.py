@@ -19,7 +19,7 @@ app = flask.Flask(__name__)
 # region_s3 = os.environ.get('Region_S3')
 # region_sqs = os.environ.get('Region_SQS')
 
-#==============================
+# ==============================
 
 region_db = 'us-west-2'
 dynamodb_table = 'Sabaa_dynamodb2'
@@ -29,10 +29,8 @@ TELEGRAM_APP_URL = 'https://polybotlb-2005455536.eu-central-1.elb.amazonaws.com'
 region_secret = 'eu-central-1'
 region_s3 = 'us-east-2'
 region_sqs = 'us-east-1'
-region_s3=os.environ.get('Region_SQS')
-region_sqs=os.environ.get('Region_S3')
-#path_cert =
-#cert generate :openssl req -newkey rsa:2048 -sha256 -nodes -keyout PRIVATE.key -x509 -days 40 -out PUBLIC.pem -subj "/C=US/O=Example Brooklyn Company/CN=polybotlb-2005455536.eu-central-1.elb.amazonaws.com"
+path_cert = 'PUBLIC.pem'
+# cert generate :openssl req -newkey rsa:2048 -sha256 -nodes -keyout PRIVATE.key -x509 -days 40 -out PUBLIC.pem -subj "/C=US/O=Example Brooklyn Company/CN=polybotlb-2005455536.eu-central-1.elb.amazonaws.com"
 
 
 # Retrieve the TELEGRAM_TOKEN value from Secrets Manager
@@ -53,6 +51,11 @@ def webhook():
     req = request.get_json()
     bot.handle_message(req['message'])
     return 'Ok'
+
+
+@app.route('/health')
+def health_check():
+    return 'Ok', 200
 
 
 @app.route(f'/results/', methods=['GET'])
