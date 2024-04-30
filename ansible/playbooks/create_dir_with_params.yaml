@@ -38,7 +38,7 @@
           path: "{{ path }}"
           state: directory 
       when: 
-      - ansible_facts['distribution'] == 'Windows'   
+      - ansible_facts['distribution'] == 'Windows' 
 
 
 
