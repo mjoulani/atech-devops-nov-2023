@@ -30,9 +30,11 @@ def calculate():
         raise RuntimeError('Autoscaling group not found')
     else:
         asg_size = asg_groups[0]['DesiredCapacity']
-
-    backlog_per_instance = msgs_in_queue / asg_size
-
+    try:
+        backlog_per_instance = msgs_in_queue / asg_size
+    except ZeroDivisionError as e:
+        logging.info(f"Error: {e}")
+        return "error"
     try:
     # TODO send backlog_per_instance to cloudwatch...
         cloudwatch = boto3.client('cloudwatch', region_name='eu-north-1')
@@ -40,7 +42,7 @@ def calculate():
             Namespace='polybot',
             MetricData=[
                 {
-                    'MetricName': 'backlog',#TODO make cloudwatch metric name
+                    'MetricName': 'backlog',
                     'Value': backlog_per_instance,
                     'Unit': 'Count'
                 }
