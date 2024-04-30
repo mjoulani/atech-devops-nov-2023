@@ -1,3 +1,4 @@
+# generale skelton not for running the code which we run inside the folder EC2
 import flask
 import boto3
 import json

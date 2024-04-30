@@ -1,4 +1,5 @@
-#Running the project with Host machine which iterated ever 30 sec
+#Runnig the project with lambda fuction which trigger with aws Amazon EventBridge every 1 min 
+import json
 import boto3
 import time
 
@@ -150,9 +151,26 @@ def send_metric(metric_name, value, scaling_action):
         print(f"Sent metric data: {metric_name}={value}, ScalingAction={scaling_action}")
     except Exception as e:
         print(f"Error sending metric data: {e}")
+    
+   
 
-def main():
-  while True:  
+    
+
+def scale_out(asg_group_name, desired_capacity):
+    print(asg_group_name)
+    print(f'desired_capacity_out = {desired_capacity}')
+    response = asg_client.set_desired_capacity(AutoScalingGroupName=asg_group_name,DesiredCapacity=desired_capacity,)
+    print("Scaling out:", response)
+    
+
+def scale_in(asg_group_name, desired_capacity):
+    print(asg_group_name)
+    print(f'desired_capacity_in = {desired_capacity}')
+    response = asg_client.set_desired_capacity(AutoScalingGroupName=asg_group_name,DesiredCapacity=desired_capacity,)
+    print("Scaling in:", response)
+   
+
+def lambda_handler(event, context):
     if not namespace_exists(NAMESPACE):
         create_namespace(NAMESPACE)
     else:
@@ -284,13 +302,12 @@ def main():
             
     send_metric(METRIC_NAME, asg_size, SCALING_STATUS)
     time.sleep(30)
-    with open(r'C:\atech-devops-nov-2023\.github\workflows\aws_project_mjoulani\stop.txt', 'r') as f:
-        content = f.readline().strip()  # Read the first line and remove leading/trailing whitespace
-    if content == "stop":
-        break
+                
     
-    
+    return {
+        'statusCode': 200,
+        'body': 'Completed Lambda execution.'
+    }
 
 
-if __name__ == "__main__":
-    main()
+#Runnig the project with lambda fuction which trigger with aws Amazon EventBridge every 1 min 

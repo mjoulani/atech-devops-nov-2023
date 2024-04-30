@@ -1,3 +1,4 @@
+# generale skelton not for running the code which we run inside the folder EC2
 import telebot
 from loguru import logger
 import os
