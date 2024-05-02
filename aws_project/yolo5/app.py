@@ -8,6 +8,7 @@ import boto3
 import json
 import requests
 from decimal import Decimal
+
 #
 # region_db = os.environ['Region_Dynamodb']
 # dynamodb_table = os.environ['Dynamodb_table']
@@ -23,9 +24,7 @@ queue_name = 'Sabaa_SQS'
 region_secret = 'eu-central-1'
 region_s3 = 'us-east-2'
 region_sqs = 'us-east-1'
-region_s3=os.environ.get('Region_SQS')
-region_sqs=os.environ.get('Region_S3')
-#path_cert =
+path_cert = 'PUBLIC.pem'
 
 sqs_client = boto3.client('sqs', region_name=region_sqs)
 s3_client = boto3.client('s3')
@@ -57,7 +56,7 @@ def consume():
             chat_id = message_data['chat_id']
             original_img_path = ...  # TODO download img_name from S3, store the local image path in original_img_path
             original_img_path = f"{img_name}"
-            s3_client.download_file(images_bucket, img_name, original_img_path)
+            s3_client.download_file(s3_bucket, img_name, original_img_path)
 
             logger.info(f'prediction: {prediction_id}/{original_img_path}. Download img completed')
 
@@ -81,7 +80,7 @@ def consume():
             # Construct the new filename for the predicted image
             predicted_img_name = f"predicted_{img_name}"
             # Upload the renamed predicted image to S3
-            s3_client.upload_file(str(predicted_img_path), images_bucket, predicted_img_name)
+            s3_client.upload_file(str(predicted_img_path), s3_bucket, predicted_img_name)
 
             # Parse prediction labels and create a summary
             pred_summary_path = Path(f'usr/src/app/{prediction_id}/labels/{original_img_path.split(".")[0]}.txt')
@@ -140,7 +139,7 @@ def consume():
                 logger.info(f'putted in DynamoDB table: {prediction_summary}')
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
-                polybot_url = "http://polybot:8443/results"
+                polybot_url = "http://polybotlb-2005455536.eu-central-1.elb.amazonaws.com/results/"
                 response = requests.get(polybot_url, params={'predictionId': str(prediction_id)})
                 sqs_client.delete_message(QueueUrl=queue_name, ReceiptHandle=receipt_handle)
 
