@@ -5,12 +5,12 @@ metadata:
 spec:
     containers:
     - name: nginx-kuber-container
-      image: nginx:1.25.5
+      image: nginx:stable-otel
       ports:
       - containerPort: 80
 
 
-# kubeclt apply -f k8s/pods/nginx.yaml  
+# kubectl apply -f k8s/pods/nginx.yaml  
 # kubectl get pod nginx-pod -o yaml
 # kubectl describe pod nginx-pod
 # kubectl port-forward nginx-pod 8080:80
