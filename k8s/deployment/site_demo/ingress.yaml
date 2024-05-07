@@ -2,11 +2,12 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: react-site-ingress
+  namespace: alexey # namespace if needed to change
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: react-site.local
+    - host: aba-babala.co.il
       http:
         paths:
           - path: /
@@ -16,4 +17,4 @@ spec:
                 name: react-site-service
                 port:
                   number: 80
-                  
+
