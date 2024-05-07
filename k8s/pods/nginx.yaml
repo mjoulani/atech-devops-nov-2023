@@ -5,9 +5,9 @@ metadata:
 spec:
     containers:
     - name: nginx-kuber-container
-      image: nginx:1.25.5
-      ports:
-      - containerPort: 80
+    image: nginx:1.25.5
+    ports:
+    - containerPort: 80
 
 
 # kubeclt apply -f k8s/pods/nginx.yaml  
