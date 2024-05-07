@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-site-deployment
-  namespace: alexey
+  namespace: alexey # namespace if needed to change
 spec:
   replicas: 1
   selector:
