@@ -31,7 +31,11 @@ pipeline {
             steps {
                 script{
                     println("=====================================${STAGE_NAME}=====================================")
+<<<<<<< HEAD
                     download_from_s3(params.AWS_CRED,params.S3_BUCKET,params.S3_FILE,"${WORKSPACE}")  
+=======
+                    download_from_s3("aws_cred","oferbakria","file_12.jpg","${WORKSPACE}")  
+>>>>>>> main
                 }
             }
         }
@@ -41,11 +45,19 @@ pipeline {
 
 //============================================================FUNC=====================================================
 
+<<<<<<< HEAD
 def download_from_s3(def cred,def bucket, def file, def dest,def region=params.REGION){
     withAWS(credentials: cred, region: region ) {
         println("Downloading file name ${file} from bucket ${bucket} to ${dest}")
         // sh "aws s3 cp s3://${bucket}/${file} ${dest}" 
         s3Download(file:"downloaded_${file}", bucket:bucket, path:file, force:true)         
+=======
+def download_from_s3(def cred,def bucket, def file, def dest,def region='ap-southeast-2'){
+    withAWS(credentials: cred, region: region ) {
+        println("Downloading file name ${file} from bucket ${bucket} to ${dest}")
+        // sh "aws s3 cp s3://${bucket}/${file} ${dest}"   
+        s3Download(file:"downloaded_${file}", bucket:bucket, path:file, force:true)      
+>>>>>>> main
     }
 }
     
