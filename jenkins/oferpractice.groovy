@@ -50,15 +50,28 @@ pipeline {
             steps {
                 script {
                 println("=====================================${STAGE_NAME}=====================================")
-                sh "sudo apt get update"
+                sh '''
 
-                sh "cd ./terraform && sudo chmod +x user_data.sh"
-                sh "cd ./terraform && terraform init && terraform apply -auto-approve"
-                sh "cd ./terraform && terraform output -json > file.json"
-                sh "sudo apt install jq"//cat file.json | jq -r '.["ec2-public_ip"].value'
+                sudo apt-get update
+                sudo apt-get install jq
 
+                cd ./terraform &&
+                sudo chmod +x user_data.sh &&
+                terraform init &&
+                terraform apply -auto-approve &&
+                terraform output -json > file.json && 
+                public_url=$(cat file.json | jq -r '.["ec2-public_ip"].value')
+
+                '''
+                // sh "sudo apt get update"
+                // sh "cd ./terraform && sudo chmod +x user_data.sh"
+                // sh "cd ./terraform && terraform init && terraform apply -auto-approve"
+                // sh "cd ./terraform && terraform output -json > file.json"
+                // sh "sudo apt install jq"//cat file.json | jq -r '.["ec2-public_ip"].value'
+                // sh "public_url=$(cat file.json | jq -r '.['ec2-public_ip'].value')"
                 }
             }
         }
   }
 }
+// create hosts.ini file and add the public_url into the hosts file
