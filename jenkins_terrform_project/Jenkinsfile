@@ -3,6 +3,7 @@ pipeline {
     agent any
 
     parameters {
+            choice choices:['us-west-1', 'eu-west-1', 'eu-west-2', 'sa-east-1'], description: 'Chocie Zone', name: 'zonechoice'
             booleanParam(name:'Init_TERRAFORM', defaultValue: false, description: 'Check to init Terraform changes')
             booleanParam(name: 'PLAN_TERRAFORM', defaultValue: false, description: 'Check to plan Terraform changes')
             booleanParam(name: 'APPLY_TERRAFORM', defaultValue: false, description: 'Check to apply Terraform changes')
@@ -30,6 +31,7 @@ pipeline {
                                 //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
                                 //dir('infra') {
                                     sh 'echo "=================Terraform Init=================="'
+                                    sh 'echo Chocie : ${zonechoice}'
                                     //sh 'terraform init'
                                 //}
                             //}
