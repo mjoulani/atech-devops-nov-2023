@@ -51,7 +51,11 @@ pipeline {
                     if (params.PLAN_TERRAFORM) {
                         //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
                             //dir('infra') {
-                                sh 'echo "=================Terraform Plan=================="'
+                                script{
+                                    sh 'echo "=================Terraform Plan=================="'
+                                    sh "env | grep TF_VAR_zone"
+                                }
+                                
                                 //sh 'terraform plan'
                             //}
                         //}
@@ -66,7 +70,10 @@ pipeline {
                     if (params.APPLY_TERRAFORM) {
                         //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
                             //dir('infra') {
-                                sh 'echo "=================Terraform Apply=================="'
+                                script{
+                                    sh 'echo "=================Terraform Apply=================="'
+                                    sh "env | grep TF_VAR_zone"
+                                }
                                 //sh 'terraform apply -auto-approve'
                             //}
                         //}
