@@ -1,7 +1,9 @@
 // This the skelton of Jenkinslife
 pipeline {
     agent any
-
+    environment {
+        TF_VAR_zone = "${params.zonechoice}"
+    }
     parameters {
             choice choices:['us-west-1', 'eu-west-1', 'eu-west-2', 'sa-east-1'], description: 'Chocie Zone', name: 'zonechoice'
             booleanParam(name:'Init_TERRAFORM', defaultValue: false, description: 'Check to init Terraform changes')
