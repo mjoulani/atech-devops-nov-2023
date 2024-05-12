@@ -73,8 +73,12 @@ pipeline {
             steps {
                 script {
                     echo "=================Terraform Apply=================="
-                    sh 'env | grep TF_VAR_zone'
-                    sh 'terraform apply -auto-approve'
+                    dir('jenkins_terrform_project') { 
+                        // Navigate to the directory containing main.tf
+                        sh "terraform apply -var 'zone=${params.zonechoice}' -auto-approve"
+                    }
+                    //sh 'env | grep TF_VAR_zone'
+                    //sh 'terraform apply -auto-approve'
                     // Additional steps for Terraform apply
                 }
             }
@@ -87,6 +91,10 @@ pipeline {
             steps {
                 script {
                     echo "=================Terraform Destroy=================="
+                    dir('jenkins_terrform_project') { 
+                        // Navigate to the directory containing main.tf
+                        sh "terraform destroy  -auto-approve"
+                    }
                     sh 'env | grep TF_VAR_zone'
                     sh 'terraform destroy -auto-approve'
                     // Additional steps for Terraform destroy
