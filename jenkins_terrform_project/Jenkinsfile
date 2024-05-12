@@ -31,9 +31,11 @@ pipeline {
                                 //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
                                 //dir('infra') {
                                     sh 'echo "=================Terraform Init=================="'
-                                    sh 'echo Chocie : ${zonechoice}'
-                                    sh 'export TF_VAR_zone=${zonechoice}'
-                                    sh "env | grep TF_VAR_zone"
+                                    withEnv(['TF_VAR_zone=eu-west-2']) {
+                                            sh 'echo "=================Terraform Init in with=================="'
+                                            sh 'echo Chocie : ${zonechoice}'
+                                            sh "env | grep TF_VAR_zone"
+                                    }
                                     //sh 'terraform init'
                                 //}
                             //}
