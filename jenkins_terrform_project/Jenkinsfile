@@ -26,10 +26,13 @@ pipeline {
                 expression { params.Init_TERRAFORM }
             }
             steps {
-                echo "=================Terraform Init=================="
-                echo "Choice : ${params.zonechoice}"
-                sh 'env | grep TF_VAR_zone'
-                // Additional steps for Terraform init
+                script{
+                    echo "=================Terraform Init=================="
+                    echo "Choice : ${params.zonechoice}"
+                    sh 'env | grep TF_VAR_zone'
+                    // Additional steps for Terraform init
+                }
+                
             }
         }
 
@@ -38,9 +41,12 @@ pipeline {
                 expression { params.PLAN_TERRAFORM }
             }
             steps {
-                echo "=================Terraform Plan=================="
-                sh 'env | grep TF_VAR_zone'
-                // Additional steps for Terraform plan
+                script{
+                    echo "=================Terraform Plan=================="
+                    sh 'env | grep TF_VAR_zone'
+                    // Additional steps for Terraform plan
+                }
+                
             }
         }
 
@@ -49,9 +55,12 @@ pipeline {
                 expression { params.APPLY_TERRAFORM }
             }
             steps {
-                echo "=================Terraform Apply=================="
-                sh 'env | grep TF_VAR_zone'
-                // Additional steps for Terraform apply
+                script{
+                    echo "=================Terraform Apply=================="
+                    sh 'env | grep TF_VAR_zone'
+                    // Additional steps for Terraform apply
+                }
+        
             }
         }
 
@@ -60,9 +69,12 @@ pipeline {
                 expression { params.DESTROY_TERRAFORM }
             }
             steps {
-                echo "=================Terraform Destroy=================="
-                sh 'env | grep TF_VAR_zone'
-                // Additional steps for Terraform destroy
+                script{
+                    echo "=================Terraform Destroy=================="
+                    sh 'env | grep TF_VAR_zone'
+                    // Additional steps for Terraform destroy
+                }
+    
             }
         }
     }
