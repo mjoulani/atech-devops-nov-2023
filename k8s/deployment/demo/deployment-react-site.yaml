@@ -22,8 +22,8 @@ spec:
           image: alexeymihaylovdev/demo:1.1
           ports:
             - containerPort: 80
-      # imagePullSecrets:
-      #   - name: docker-hub-secret      
+      imagePullSecrets:
+        - name: dockerhub      
 ---
 apiVersion: v1
 kind: Service
