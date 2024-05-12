@@ -37,10 +37,11 @@ pipeline {
                 script {
                     echo "=================Terraform Init=================="
                     echo "Choice : ${params.zonechoice}"
-                    sh "export TF_VAR_zone='${params.zonechoice}'" // Ensure proper substitution
-                    sh 'env | grep TF_VAR_zone'
+                    //sh "export TF_VAR_zone='${params.zonechoice}'" // Ensure proper substitution
+                    //sh 'env | grep TF_VAR_zone'
                     dir('jenkins_terrform_project') { // Navigate to the directory containing main.tf
-                                sh 'terraform init'
+                                //sh 'terraform init'
+                                sh "terraform init -var 'zone=${params.zonechoice}'"
                     }
                     // Additional steps for Terraform init
                 }
@@ -54,9 +55,11 @@ pipeline {
             steps {
                 script {
                     echo "=================Terraform Plan=================="
-                    sh 'env | grep TF_VAR_zone'
-                    dir('jenkins_terrform_project') { // Navigate to the directory containing main.tf
-                                sh 'terraform apply -auto-approve'
+                    //sh 'env | grep TF_VAR_zone'
+                    dir('jenkins_terrform_project') { 
+                        // Navigate to the directory containing main.tf
+                        //sh 'terraform apply -auto-approve'
+                        sh "terraform plan -var 'zone=${params.zonechoice}'"
                     }
                     // Additional steps for Terraform plan
                 }
