@@ -35,7 +35,8 @@ pipeline {
                                     if (params.Init_TERRAFORM) {
                                         sh 'echo "=================Terraform Init=================="'
                                         sh 'echo Choice : ${zonechoice}'
-                                        sh "export TF_VAR_zone=${zonechoice}"
+                                        //sh "export TF_VAR_zone=${zonechoice}"
+                                        TF_VAR_zone = "${params.zonechoice}"
                                         sh "env | grep TF_VAR_zone"
                                     }
                                     //sh 'terraform init'
