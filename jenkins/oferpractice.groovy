@@ -60,7 +60,7 @@ pipeline {
                 terraform init &&
                 terraform apply -auto-approve &&
                 terraform output -json > file.json && 
-                public_url=$(cat file.json | jq -r '.["ec2-public_ip"].value')
+                export public_url=$(cat file.json | jq -r '.["ec2-public_ip"].value')
 
                 '''
                 // sh "sudo apt get update"
@@ -69,6 +69,29 @@ pipeline {
                 // sh "cd ./terraform && terraform output -json > file.json"
                 // sh "sudo apt install jq"//cat file.json | jq -r '.["ec2-public_ip"].value'
                 // sh "public_url=$(cat file.json | jq -r '.['ec2-public_ip'].value')"
+                }
+            }
+        }
+
+
+        stage('Build hosts file containing public ip') {
+            steps {
+                script {
+                println("=====================================${STAGE_NAME}=====================================")
+                sh '''
+                
+                export public_url=$(cat terraform/file.json | jq -r '.["ec2-public_ip"].value')
+
+                cd ansible &&
+                echo "[linux]" > hosts.ini &&
+                echo "$public_url" >> hosts.ini &&
+                echo "" >> hosts.ini &&
+                echo "[linux:vars]" >> hosts.ini &&
+                echo "ansible_ssh_user=ubuntu" >> hosts.ini &&
+                echo "ansible_ssh_private_key_file=/home/ubuntu/key.pem" >> hosts.ini &&
+                echo "ansible_ssh_extra_args='-o StrictHostKeyChecking=no'" >> hosts.ini
+
+                '''
                 }
             }
         }
