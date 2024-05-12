@@ -1,67 +1,43 @@
-// This the skelton of Jenkinslife
 pipeline {
     agent any
-    environment {
-        TF_VAR_zone = "${params.zonechoice}"
-    }
     parameters {
-            choice choices:['us-west-1', 'eu-west-1', 'eu-west-2', 'sa-east-1'], description: 'Chocie Zone', name: 'zonechoice'
-            booleanParam(name:'Init_TERRAFORM', defaultValue: false, description: 'Check to init Terraform changes')
-            booleanParam(name: 'PLAN_TERRAFORM', defaultValue: false, description: 'Check to plan Terraform changes')
-            booleanParam(name: 'APPLY_TERRAFORM', defaultValue: false, description: 'Check to apply Terraform changes')
-            booleanParam(name: 'DESTROY_TERRAFORM', defaultValue: false, description: 'Check to apply Terraform changes')
+        choice choices:['us-west-1', 'eu-west-1', 'eu-west-2', 'sa-east-1'], description: 'Choice Zone', name: 'zonechoice'
+        booleanParam(name:'Init_TERRAFORM', defaultValue: false, description: 'Check to init Terraform changes')
+        booleanParam(name: 'PLAN_TERRAFORM', defaultValue: false, description: 'Check to plan Terraform changes')
+        booleanParam(name: 'APPLY_TERRAFORM', defaultValue: false, description: 'Check to apply Terraform changes')
+        booleanParam(name: 'DESTROY_TERRAFORM', defaultValue: false, description: 'Check to apply Terraform changes')
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                // Clean workspace before cloning (optional)
                 deleteDir()
-
-                // Clone the Git repository
+                // Clone Git repository
                 // git branch: 'main',
                 //     url: 'https://github.com/rahulwagh/devops-project-1.git'
-
-                // sh "ls -lart"
             }
         }
 
         stage('Terraform Init') {
-                    steps {
-                        script{
-                            if(params.Init_TERRAFORM){
-                                //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
-                                //dir('infra') {
-                                    if (params.Init_TERRAFORM) {
-                                        sh 'echo "=================Terraform Init=================="'
-                                        sh 'echo Choice : ${zonechoice}'
-                                        //sh "export TF_VAR_zone=${zonechoice}"
-                                        TF_VAR_zone = "${params.zonechoice}"
-                                        sh "env | grep TF_VAR_zone"
-                                    }
-                                    //sh 'terraform init'
-                                //}
-                            //}
-                                
-                            }
-                        }
+            steps {
+                script {
+                    if (params.Init_TERRAFORM) {
+                        echo "=================Terraform Init=================="
+                        echo "Choice : ${params.zonechoice}"
+                        env.TF_VAR_zone = params.zonechoice
+                        sh "export TF_VAR_zone=${env.TF_VAR_zone}"
+                        sh "env | grep TF_VAR_zone"
+                    }
                 }
+            }
         }
 
         stage('Terraform Plan') {
             steps {
                 script {
                     if (params.PLAN_TERRAFORM) {
-                        //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
-                            //dir('infra') {
-                                script{
-                                    sh 'echo "=================Terraform Plan=================="'
-                                    sh "env | grep TF_VAR_zone"
-                                }
-                                
-                                //sh 'terraform plan'
-                            //}
-                        //}
+                        echo "=================Terraform Plan=================="
+                        sh "env | grep TF_VAR_zone"
                     }
                 }
             }
@@ -71,15 +47,8 @@ pipeline {
             steps {
                 script {
                     if (params.APPLY_TERRAFORM) {
-                        //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
-                            //dir('infra') {
-                                script{
-                                    sh 'echo "=================Terraform Apply=================="'
-                                    sh "env | grep TF_VAR_zone"
-                                }
-                                //sh 'terraform apply -auto-approve'
-                            //}
-                        //}
+                        echo "=================Terraform Apply=================="
+                        sh "env | grep TF_VAR_zone"
                     }
                 }
             }
@@ -89,12 +58,7 @@ pipeline {
             steps {
                 script {
                     if (params.DESTROY_TERRAFORM) {
-                       //withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-crendentails-rwagh']]){
-                            //dir('infra') {
-                                sh 'echo "=================Terraform Destroy=================="'
-                                //sh 'terraform destroy -auto-approve'
-                            //}
-                        //}
+                        echo "=================Terraform Destroy=================="
                     }
                 }
             }
