@@ -32,7 +32,7 @@ pipeline {
                                 //dir('infra') {
                                     sh 'echo "=================Terraform Init=================="'
                                     sh 'echo Chocie : ${zonechoice}'
-                                    sh 'TF_VAR_zone = ${zonechoice}'
+                                    sh 'TF_VAR_zone=${zonechoice}'
                                     sh "env | grep TF_VAR_zone"
                                     //sh 'terraform init'
                                 //}
