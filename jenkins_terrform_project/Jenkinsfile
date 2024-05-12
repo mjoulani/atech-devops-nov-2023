@@ -95,8 +95,8 @@ pipeline {
                         // Navigate to the directory containing main.tf
                         sh "terraform destroy  -auto-approve"
                     }
-                    sh 'env | grep TF_VAR_zone'
-                    sh 'terraform destroy -auto-approve'
+                    //sh 'env | grep TF_VAR_zone'
+                    //sh 'terraform destroy -auto-approve'
                     // Additional steps for Terraform destroy
                 }
             }
