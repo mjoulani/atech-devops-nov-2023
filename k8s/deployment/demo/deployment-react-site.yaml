@@ -2,12 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-site-deployment
-  namespace: alexey # namespace if needed to change
+  namespace: alexey
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: react-site
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       labels:
@@ -15,19 +20,22 @@ spec:
     spec:
       containers:
         - name: react-site
-          image: alexeymihaylovdev/demo:1.1
+          image: alexeymihaylovdev/demo:2.0
           ports:
             - containerPort: 80
+      imagePullSecrets:
+        - name: docker-hub-secret      
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: react-site-service
-  namespace: alexey # namespace if needed to change
+  namespace: alexey
 spec:
   selector:
     app: react-site
   ports:
     - protocol: TCP
       port: 80
-  type: NodePort            
+      targetPort: 80
+
