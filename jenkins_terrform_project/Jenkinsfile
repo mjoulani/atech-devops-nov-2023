@@ -20,6 +20,12 @@ pipeline {
                 //git branch: 'jenkins_terrafor/muhamed_joulani', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
                 sh "ls -lart"
                 // Clone repository
+                checkout scm: [
+                        $class: 'GitSCM',
+                        branches: [[name: 'jenkins_terraform_project/muhamed_joulani']],
+                        extensions: [],
+                        userRemoteConfigs: [[credentialsId: 'github token', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git']]
+                ]
             }
         }
 
