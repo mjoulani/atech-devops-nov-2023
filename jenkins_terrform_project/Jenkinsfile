@@ -17,6 +17,8 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 deleteDir()
+                git branch: 'jenkins_terrafor/muhamed_joulani', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
+                sh "ls -lart"
                 // Clone repository
             }
         }
@@ -26,13 +28,14 @@ pipeline {
                 expression { params.Init_TERRAFORM }
             }
             steps {
-                script{
+                script {
                     echo "=================Terraform Init=================="
                     echo "Choice : ${params.zonechoice}"
+                    sh "export TF_VAR_zone='${params.zonechoice}'" // Ensure proper substitution
                     sh 'env | grep TF_VAR_zone'
+                    sh 'terraform init'
                     // Additional steps for Terraform init
                 }
-                
             }
         }
 
@@ -41,12 +44,12 @@ pipeline {
                 expression { params.PLAN_TERRAFORM }
             }
             steps {
-                script{
+                script {
                     echo "=================Terraform Plan=================="
                     sh 'env | grep TF_VAR_zone'
+                    sh 'terraform plan'
                     // Additional steps for Terraform plan
                 }
-                
             }
         }
 
@@ -55,12 +58,12 @@ pipeline {
                 expression { params.APPLY_TERRAFORM }
             }
             steps {
-                script{
+                script {
                     echo "=================Terraform Apply=================="
                     sh 'env | grep TF_VAR_zone'
+                    sh 'terraform apply -auto-approve'
                     // Additional steps for Terraform apply
                 }
-        
             }
         }
 
@@ -69,14 +72,15 @@ pipeline {
                 expression { params.DESTROY_TERRAFORM }
             }
             steps {
-                script{
+                script {
                     echo "=================Terraform Destroy=================="
                     sh 'env | grep TF_VAR_zone'
+                    sh 'terraform destroy -auto-approve'
                     // Additional steps for Terraform destroy
                 }
-    
             }
         }
     }
 }
+
 
