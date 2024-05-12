@@ -4,16 +4,6 @@ metadata:
   name: ingress-hosts
 spec:
   rules:
-  - host: www.aba-babala.co.il
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: main
-            port:
-              number: 80
   - host: www.aba-babala2.co.il            
     http:
       paths:
