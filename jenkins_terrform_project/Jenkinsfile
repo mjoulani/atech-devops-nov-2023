@@ -17,7 +17,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 deleteDir()
-                #git branch: 'jenkins_terrafor/muhamed_joulani', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
+                //git branch: 'jenkins_terrafor/muhamed_joulani', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
                 sh "ls -lart"
                 // Clone repository
             }
