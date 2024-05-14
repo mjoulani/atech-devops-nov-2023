@@ -3,8 +3,13 @@ from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+import json
+import uuid
+import boto3
+import telebot
+from botocore.exceptions import NoCredentialsError
 
-
+bucket_name = os.environ['BUCKET_NAME']
 class Bot:
 
     def __init__(self, token, telegram_chat_url):
@@ -73,7 +78,7 @@ class ObjectDetectionBot(Bot):
             photo_path = self.download_user_photo(msg)
 
             # TODO upload the photo to S3
-            image_id = self.upload_to_s3(photo_path, images_bucket)
+            image_id = self.upload_to_s3(photo_path, bucket_name)
             logger.info(f'Photo uploaded to S3')
             # TODO send a job to the SQS queue
             message = {
@@ -88,18 +93,18 @@ class ObjectDetectionBot(Bot):
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             self.send_text(msg['chat']['id'], f'Your image is being processed. Please wait...')
 
-    def upload_to_s3(self, local_path, images_bucket):
+    def upload_to_s3(self, local_path, bucket_name):
         s3 = boto3.client('s3')
         image_id = str(uuid.uuid4())
         image_id = f'{image_id}.jpeg'
         try:
-            s3.upload_file(local_path, images_bucket, image_id)
-            logger.info(f'Photo uploaded to S3. S3 URL: s3://{images_bucket}/{image_id}')
+            s3.upload_file(local_path, bucket_name, image_id)
+            logger.info(f'Photo uploaded to S3')
 
             return image_id
         except NoCredentialsError:
             logger.error("AWS credentials not available.")
             return None
         except Exception as e:
-            logger.error(f"Error uploading photo to S3: {e}")
+            logger.error(f"uploading photo to S3 Failed: {e}")
             return None

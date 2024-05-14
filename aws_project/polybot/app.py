@@ -35,7 +35,7 @@ def get_secret():
 
 TELEGRAM_TOKEN = get_secret()
 
-TELEGRAM_APP_URL = os.environ['TELEGRAM_APP_URL']
+TELEGRAM_APP_URL = "ahmad-baloum-1107395860.ap-northeast-2.elb.amazonaws.com"
 
 
 @app.route('/', methods=['GET'])
@@ -55,9 +55,18 @@ def results():
     prediction_id = request.args.get('predictionId')
 
     # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
+    dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-2')
+    table = dynamodb.Table('ahmadbaloum-db')
+    response = table.get_item(
+        Key={
+            'prediction_id': prediction_id
+        }
+    )
+    logger.info(f'results: {response}')
 
-    chat_id = ...
-    text_results = ...
+    chat_id = response['Item']['chat_id']
+    text_results = response['Item']['labels']
+    logger.info(f'chat_id :{chat_id}, text_results : {text_results}')
 
     bot.send_text(chat_id, text_results)
     return 'Ok'
