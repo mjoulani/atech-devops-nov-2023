@@ -5,6 +5,7 @@ from bot import ObjectDetectionBot
 import boto3
 from botocore.exceptions import ClientError
 from loguru import logger
+import json
 
 app = flask.Flask(__name__)
 

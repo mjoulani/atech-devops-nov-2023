@@ -5,6 +5,10 @@ import yaml
 from loguru import logger
 import os
 import boto3
+import json
+from botocore.exceptions import NoCredentialsError
+from collections import Counter
+import requests
 
 bucket_name = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
