@@ -15,7 +15,7 @@ spec:
         app: nginx
     spec:
       containers:
-        - name: nginx-kuber-container
+        - name: nginx
           image: nginx:1.25.5
           ports:
             - containerPort: 80
