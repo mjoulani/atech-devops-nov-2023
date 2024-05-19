@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sonarqube-pv
+spec:
+  capacity:
+    storage: 15Gi
+  awsElasticBlockStore:
+    volumeID: vol-09d19a3e1bb46c5d7
+    fsType: ext4
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: sonarqube-pvc
+# spec:
+#   storageClassName: ebs-sc
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 30Gi

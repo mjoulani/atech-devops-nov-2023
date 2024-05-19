@@ -1,0 +1,10 @@
+tolerations: 
+  - key: "sonarqube"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+nodeSelector: 
+  sonarqube: "true"    
+persistence:
+  enabled: true
+  storageClass: "ebs-sc"

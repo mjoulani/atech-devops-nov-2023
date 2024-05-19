@@ -12,8 +12,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: standard
   awsElasticBlockStore:
-    volumeID: "<your-ebs-volume-id>"
-    fsType: ext4
+    kubectl apply -f sonarqube-pv.yaml    fsType: gp3
   # nfs:
   #   path: /tmp
   #   server: nfs-server.example.com  
