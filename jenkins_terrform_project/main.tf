@@ -42,7 +42,7 @@ terraform {
   }
   
   backend "s3" {
-    bucket         = "muh-tfstate-bucket"  # Corrected bucket name
+    bucket         = "muh1-tfstate-bucket"  # Corrected bucket name
     key            = "state/terraform.tfstate"
     region         = "us-west-1"
     #encrypt        = false
@@ -51,7 +51,7 @@ terraform {
 }
 
 provider "aws" {
-  region                   = us-west-1
+  region                   = "us-west-1"
   shared_credentials_files = ["C:\\Users\\muham.DESKTOP-T5LGP3O\\.aws\\credentials"]
 }
 
