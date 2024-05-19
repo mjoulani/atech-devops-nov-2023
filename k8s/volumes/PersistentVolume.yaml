@@ -14,3 +14,6 @@ spec:
   awsElasticBlockStore:
     volumeID: "<your-ebs-volume-id>"
     fsType: ext4
+  # nfs:
+  #   path: /tmp
+  #   server: nfs-server.example.com  
