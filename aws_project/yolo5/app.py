@@ -40,7 +40,7 @@ def consume():
             s3 = boto3.client('s3')
             original_img_path = str(img_name)
             try:
-                s3.download_file(images_bucket, img_name, original_img_path)
+                s3.download_file(bucket_name, img_name, original_img_path)
                 logger.info(f'Downloading image completed')
 
             except NoCredentialsError:

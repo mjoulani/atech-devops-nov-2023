@@ -88,7 +88,11 @@ class ObjectDetectionBot(Bot):
             message = json.dumps(message)
             queue_name = 'ahmadbaloum-polybot.fifo'
             sqs_client = boto3.client('sqs', region_name='ap-northeast-2')
-            response = sqs_client.send_message(QueueUrl=queue_name, MessageBody=message)
+            response = sqs_client.send_message(
+                QueueUrl=queue_name,
+                MessageBody=message,
+                MessageGroupId='default'
+            )
             logger.info(f'Job Sent to SQS Queue')
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             self.send_text(msg['chat']['id'], f'Your image is being processed. Please wait...')
