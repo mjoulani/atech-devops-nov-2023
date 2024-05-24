@@ -189,11 +189,6 @@ out/
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
-<<<<<<< HEAD
-.networking_project/encSampleMsgReady.txt
-=======
-# terraform
-.terraform*
-terraform.tfstate
-terraform.tfstate.backup
->>>>>>> main
+
+
+*.pem
