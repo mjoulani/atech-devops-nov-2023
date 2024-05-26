@@ -92,39 +92,24 @@ def results():
 
 @app.route(f'/results/', methods=['GET'])
 def results():
-    try:
-        prediction_id = request.args.get('predictionId')
-        logger.info(f'Fetching results for prediction_id: {prediction_id}')
+    prediction_id = request.args.get('predictionId')
 
-        dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-2')
-        table = dynamodb.Table('ahmadbaloum-db')
-        response = table.get_item(Key={'polybot': prediction_id})
+    # TODO use the prediction_id to retrieve results from DynamoDB and send to the end-user
+    dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-2')
+    table = dynamodb.Table('ahmadbaloum-db')
+    response = table.get_item(
+        Key={
+            'polybot': prediction_id
+        }
+    )
+    logger.info(f'results: {response}')
 
-        if 'Item' not in response:
-            return {'error': 'Prediction ID not found'}, 404
+    chat_id = response['Item']['chat_id']
+    text_results = response['Item']['labels']
+    logger.info(f'chat_id :{chat_id}, text_results : {text_results}')
 
-        item = response['Item']
-        chat_id = item['chat_id']
-        labels = item['labels']
-
-        class_counts = {}
-        for label in labels:
-            class_name = label['class']
-            if class_name in class_counts:
-                class_counts[class_name] += 1
-            else:
-                class_counts[class_name] = 1
-
-        response_list = [f"{class_name}: {count}" for class_name, count in class_counts.items()]
-        response_to_enduser = '\n'.join(response_list)
-
-        logger.info(f'chat_id: {chat_id}, response_to_enduser: {response_to_enduser}')
-
-        bot.send_text(chat_id, f'Prediction Results:\n{response_to_enduser}')
-        return 'Ok'
-    except Exception as e:
-        logger.error(f'Error processing results: {e}')
-        return {'error': 'Internal Server Error'}, 500
+    bot.send_text(chat_id, text_results)
+    return 'Ok'
 
 @app.route(f'/loadTest/', methods=['POST'])
 def load_test():
