@@ -60,16 +60,30 @@ def results():
     table = dynamodb.Table('ahmadbaloum-db')
     response = table.get_item(
         Key={
-            'prediction_id': prediction_id
+            'polybot': prediction_id
         }
     )
     logger.info(f'results: {response}')
 
-    chat_id = response['Item']['chat_id']
-    text_results = response['Item']['labels']
-    logger.info(f'chat_id :{chat_id}, text_results : {text_results}')
+    item = response['Item']
+    chat_id = item['chat_id']
+    labels = item['labels']
 
-    bot.send_text(chat_id, text_results)
+    class_counts = {}
+    for label in labels:
+        class_name = label['class']
+        if class_name in class_counts:
+            class_counts[class_name] += 1
+        else:
+            class_counts[class_name] = 1
+
+    response_list = [f"{class_name}: {count}" for class_name, count in class_counts.items()]
+    response_to_enduser = '\n'.join(response_list)
+
+    logger.info(f'chat_id: {chat_id}, response_to_enduser: {response_to_enduser}')
+
+
+    bot.send_text(chat_id, f'Prediction Results:\n{response_to_enduser}')
     return 'Ok'
 
 
