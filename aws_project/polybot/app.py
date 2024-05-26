@@ -69,6 +69,9 @@ def results():
     chat_id = item['chat_id']
     labels = item['labels']
 
+    if isinstance(labels, str):
+        labels = json.loads(labels)
+
     class_counts = {}
     for label in labels:
         class_name = label['class']
