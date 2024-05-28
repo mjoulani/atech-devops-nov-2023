@@ -1,0 +1,27 @@
+replicaCount: 1
+
+image:
+  repository: alexeymihaylovdev/demo
+  tag: "1.1"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+    - host: www.aba-babala2.co.il
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+  
