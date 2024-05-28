@@ -1,21 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "react-site.fullname" . }}-deployment
-  labels:
-    {{- include "react-site.labels" . | nindent 4 }}
+  name: {{ .Values.releaseName }}-deployment
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "react-site.name" . }}
+      app: {{ .Values.releaseName }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: {{ .Values.maxSurge }}
   template:
     metadata:
       labels:
-        app: {{ include "react-site.name" . }}
+        app: {{ .Values.releaseName }}
     spec:
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        - name: {{ .Values.releaseName }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.containerPort }}
+      imagePullSecrets:
+        - name: {{ .Values.imagePullSecrets }}

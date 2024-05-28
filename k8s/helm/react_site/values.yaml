@@ -1,27 +1,21 @@
-replicaCount: 1
+replicaCount: 3
+
+releaseName: react-site
 
 image:
   repository: alexeymihaylovdev/demo
-  tag: "1.1"
-  pullPolicy: IfNotPresent
+  tag: "2.0"
+
+containerPort: 80
 
 service:
-  type: NodePort
   port: 80
 
 ingress:
-  enabled: true
-  className: ""
-  annotations: {}
-  hosts:
-    - host: www.aba-babala2.co.il
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
+  name: ingress-hosts
+  host: www.aba-babala2.co.il
+  path: "/"
 
-resources: {}
-nodeSelector: {}
-tolerations: []
-affinity: {}
-  
+imagePullSecrets: dockerhub
+
+maxSurge: 3
