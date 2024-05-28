@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: {{ .Values.ingress.name }}
 spec:
+  ingressClassName: nginx  # This is the default ingress class for the NGINX Ingress Controller
   rules:
     - host: {{ .Values.ingress.host }}
       http:
