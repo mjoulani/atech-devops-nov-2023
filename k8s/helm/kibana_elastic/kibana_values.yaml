@@ -1,0 +1,10 @@
+replicaCount: 1
+
+resources:
+  requests:
+    cpu: "900m"
+    memory: "1024Mi"
+  limits:
+    cpu: "900m"
+    memory: "1024Mi"
+elasticsearchHosts: "https://elasticsearch-master:9200"    
