@@ -2,9 +2,9 @@ replicaCount: 1
 
 resources:
   requests:
-    cpu: "900m"
-    memory: "1024Mi"
+    cpu: "250m"
+    memory: "512Mi"
   limits:
-    cpu: "900m"
-    memory: "1024Mi"
+    cpu: "250m"
+    memory: "512Mi"
 elasticsearchHosts: "https://elasticsearch-master:9200"    
