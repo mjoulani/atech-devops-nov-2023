@@ -1,0 +1,22 @@
+replicas: 1
+
+persistence:
+  enabled: true    
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: "gp2"
+  existingClaim: "elastic-pvc"
+  resources:
+    requests:
+      storage: 10Gi
+
+
+
+resources:
+  requests:
+    cpu: "1.5"
+    memory: "2048Mi"
+  limits:
+    cpu: "1.5"
+    memory: "2048Mi"
+    
