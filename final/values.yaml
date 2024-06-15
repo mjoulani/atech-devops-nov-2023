@@ -1,0 +1,22 @@
+replicaCount: 3
+
+releaseName: react-site
+
+image:
+  repository: oferbakria/polybot
+  tag: "latest"
+
+containerPort: 80
+
+service:
+  port: 80
+
+ingress:
+  name: ingress-hosts
+  host: www.polybot.co.il
+  path: "/"
+
+imagePullSecrets: dockerhub
+
+maxSurge: 3
+
