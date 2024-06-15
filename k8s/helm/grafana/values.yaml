@@ -4,3 +4,5 @@ service:
     name: grafana-service
 adminUser: admin
 adminPassword: secret
+
+replicas: 2
