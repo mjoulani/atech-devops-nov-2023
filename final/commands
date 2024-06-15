@@ -1,6 +1,6 @@
-helm upgrade test -f .\values.yaml -n oferbakria .
-helm install test -f .\values.yaml -n oferbakria .
-helm uninstall test -n oferbakria .
+helm upgrade finalproject -f .\values.yaml -n oferbakria .
+helm install finalproject -f .\values.yaml -n oferbakria .
+helm uninstall finalproject -n oferbakria .
 
 kubectl create secret generic aws-credentials --from-file=credentials=C:\Users\User\.aws\credentials -n oferbakria
 

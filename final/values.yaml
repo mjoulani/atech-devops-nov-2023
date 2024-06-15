@@ -6,7 +6,7 @@ image:
   repository: oferbakria/polybot
   tag: "latest"
 
-containerPort: 80
+containerPort: 8443
 
 service:
   port: 80
