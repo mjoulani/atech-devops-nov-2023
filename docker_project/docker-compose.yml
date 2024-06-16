@@ -1,0 +1,86 @@
+version: '3.8'
+services:
+
+  mongo1:
+    image: mongo:5
+    container_name: mongo1
+    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo1  
+    ports:
+      - "27017:27017"
+    networks:
+      - mongoCluster
+    volumes:
+      - mongo_data_1:/data/db
+
+  mongo2:
+    image: mongo:5
+    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo2
+    container_name: mongo2
+    ports:
+      - "27018:27017"
+    networks:
+      - mongoCluster
+    volumes:
+      - mongo_data_2:/data/db
+    
+  mongo3:
+    image: mongo:5
+    command: mongod --replSet myReplicaSet --bind_ip localhost,mongo3
+    container_name: mongo3
+    ports:
+      - "27019:27017"
+    networks:
+      - mongoCluster
+    volumes:
+      - mongo_data_3:/data/db
+
+
+  
+  yolo_app:
+    image : abdskcot/yolo_app
+    container_name: yolo_app
+    volumes : 
+      - /home/abd/.aws/credentials:/credentials
+    environment :
+      - BUCKET_NAME=abed-skout-devops
+      - AWS_SHARED_CREDENTIALS_FILE=/credentials
+    ports:
+      - "8081:8081"
+    networks:
+      - mongoCluster
+    depends_on:
+      - mongo1
+
+  polybot_app:
+    image : abdskcot/polybot
+    container_name: polybot_app
+    volumes : 
+      - /home/abd/.aws/credentials:/credentials
+    environment :
+      - BUCKET_NAME=abed-skout-devops
+      - AWS_SHARED_CREDENTIALS_FILE=/credentials
+      - TELEGRAM_APP_URL=https://980a-2a06-c701-983f-a000-630d-980c-fcc1-353e.ngrok-free.app
+    ports:
+      - "8443:8443"
+    networks:
+      - mongoCluster
+    depends_on:
+      - yolo_app
+    secrets:
+      - telegram_token
+
+
+
+
+networks:
+  mongoCluster:
+
+volumes:
+  mongo_data_1:
+  mongo_data_2:
+  mongo_data_3:
+
+secrets:
+  telegram_token:
+    file: ./te_token
+

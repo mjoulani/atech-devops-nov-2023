@@ -1,9 +1,13 @@
+from functools import reduce
 import telebot
 from loguru import logger
 import os
 import time
 from telebot.types import InputFile
+import boto3
+import requests
 
+images_bucket = os.environ['BUCKET_NAME']
 
 class Bot:
 
@@ -81,6 +85,55 @@ class ObjectDetectionBot(Bot):
         if self.is_current_msg_photo(msg):
             pass
             # TODO download the user photo (utilize download_user_photo)
+            file_path = self.download_user_photo(msg)
+            image_name = file_path.split("/")[-1]
+            print(image_name)
             # TODO upload the photo to S3
+            self.upload_file_to_s3(image_name, file_path)
             # TODO send a request to the `yolo5` service for prediction
+            res = self.send_request_to_yolo(image_name)
+            if res.status_code != 200:
+                self.send_text(msg['chat']['id'], "Error with Identified Objects in Photo")
+                return
+            result_string = self.get_result_from_response(res.json())
             # TODO send results to the Telegram end-user
+            self.send_text(msg['chat']['id'],result_string)
+    def upload_file_to_s3(self, object_name, image_path):
+        # Upload the file
+        s3_client = boto3.client('s3')
+        print("image_path is " + str(image_path))
+        try:
+            s3_client.upload_file(image_path, images_bucket, object_name)
+            print(f"File {image_path} uploaded to {images_bucket}/{object_name}")
+            return True
+        except RuntimeError:
+            print("Credentials not available")
+            return False
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+
+    def send_request_to_yolo(self, image_name):
+        url = 'http://yolo_app:8081/predict'
+        params = {
+            'imgName': image_name
+        }
+        response = requests.post(url, params=params, data={})
+        return response
+
+    def get_result_from_response(self, res):
+        labels = res['labels']
+        result = {}
+        for label in labels:
+            label_name = label['class']
+            value = result.get(label_name)
+            if value is None:
+                result[label_name] = 1
+            else:
+                result[label_name] = value + 1
+
+        result_string = reduce(lambda acc, item: acc + f"{item[0]} {item[1]}\n", result.items(), "Detected objects :\n")
+        return result_string
+
+
+

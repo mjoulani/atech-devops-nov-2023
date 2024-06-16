@@ -7,13 +7,16 @@ import yaml
 from loguru import logger
 import os
 import boto3
+from pymongo import MongoClient
 
 images_bucket = os.environ['BUCKET_NAME']
 
 with open("data/coco128.yaml", "r") as stream:
     names = yaml.safe_load(stream)['names']
 
+mongo_client = None
 app = Flask(__name__)
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -40,7 +43,7 @@ def predict():
         name=prediction_id,
         save_txt=True
     )
-    
+
     logger.info(f'prediction: {prediction_id}/{original_img_path}. done')
 
     # This is the path for the predicted image with labels
@@ -49,8 +52,8 @@ def predict():
 
     # TODO Uploads the predicted image (predicted_img_path) to S3 (be careful not to override the original image).
     name, extension = img_name.rsplit('.', 1)
-    image_name_after_prdeict=f'{name}_after_prdeict.{extension}'
-    upload_file_to_s3(image_name_after_prdeict,predicted_img_path)
+    image_name_after_prdeict = f'{name}_after_predict.{extension}'
+    upload_file_to_s3(image_name_after_prdeict, predicted_img_path)
     # Parse prediction labels and create a summary
     pred_summary_path = Path(f'static/data/{prediction_id}/labels/{original_img_path.split(".")[0]}.txt')
     if pred_summary_path.exists():
@@ -68,26 +71,30 @@ def predict():
         logger.info(f'prediction: {prediction_id}/{original_img_path}. prediction summary:\n\n{labels}')
 
         prediction_summary = {
-            'prediction_id': prediction_id,
-            'original_img_path': original_img_path,
-            'predicted_img_path': predicted_img_path,
+            'prediction_id': str(prediction_id),
+            'original_img_path': str(original_img_path),
+            'predicted_img_path': str(predicted_img_path),
             'labels': labels,
             'time': time.time()
         }
 
         # TODO store the prediction_summary in MongoDB
 
+        save(prediction_summary)
+        prediction_summary["_id"] = str(prediction_summary["_id"])
         return prediction_summary
     else:
         return f'prediction: {prediction_id}/{original_img_path}. prediction result not found', 404
 
+
 def download_image(image_name):
     s3 = boto3.client('s3')
     with open(image_name, 'wb') as f:
-        s3.download_fileobj(images_bucket,image_name, f)
+        s3.download_fileobj(images_bucket, image_name, f)
     return image_name
 
-def upload_file_to_s3(object_name,image_path):
+
+def upload_file_to_s3(object_name, image_path):
     # Upload the file
     s3_client = boto3.client('s3')
     print("image_path is " + str(image_path))
@@ -101,9 +108,23 @@ def upload_file_to_s3(object_name,image_path):
     except Exception as e:
         print(f"Error: {e}")
         return False
-    
 
-def 
+
+def connect_To_mongo():
+    global mongo_client
+    if mongo_client == None:
+        mongo_client = MongoClient('mongodb://mongo1:27017,mongo2:27017,mongo3:27017/?replicaSet=myReplicaSet')
+        # mongo_client =MongoClient("mongodb://admin:ADMIN@127.0.0.1:27017")
+    return mongo_client
+
+
+def save(data):
+    client = connect_To_mongo()
+    db = client['yolo_db']
+    collection = db['prediction']
+    data = collection.insert_one(data)
+    return data
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8081)
