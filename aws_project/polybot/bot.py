@@ -8,6 +8,7 @@ from telebot.types import InputFile
 import uuid
 
 images_bucket = "abed-skout-aws-project-buket"
+queue_url = "https://sqs.ap-northeast-2.amazonaws.com/933060838752/abed-skout-sqs-aws-project.fifo"
 
 
 class Bot:
@@ -87,7 +88,6 @@ class Bot:
     def send_job_to_sqs(self, chat_id, image_name):
         message_deduplication_id = str(uuid.uuid4())
         sqs = boto3.client('sqs', region_name='ap-northeast-2')
-        queue_url = "https://sqs.ap-northeast-2.amazonaws.com/933060838752/abed-skout-sqs-aws-project.fifo"
         msg_payload = {'chat_id': chat_id, 'image_name': image_name}
         message_body = json.dumps(msg_payload)
         response = sqs.send_message(
