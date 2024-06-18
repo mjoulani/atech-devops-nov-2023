@@ -2,7 +2,12 @@ import telebot
 from loguru import logger
 import os
 import time
+import boto3
+import json
 from telebot.types import InputFile
+import uuid
+
+images_bucket = "abed-skout-aws-project-buket"
 
 
 class Bot:
@@ -64,6 +69,35 @@ class Bot:
         logger.info(f'Incoming message: {msg}')
         self.send_text(msg['chat']['id'], f'Your original message: {msg["text"]}')
 
+    def upload_file_to_s3(self, object_name, image_path):
+        # Upload the file
+        s3_client = boto3.client('s3')
+        print("image_path is " + str(image_path))
+        try:
+            s3_client.upload_file(image_path, images_bucket, object_name)
+            print(f"File {image_path} uploaded to {images_bucket}/{object_name}")
+            return True
+        except RuntimeError:
+            print("Credentials not available")
+            return False
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+
+    def send_job_to_sqs(self, chat_id, image_name):
+        message_deduplication_id = str(uuid.uuid4())
+        sqs = boto3.client('sqs', region_name='ap-northeast-2')
+        queue_url = "https://sqs.ap-northeast-2.amazonaws.com/933060838752/abed-skout-sqs-aws-project.fifo"
+        msg_payload = {'chat_id': chat_id, 'image_name': image_name}
+        message_body = json.dumps(msg_payload)
+        response = sqs.send_message(
+            QueueUrl=queue_url,
+            MessageBody=message_body,
+            MessageGroupId=str(chat_id),
+            MessageDeduplicationId=message_deduplication_id  # Explicitly provide MessageDeduplicationId
+        )
+        print(f'Message ID: {response["MessageId"]}')
+
 
 class ObjectDetectionBot(Bot):
     def handle_message(self, msg):
@@ -71,7 +105,12 @@ class ObjectDetectionBot(Bot):
 
         if self.is_current_msg_photo(msg):
             photo_path = self.download_user_photo(msg)
-
+            image_name = photo_path.split("/")[-1]
             # TODO upload the photo to S3
+            self.upload_file_to_s3(image_name, photo_path)
             # TODO send a job to the SQS queue
+            self.send_job_to_sqs(msg['chat']['id'],image_name)
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
+            self.send_text(msg['chat']['id'],"Your image is being processed. Please wait...")
+        else:
+            print("not imge")
