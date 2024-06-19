@@ -18,27 +18,34 @@ spec:
       serviceAccountName: fluentd
       containers:
       - name: fluentd
-        image: fluent/fluentd-kubernetes-daemonset:v1.16.5-debian-elasticsearch8-1.0
+        image: fluent/fluentd-kubernetes-daemonset:v1.16-debian-elasticsearch8-2
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
             value: "elasticsearch-master.elastic.svc.cluster.local"
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
-            value: "http"
+            value: "https"
+          - name: FLUENT_ELASTICSEARCH_SSL_VERIFY
+            value: "false"
+          - name: FLUENT_ELASTICSEARCH_USER
+            value: "elastic"
+          - name: FLUENT_ELASTICSEARCH_PASSWORD
+            value: "J520PRlogfDjjngt"  
           # If the name of the Kubernetes node the plugin is running on is set as an environment variable with the name K8S_NODE_NAME, it will reduce cache misses and needless calls to the Kubernetes API.
           - name: K8S_NODE_NAME
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-          # - name: FLUENT_CONTAINER_TAIL_EXCLUDE_PATH
-          #   value: >
-          #     [
-          #     "/var/log/containers/fluentd-*",
-          #     "/var/log/containers/kube-proxy-*"
-          #     ]
+          - name: FLUENT_CONTAINER_TAIL_EXCLUDE_PATH
+            value: >
+              [
+              "/var/log/containers/fluentd-*",
+              "/var/log/containers/kube-proxy-*"
+              ]
         resources:
           limits:
+            cpu: 150m
             memory: 200Mi
           requests:
             cpu: 100m
