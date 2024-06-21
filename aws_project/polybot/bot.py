@@ -112,5 +112,3 @@ class ObjectDetectionBot(Bot):
             self.send_job_to_sqs(msg['chat']['id'],image_name)
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
             self.send_text(msg['chat']['id'],"Your image is being processed. Please wait...")
-        else:
-            print("not imge")

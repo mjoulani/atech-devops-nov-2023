@@ -10,6 +10,7 @@ import requests
 
 images_bucket = "abed-skout-aws-project-buket"
 queue_name = "https://sqs.ap-northeast-2.amazonaws.com/933060838752/abed-skout-sqs-aws-project.fifo"
+polybot_url = os.environ['POLYBOT_URL']
 
 sqs_client = boto3.client('sqs', region_name='ap-northeast-2')
 
@@ -99,7 +100,7 @@ def consume():
                 # TODO store the prediction_summary in a DynamoDB table
                 upload_to_DynamoDB(prediction_id, prediction_summary_string)
                 # TODO perform a GET request to Polybot to `/results` endpoint
-                notify_polybot("http://10.0.0.7:8443/results", prediction_id)
+                notify_polybot(prediction_id)
             # Delete the message from the queue as the job is considered as DONE
             sqs_client.delete_message(QueueUrl=queue_name, ReceiptHandle=receipt_handle)
 
@@ -138,11 +139,11 @@ def upload_to_DynamoDB(prediction_id, prediction_summary):
     table.put_item(Item=item)
 
 
-def notify_polybot(url, prediction_id):
+def notify_polybot( prediction_id):
     params = {
         'predictionId': prediction_id
     }
-    requests.get(url, params=params)
+    requests.get(polybot_url + "/results", params=params)
 
 
 if __name__ == "__main__":
