@@ -23,7 +23,8 @@ class Bot:
         time.sleep(0.5)
 
         # set the webhook URL
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60,
+                                             certificate=open("alb-cert.pem", 'r'))
 
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
@@ -109,6 +110,6 @@ class ObjectDetectionBot(Bot):
             # TODO upload the photo to S3
             self.upload_file_to_s3(image_name, photo_path)
             # TODO send a job to the SQS queue
-            self.send_job_to_sqs(msg['chat']['id'],image_name)
+            self.send_job_to_sqs(msg['chat']['id'], image_name)
             # TODO send message to the Telegram end-user (e.g. Your image is being processed. Please wait...)
-            self.send_text(msg['chat']['id'],"Your image is being processed. Please wait...")
+            self.send_text(msg['chat']['id'], "Your image is being processed. Please wait...")
