@@ -9,7 +9,7 @@ image:
   yoloTag: "latest"
 
 polyPort: 8443
-yoloPort: 8081
+yoloPort: 8441
 
 
 service:
