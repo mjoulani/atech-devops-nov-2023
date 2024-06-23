@@ -18,7 +18,36 @@ data:
       </parse>
     </source>
 
-    <match **>
+    <filter kubernetes.**>
+      @type kubernetes_metadata
+      kubernetes_url "https://kubernetes.default.svc"
+    </filter>
+
+    <filter kubernetes.**>
+      @type grep
+      exclude1 kubernetes.namespace_name fluentd
+      <exclude>
+        key namespace_name
+        pattern fluentd
+      </exclude>
+    </filter>
+
+    <filter kubernetes.**>
+      @type record_transformer
+      <record>
+        hostname "#{Socket.gethostname}"
+      </record>
+    </filter>
+
+    <filter kubernetes.**>
+      @type parser
+      key_name log
+      <parse>
+        @type syslog
+      </parse>
+    </filter>
+
+    <match kubernetes.**>
       @type elasticsearch
       @id out_es
       @log_level info
@@ -26,14 +55,16 @@ data:
       host "elasticsearch-master.elastic.svc.cluster.local"
       port 9200
       scheme https
-      ssl_verify false
+      ssl_verify true
       user "elastic"
       password "J520PRlogfDjjngt"
+      logstash_format true
+      logstash_prefix kubernetes
+      flush_interval 5s
       <buffer>
         flush_thread_count 8
-        flush_interval 5s
         chunk_limit_size 2M
-        queue_limit_length 32
+        queue_limit_length 4096
         retry_max_interval 30
         retry_forever true
       </buffer>

@@ -2,9 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-hosts
+  namespace: react-demo
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:933060838752:certificate/a990ae69-cb2b-43b9-8bea-9065c44bf53d
 spec:
+  ingressClassName: nginx
   rules:
-  - host: www.aba-babala2.co.il            
+  - host: alexeysite.atech-bot.click
     http:
       paths:
       - pathType: Prefix
@@ -14,3 +20,7 @@ spec:
             name: react-site-service
             port:
               number: 80
+  tls:
+  - hosts:
+    - alexeysite.atech-bot.click
+    secretName: tls-secret

@@ -1,0 +1,39 @@
+
+
+master:
+  masterOnly: false
+  replicaCount: 1
+data:
+  replicaCount: 0
+coordinating:
+  replicaCount: 0
+ingest:
+  replicaCount: 0
+
+resources:
+  requests:
+    cpu: 1
+    memory: "512Mi"
+  limits:
+    cpu: 1
+    memory: "512Mi"
+persistence:
+  ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
+  ##
+  enabled: true
+  ## @param master.persistence.storageClass Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: "gp2"
+  ## @param master.persistence.existingClaim Existing Persistent Volume Claim
+  ## then accept the value as an existing Persistent Volume Claim to which
+  ## the container should be bound
+  ##
+  existingClaim: "elastic-pvc"
+  accessModes:
+    - ReadWriteOnce  
+  size: "10Gi"

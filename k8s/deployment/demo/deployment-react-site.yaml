@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-site-deployment
+  namespace: react-demo
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: react-site
@@ -31,6 +32,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: react-site-service
+  namespace: react-demo
 spec:
   selector:
     app: react-site
