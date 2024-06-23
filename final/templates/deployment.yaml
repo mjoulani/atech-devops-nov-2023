@@ -23,7 +23,7 @@ spec:
           image: {{ .Values.image.polyRepository }}:{{ .Values.image.polyTag }}
           env:
           - name: LOAD_BALANCER
-            value: "https://aa7efeb52e00748a897a58c171caab79-63f312b45163c741.elb.us-east-1.amazonaws.com"
+            value: "https://oferbakria.atech-bot.click"
           volumeMounts:
             - name: aws-credentials
               mountPath: /root/.aws
@@ -39,7 +39,7 @@ spec:
           - name: SQS_QUEUE_NAME
             value: "oferbakria_aws_sqs"
           - name: LOAD_BALANCER
-            value: "https://aa7efeb52e00748a897a58c171caab79-63f312b45163c741.elb.us-east-1.amazonaws.com"
+            value: "https://oferbakria.atech-bot.click"
           volumeMounts:
             - name: aws-credentials
               mountPath: /root/.aws

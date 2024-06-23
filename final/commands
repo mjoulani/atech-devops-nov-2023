@@ -6,3 +6,7 @@ kubectl create secret generic aws-credentials --from-file=credentials=C:\Users\U
 
 https://api.telegram.org/bot<your-bot-token>/setWebhook?url=https://<your-load-balancer-url>/your-webhook-path
 docker run -it --rm poly bash
+
+
+kubectl version --client
+helm version

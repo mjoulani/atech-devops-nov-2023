@@ -13,8 +13,9 @@ service:
 
 ingress:
   name: ingress-hosts
-  host: www.aba-babala22.co.il
+  host: oferbakria.atech-bot.click
   path: "/"
+  tls: tls-secret
 
 imagePullSecrets: dockerhub
 

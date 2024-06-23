@@ -17,8 +17,9 @@ service:
 
 ingress:
   name: ingress-hosts
-  host: www.polybot.co.il
+  host: oferbakria.atech-bot.click
   path: "/"
+  tls: tls-secret-oferbakria
 
 imagePullSecrets: dockerhub
 
