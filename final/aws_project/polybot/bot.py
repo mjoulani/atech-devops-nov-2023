@@ -26,42 +26,42 @@ class Bot:
         time.sleep(0.5)
 
 
-        # with open('YOURPUBLIC.pem', 'r') as file:
-        #   pem_contents = file.read()
-        #   print(pem_contents)
-        # # set the webhook URL
-        # #self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
-        # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
-        # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
-        
-
-
-        session = boto3.session.Session()
-        client = session.client(
-            service_name='secretsmanager',
-            region_name="eu-west-1"
-        )
-        secret_response  = client.get_secret_value(
-            SecretId="oferbakria_certificate"
-        )
-        pem_contents = secret_response['SecretString']
-        print("PEM Contents:", pem_contents)
-        # Parse the JSON
-        data = json.loads(pem_contents)
-
-        # Extract the certificate value
-        cert_value = data['poly_cert']
-        # print(cert_value)
-        # Write the certificate to a file
-        file_path = "./file.pem"  # Replace with your desired file path
-        
-        # Open the file in write mode ('w')
-        with open(file_path, 'w') as file:
-            # Write the string content to the file
-            file.write(str(cert_value))
-
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('file.pem', 'r'))
+        with open('YOURPUBLIC.pem', 'r') as file:
+          pem_contents = file.read()
+          print(pem_contents)
+        # set the webhook URL
+        #self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
+        
+
+
+        # session = boto3.session.Session()
+        # client = session.client(
+        #     service_name='secretsmanager',
+        #     region_name="eu-west-1"
+        # )
+        # secret_response  = client.get_secret_value(
+        #     SecretId="oferbakria_certificate"
+        # )
+        # pem_contents = secret_response['SecretString']
+        # print("PEM Contents:", pem_contents)
+        # # Parse the JSON
+        # data = json.loads(pem_contents)
+
+        # # Extract the certificate value
+        # cert_value = data['poly_cert']
+        # # print(cert_value)
+        # # Write the certificate to a file
+        # file_path = "./file.pem"  # Replace with your desired file path
+        
+        # # Open the file in write mode ('w')
+        # with open(file_path, 'w') as file:
+        #     # Write the string content to the file
+        #     file.write(str(cert_value))
+
+        # # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open(file_path, 'r'))
+        # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
  
 
