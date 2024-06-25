@@ -4,9 +4,9 @@ releaseName: react-site
 
 image:
   polyRepository: oferbakria/poly
-  polyTag: "1.1"
+  polyTag: "1.3"
   yoloRepository: oferbakria/yolo
-  yoloTag: "1.1"
+  yoloTag: "1.3"
 
 polyPort: 8443
 yoloPort: 8441
