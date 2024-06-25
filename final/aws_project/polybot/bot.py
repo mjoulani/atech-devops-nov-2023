@@ -59,10 +59,9 @@ class Bot:
         # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
         # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
-        namespace = "oferbakria"  # Replace with your namespace
-        secret_name = "tls-secret-oferbakria"  # Replace with your secret name
 
-        secret_data = Bot.get_k8s_secret(namespace,secret_name)
+
+        secret_data = self.get_k8s_secret()
         if secret_data:
             for key, value in secret_data.items():
                 print(f"{key}: {value}")
@@ -73,7 +72,7 @@ class Bot:
         # pem_file = io.StringIO(pem_contents)
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_contents)
 
-    def  get_k8s_secret(namespace,secret_name):
+    def  get_k8s_secret():
         # Load kubeconfig from default location or specified path
         config.load_kube_config()  # Use config.load_incluster_config() if running inside a pod
 
@@ -82,7 +81,7 @@ class Bot:
 
         try:
             # Retrieve the secret
-            secret = v1.read_namespaced_secret(secret_name, namespace)
+            secret = v1.read_namespaced_secret("tls-secret-oferbakria", "oferbakria")
             return secret.data
         except client.exceptions.ApiException as e:
             print(f"Exception when calling CoreV1Api->read_namespaced_secret: {e}")
