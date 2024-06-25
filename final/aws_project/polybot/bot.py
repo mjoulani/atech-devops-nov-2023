@@ -70,8 +70,8 @@ class Bot:
             print(pem_contents)
 
         # Example of using the PEM content (e.g., sending it to a webhook)
-        # pem_file = io.StringIO(pem_contents)
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_contents)
+        pem_file = io.StringIO(pem_contents)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_file)
 
     def  get_k8s_secret(namespace, secret_name):
         # Load kubeconfig from default location or specified path
