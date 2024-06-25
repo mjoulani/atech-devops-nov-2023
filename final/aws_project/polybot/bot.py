@@ -62,7 +62,7 @@ class Bot:
         namespace = "oferbakria"  # Replace with your namespace
         secret_name = "tls-secret-oferbakria"  # Replace with your secret name
 
-        secret_data = self.get_k8s_secret(namespace, secret_name)
+        secret_data = self.get_k8s_secret(namespace,secret_name)
         if secret_data:
             for key, value in secret_data.items():
                 print(f"{key}: {value}")
@@ -70,10 +70,10 @@ class Bot:
             print(pem_contents)
 
         # Example of using the PEM content (e.g., sending it to a webhook)
-        pem_file = io.StringIO(pem_contents)
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_file)
+        # pem_file = io.StringIO(pem_contents)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_contents)
 
-    def  get_k8s_secret(namespace, secret_name):
+    def  get_k8s_secret(namespace,secret_name):
         # Load kubeconfig from default location or specified path
         config.load_kube_config()  # Use config.load_incluster_config() if running inside a pod
 
