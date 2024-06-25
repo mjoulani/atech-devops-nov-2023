@@ -62,7 +62,7 @@ class Bot:
         namespace = "oferbakria"  # Replace with your namespace
         secret_name = "tls-secret-oferbakria"  # Replace with your secret name
 
-        secret_data = self.get_k8s_secret(namespace,secret_name)
+        secret_data = Bot.get_k8s_secret(namespace,secret_name)
         if secret_data:
             for key, value in secret_data.items():
                 print(f"{key}: {value}")
