@@ -8,6 +8,8 @@ import boto3
 from telebot.types import InputFile
 from botocore.exceptions import ClientError
 import io
+from kubernetes import client, config
+import base64
 
 class Bot:
 
@@ -32,20 +34,43 @@ class Bot:
         # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
         # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
         
-        session = boto3.session.Session()
-        client = session.client(
-            service_name='secretsmanager',
-            region_name="eu-west-1"
-        )
-        secret_response  = client.get_secret_value(
-            SecretId="oferbakria_certificate"
-        )
-        pem_contents = secret_response['SecretString']
-        print("PEM Contents:", pem_contents)
 
+
+        # session = boto3.session.Session()
+        # client = session.client(
+        #     service_name='secretsmanager',
+        #     region_name="eu-west-1"
+        # )
+        # secret_response  = client.get_secret_value(
+        #     SecretId="oferbakria_certificate"
+        # )
+        # pem_contents = secret_response['SecretString']
+        # print("PEM Contents:", pem_contents)
+
+        # pem_file = io.StringIO(pem_contents)
+        # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_file)
+        # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
+
+
+        # Load Kubernetes configuration
+        config.load_incluster_config()
+
+        # Create an API client
+        v1 = client.CoreV1Api()
+
+        # Retrieve the secret
+        secret = v1.read_namespaced_secret("tls-secret-oferbakria", "oferbakria")
+
+        # Decode the PEM file content
+        pem_contents = base64.b64decode(secret.data['tls.crt']).decode('utf-8')
+
+        # Print the PEM contents or use it as needed
+        print(pem_contents)
+
+        # Example of using the PEM content (e.g., sending it to a webhook)
         pem_file = io.StringIO(pem_contents)
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_file)
-        logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
+
 
     def send_text(self, chat_id, text):
         self.telegram_bot_client.send_message(chat_id, text)
