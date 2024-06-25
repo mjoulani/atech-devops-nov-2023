@@ -46,9 +46,17 @@ class Bot:
         )
         pem_contents = secret_response['SecretString']
         print("PEM Contents:", pem_contents)
+        # Parse the JSON
+        data = json.loads(pem_contents)
 
-        pem_file = io.StringIO(pem_contents)
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open(pem_file, 'r'))
+        # Extract the certificate value
+        cert_value = data['poly_cert']
+
+        # Write the certificate to a file
+        with open('YOURPUBLIC.pem', 'w') as cert_file:
+            cert_file.write(cert_value)
+
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
 
