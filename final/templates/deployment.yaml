@@ -31,21 +31,21 @@ spec:
           ports:
             - containerPort: {{ .Values.polyPort }}
 
-        - name: {{ .Values.releaseName }}-yolo
-          image: {{ .Values.image.yoloRepository }}:{{ .Values.image.yoloTag }}
-          env:
-          - name: BUCKET_NAME
-            value: "oferbakria"
-          - name: SQS_QUEUE_NAME
-            value: "oferbakria_aws_sqs"
-          - name: LOAD_BALANCER
-            value: "https://oferbakria.atech-bot.click"
-          volumeMounts:
-            - name: aws-credentials
-              mountPath: /root/.aws
-              readOnly: true
-          ports:
-            - containerPort: {{ .Values.yoloPort }}
+        # - name: {{ .Values.releaseName }}-yolo
+        #   image: {{ .Values.image.yoloRepository }}:{{ .Values.image.yoloTag }}
+        #   env:
+        #   - name: BUCKET_NAME
+        #     value: "oferbakria"
+        #   - name: SQS_QUEUE_NAME
+        #     value: "oferbakria_aws_sqs"
+        #   - name: LOAD_BALANCER
+        #     value: "https://oferbakria.atech-bot.click"
+        #   volumeMounts:
+        #     - name: aws-credentials
+        #       mountPath: /root/.aws
+        #       readOnly: true
+        #   ports:
+        #     - containerPort: {{ .Values.yoloPort }}
 
       imagePullSecrets:
         - name: {{ .Values.imagePullSecrets }}

@@ -186,7 +186,7 @@ pipeline {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: PROP['aws_cli_cred']]]) {
                     script {
-                        sh 'aws eks --region us-east-1 update-kubeconfig --name k8s-main'
+                        sh 'aws eks --region us-east-1 update-kubeconfig --name Atech'
                     }
                 }
             }
@@ -203,6 +203,8 @@ pipeline {
                 }
             }
         }
+
+
 
 
 
