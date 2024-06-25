@@ -3,10 +3,10 @@ replicaCount: 1
 releaseName: react-site
 
 image:
-  polyRepository: oferbakria/polybot
-  polyTag: "latest"
-  yoloRepository: oferbakria/yolo5
-  yoloTag: "latest"
+  polyRepository: oferbakria/poly
+  polyTag: "1.1"
+  yoloRepository: oferbakria/yolo
+  yoloTag: "1.1"
 
 polyPort: 8443
 yoloPort: 8441
