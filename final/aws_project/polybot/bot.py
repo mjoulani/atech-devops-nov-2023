@@ -51,12 +51,16 @@ class Bot:
 
         # Extract the certificate value
         cert_value = data['poly_cert']
-
+        # print(cert_value)
         # Write the certificate to a file
-        with open('YOURPUBLIC.pem', 'w') as cert_file:
-            cert_file.write(cert_value)
+        file_path = "./file.pem"  # Replace with your desired file path
+        
+        # Open the file in write mode ('w')
+        with open(file_path, 'w') as file:
+            # Write the string content to the file
+            file.write(str(cert_value))
 
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=cert_value)
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('file.pem', 'r'))
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
  
