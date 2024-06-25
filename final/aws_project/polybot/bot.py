@@ -36,53 +36,30 @@ class Bot:
         
 
 
-        # session = boto3.session.Session()
-        # client = session.client(
-        #     service_name='secretsmanager',
-        #     region_name="eu-west-1"
-        # )
-        # secret_response  = client.get_secret_value(
-        #     SecretId="oferbakria_certificate"
-        # )
-        # pem_contents = secret_response['SecretString']
-        # print("PEM Contents:", pem_contents)
-        # # Parse the JSON
-        # data = json.loads(pem_contents)
+        session = boto3.session.Session()
+        client = session.client(
+            service_name='secretsmanager',
+            region_name="eu-west-1"
+        )
+        secret_response  = client.get_secret_value(
+            SecretId="oferbakria_certificate"
+        )
+        pem_contents = secret_response['SecretString']
+        print("PEM Contents:", pem_contents)
+        # Parse the JSON
+        data = json.loads(pem_contents)
 
-        # # Extract the certificate value
-        # cert_value = data['poly_cert']
+        # Extract the certificate value
+        cert_value = data['poly_cert']
 
-        # # Write the certificate to a file
-        # with open('YOURPUBLIC.pem', 'w') as cert_file:
-        #     cert_file.write(cert_value)
+        # Write the certificate to a file
+        with open('YOURPUBLIC.pem', 'w') as cert_file:
+            cert_file.write(cert_value)
 
-        # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
-        # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
+        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=cert_value)
+        logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
 
-        namespace = "oferbakria"  # Replace with your namespace
-        secret_name = "tls-secret-oferbakria"  # Replace with your secret name
-                # Load kubeconfig from default location or specified path
-        config.load_kube_config()  # Use config.load_incluster_config() if running inside a pod
-
-        # Create an instance of the CoreV1Api
-        v1 = client.CoreV1Api()
-
-        try:
-            # Retrieve the secret
-            secret = v1.read_namespaced_secret(secret_name, namespace)
-        except client.exceptions.ApiException as e:
-            print(f"Exception when calling CoreV1Api->read_namespaced_secret: {e}")
-        secret_data=secret.data
-        if secret_data:
-            for key, value in secret_data.items():
-                print(f"{key}: {value}")
-            pem_contents = base64.b64decode(secret_data["tls.crt"]).decode("utf-8")
-            print(pem_contents)
-
-        # Example of using the PEM content (e.g., sending it to a webhook)
-        # pem_file = io.StringIO(pem_contents)
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_contents)
-
+ 
 
     def send_text(self, chat_id, text):
         self.telegram_bot_client.send_message(chat_id, text)
