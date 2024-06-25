@@ -61,7 +61,7 @@ class Bot:
 
 
 
-        secret_data = self.get_k8s_secret()
+        secret_data = self.get_secret()
         if secret_data:
             for key, value in secret_data.items():
                 print(f"{key}: {value}")
@@ -72,7 +72,7 @@ class Bot:
         # pem_file = io.StringIO(pem_contents)
         self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=pem_contents)
 
-    def  get_k8s_secret():
+    def  get_secret():
         # Load kubeconfig from default location or specified path
         config.load_kube_config()  # Use config.load_incluster_config() if running inside a pod
 
