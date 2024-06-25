@@ -36,31 +36,6 @@ class Bot:
         
 
 
-        # session = boto3.session.Session()
-        # client = session.client(
-        #     service_name='secretsmanager',
-        #     region_name="eu-west-1"
-        # )
-        # secret_response  = client.get_secret_value(
-        #     SecretId="oferbakria_certificate"
-        # )
-        # pem_contents = secret_response['SecretString']
-        # print("PEM Contents:", pem_contents)
-        # # Parse the JSON
-        # data = json.loads(pem_contents)
-
-        # # Extract the certificate value
-        # cert_value = data['poly_cert']
-
-        # # Write the certificate to a file
-        # with open('YOURPUBLIC.pem', 'w') as cert_file:
-        #     cert_file.write(cert_value)
-
-        # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
-        # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
-
-
-
         secret_data = self.get_secret()
         if secret_data:
             for key, value in secret_data.items():
