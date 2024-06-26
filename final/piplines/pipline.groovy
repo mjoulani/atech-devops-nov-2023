@@ -19,12 +19,11 @@ PROP['docker_image2'] = 'oferbakria/yolo'
 PROP['docker_tag'] = '1.4'
 PROP['aws_cli_cred'] = 'aws_cred'
 
-// PROP['docker_file_path'] = 'flask/Dockerfile'
-// PROP['ecr_registry'] = '933060838752.dkr.ecr.eu-west-1.amazonaws.com/ofer'
-// PROP['aws_region'] = 'eu-west-1'
-// PROP['image_name'] = 'ofer-flask-image'
+PROP['project_folder_name'] = 'final'
+PROP['cluster_region'] = 'us-east-1'
+PROP['cluster_name'] = 'Atech'
+PROP['helm_sh'] = 'helm install ofertest -f values.yaml -n oferbakria .'
 
-// PROP['email_recepients'] = "alexeymihaylovdev@gmail.com"
 
 pipeline {
 
@@ -51,14 +50,14 @@ pipeline {
 
     stages {
 
-    stage('Hello'){
-        steps {
-            script {
-                println("=====================================${STAGE_NAME}=====================================")
-                println("Hello ${PROP.trigg_by}")
-            }
-        }
-    }
+    // stage('Hello'){
+    //     steps {
+    //         script {
+    //             println("=====================================${STAGE_NAME}=====================================")
+    //             println("Hello ${PROP.trigg_by}")
+    //         }
+    //     }
+    // }
 
 
 
@@ -75,7 +74,7 @@ pipeline {
                     branches: [[name: "*/${PROP.branch}"]],
                     doGenerateSubmoduleConfigurations: false, 
                     extensions: [
-                        [$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'final']]]
+                        [$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: PROP.project_folder_name]]]
                     ], 
                     submoduleCfg: [], 
                     userRemoteConfigs: [[
@@ -139,7 +138,7 @@ pipeline {
     stage('Read helm chart values'){
         steps{
             script{  
-                    dir("${WORKSPACE}/final")  {
+                    dir("${WORKSPACE}/${PROP.project_folder_name}")  {
                     sh 'ls -l'    
                 def chartValues = readFile (file: 'values.yaml')  
                 JOB.buildChartValues = chartValues
@@ -186,7 +185,7 @@ pipeline {
             }
             steps{
                 script{
-                     dir("${WORKSPACE}/final")  {
+                     dir("${WORKSPACE}/${PROP.project_folder_name}")  {
                         writeFile file: 'values.yaml', text: JOB.params
                     }
                 }
@@ -198,7 +197,7 @@ pipeline {
             steps {
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: PROP['aws_cli_cred']]]) {
                     script {
-                        sh 'aws eks --region us-east-1 update-kubeconfig --name Atech'
+                        sh "aws eks --region ${PROP.cluster_region} update-kubeconfig --name ${PROP.cluster_name}"
                     }
                 }
             }
@@ -210,7 +209,7 @@ pipeline {
             steps{
                 script{
                      dir("${WORKSPACE}/final")  {
-                        sh 'helm install ofertest -f values.yaml -n oferbakria .'
+                        sh "${PROP.helm_sh}"
                     }
                 }
             }
