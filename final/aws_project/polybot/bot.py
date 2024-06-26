@@ -26,12 +26,30 @@ class Bot:
         time.sleep(0.5)
 
 
-        with open('YOURPUBLIC.pem', 'r') as file:
-          pem_contents = file.read()
-          print(pem_contents)
-        # set the webhook URL
-        #self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
-        self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
+        # with open('YOURPUBLIC.pem', 'r') as file:
+        #   pem_contents = file.read()
+        #   print(pem_contents)
+        # # set the webhook URL
+        # #self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', timeout=60)
+        # self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=open('YOURPUBLIC.pem', 'r'))
+        # logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
+
+        client =boto3.session.Session().client(
+            service_name='secretsmanager',
+            region_name="eu-west-1"
+        )
+        secret_response = client.get_secret_value(
+            SecretId="oferbakria_certificate"
+        )
+        pem_contents = secret_response['SecretString']
+        print(pem_contents.split(":"))
+
+        secret = io.StringIO(pem_contents.split(":")[1].replace('"',''))
+        print("##################################1####################################")
+        print(secret.read())
+        print("################################2######################################")
+        response = self.telegram_bot_client.set_webhook(url=f'{telegram_chat_url}/{token}/', certificate=secret.read())
+        print(response)
         logger.info(f'Telegram Bot information\n\n{self.telegram_bot_client.get_me()}')
         
 

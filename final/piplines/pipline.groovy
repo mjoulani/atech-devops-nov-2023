@@ -16,7 +16,7 @@ PROP['proj_url'] = 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023'
 PROP['dockerhub_cred'] = 'dockerhub_cred' // Jenkins credential ID for DockerHub
 PROP['docker_image1'] = 'oferbakria/poly'
 PROP['docker_image2'] = 'oferbakria/yolo'
-PROP['docker_tag'] = '1.3'
+PROP['docker_tag'] = '1.4'
 PROP['aws_cli_cred'] = 'aws_cred'
 
 // PROP['docker_file_path'] = 'flask/Dockerfile'
@@ -88,21 +88,21 @@ pipeline {
         }
 
 
-        stage('Copy PEM File to Node') {
-            steps {
-                script {
-                    // Use the withCredentials block to securely retrieve the file credential
-                    withCredentials([file(credentialsId: 'alb2_cert', variable: 'CREDENTIAL_FILE')]) {
-                        def filePath = env.CREDENTIAL_FILE
-                        def destinationDir = '/home/ubuntu/workspace/final/final/aws_project/polybot'  // Replace with your actual destination directory
+        // stage('Copy PEM File to Node') {
+        //     steps {
+        //         script {
+        //             // Use the withCredentials block to securely retrieve the file credential
+        //             withCredentials([file(credentialsId: 'alb2_cert', variable: 'CREDENTIAL_FILE')]) {
+        //                 def filePath = env.CREDENTIAL_FILE
+        //                 def destinationDir = '/home/ubuntu/workspace/final/final/aws_project/polybot'  // Replace with your actual destination directory
 
-                        // Copy the file to the node using Jenkins pipeline sh step
-                        sh "cp ${filePath} ${destinationDir}"
-                        sh "sudo chmod 666 ${destinationDir}/YOURPUBLIC.pem"
-                    }
-                }
-            }
-        }
+        //                 // Copy the file to the node using Jenkins pipeline sh step
+        //                 sh "cp ${filePath} ${destinationDir}"
+        //                 sh "sudo chmod 666 ${destinationDir}/YOURPUBLIC.pem"
+        //             }
+        //         }
+        //     }
+        // }
 
 
     stage('Create Docker Image') {
