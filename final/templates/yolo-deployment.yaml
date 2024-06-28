@@ -22,13 +22,13 @@ spec:
           image: {{ .Values.image.yoloRepository }}:{{ .Values.image.yoloTag }}
           env:
             - name: BUCKET_NAME
-              value: "oferbakria"
+              value: "basharziv"
             - name: SQS_QUEUE_NAME
-              value: "oferbakria_aws_sqs"
+              value: "bashar_z_sqs"
             - name: LOAD_BALANCER
-              value: "https://oferbakria.atech-bot.click"
+              value: "https://basharz.atech-bot.click"
             - name: DYNAMO_TABLE
-              value: "oferbakria_awsproject"
+              value: "bashar_ziv_aws"
           volumeMounts:
             - name: aws-credentials
               mountPath: /root/.aws
