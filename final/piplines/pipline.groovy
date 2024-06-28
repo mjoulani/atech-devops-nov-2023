@@ -93,7 +93,7 @@ pipeline {
                     // Use the withCredentials block to securely retrieve the file credential
                     withCredentials([file(credentialsId: 'alb2_cert', variable: 'CREDENTIAL_FILE')]) {
                         def filePath = env.CREDENTIAL_FILE
-                        def destinationDir = '/home/ubuntu/workspace/final/final/aws_project/polybot'  // Replace with your actual destination directory
+                        def destinationDir = '/home/ubuntu/workspace/final_test/final/aws_project/polybot'  // Replace with your actual destination directory
 
                         // Copy the file to the node using Jenkins pipeline sh step
                         sh "cp ${filePath} ${destinationDir}"
@@ -208,7 +208,7 @@ pipeline {
         stage('Helm install'){
             steps{
                 script{
-                     dir("${WORKSPACE}/final")  {
+                     dir("${WORKSPACE}/final_test")  {
                         sh "${PROP.helm_sh}"
                     }
                 }

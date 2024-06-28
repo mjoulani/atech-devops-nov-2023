@@ -96,9 +96,9 @@ class ObjectDetectionBot(Bot):
 
             # TODO upload the photo to S3
             s3 = boto3.client('s3')
-            s3.upload_file(photo_path, "oferbakria" , photo_key)
+            s3.upload_file(photo_path, "basharziv" , photo_key)
 
-            print(f"Photo uploaded successfully to S3 bucket: {'oferbakria'} with key: {photo_key}")
+            print(f"Photo uploaded successfully to S3 bucket: {'basharziv'} with key: {photo_key}")
          
             message = {
                 'image': photo_key,
@@ -120,14 +120,12 @@ class ObjectDetectionBot(Bot):
         return s[:len(prefix)] == prefix
         
     def send_message_to_sqs(self,message):
-        # SQS queue name
-        QUEUE_NAME = 'oferbakria_aws_sqs'
         
         # Create an SQS client
         sqs = boto3.client('sqs', region_name="eu-west-1")
         
         # Get the queue URL by its name
-        queue_url = 'https://sqs.eu-west-1.amazonaws.com/933060838752/oferbakria_aws_sqs'
+        queue_url = 'https://sqs.eu-west-1.amazonaws.com/933060838752/bashar_z_sqs'
         try:
             response = sqs.send_message(
                 QueueUrl=queue_url,

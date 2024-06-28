@@ -11,7 +11,7 @@ app = flask.Flask(__name__)
 
 def get_secret():
 
-    secret_name = "oferbakria_telebot"
+    secret_name = "bashar"
     region_name = "eu-west-1"
     
     # Create a Secrets Manager client
@@ -35,7 +35,7 @@ def get_secret():
     secret_data = json.loads(secret)
     
     # Access the value associated with the 'teleBot' key
-    telebot_value = secret_data['teleBot']
+    telebot_value = secret_data['TOKEN']
     
     return telebot_value
 
@@ -82,7 +82,7 @@ def results():
     dynamodb = boto3.client('dynamodb',region_name='eu-west-1')
 
     # Specify the name of the DynamoDB table
-    table_name = 'oferbakria_awsproject'
+    table_name = 'bashar_ziv_aws'
 
     # Retrieve the item from the DynamoDB table
     response = dynamodb.get_item(
