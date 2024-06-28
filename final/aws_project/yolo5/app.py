@@ -13,6 +13,10 @@ import requests
 
 images_bucket = os.environ['BUCKET_NAME']
 queue_name = os.environ['SQS_QUEUE_NAME']
+alb = os.environ['LOAD_BALANCER']
+table_name = os.environ['DYNAMO_TABLE']
+
+
 
 sqs_client = boto3.client('sqs', region_name='eu-west-1')
 
@@ -103,23 +107,20 @@ def consume():
                 }
 
                 # TODO store the prediction_summary in a DynamoDB table
-                insertData(prediction_id,img_name,labels,chat_id)
+                insertData(prediction_id,img_name,labels,chat_id,table_name)
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
-                url = f"https://oferbakria-loadbalancer-1920523343.eu-west-1.elb.amazonaws.com/results/?predictionId={prediction_id}"
+                url = f"{alb}/results/?predictionId={prediction_id}"
                 # Send a GET request to the URL
                 response = requests.get(url, verify=False)  # Set verify=False to ignore SSL certificate validation
 
             # Delete the message from the queue as the job is considered as DONE
             sqs_client.delete_message(QueueUrl=queue_name, ReceiptHandle=receipt_handle)
 
-def insertData(prediction_id,filename,data,chat_id):
+def insertData(prediction_id,filename,data,chat_id,table_name):
 
     # Create a DynamoDB client
     dynamodb = boto3.client('dynamodb',region_name='eu-west-1')
-
-    # Specify the name of the DynamoDB table
-    table_name = 'oferbakria_awsproject'
 
     # Create an item to store in the table
     item = {

@@ -1,12 +1,12 @@
 replicaCount: 1
 
-releaseName: react-site
+releaseName: final-project
 
 image:
   polyRepository: oferbakria/poly
-  polyTag: "1.3"
+  polyTag: "1.4"
   yoloRepository: oferbakria/yolo
-  yoloTag: "1.3"
+  yoloTag: "1.4"
 
 polyPort: 8443
 yoloPort: 8441
