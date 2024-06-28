@@ -16,7 +16,7 @@ PROP['proj_url'] = 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023'
 PROP['dockerhub_cred'] = 'dockerhub_cred' // Jenkins credential ID for DockerHub
 PROP['docker_image1'] = 'oferbakria/poly'
 PROP['docker_image2'] = 'oferbakria/yolo'
-PROP['docker_tag'] = '1.5'
+PROP['docker_tag'] = '1.7'
 PROP['aws_cli_cred'] = 'aws_cred'
 
 PROP['project_folder_name'] = 'final'

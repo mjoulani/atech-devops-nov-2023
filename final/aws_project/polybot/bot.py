@@ -107,12 +107,12 @@ class ObjectDetectionBot(Bot):
             
             self.send_message_to_sqs(json.dumps(message))
 
-        elif self.custom_startswith(msg["text"], "pixabay:"):
-            # TODO download the user photo (utilize download_user_photo)
-            obj=msg["text"][len("pixabay:"):]
-            url2 = f"http://pixabay:8082/getImage?imgName={obj}"
-            data2 = requests.get(url2).content
-            self.send_text(msg['chat']['id'], f'Your Photo from Pixabay API :{data2} \n')
+        # elif self.custom_startswith(msg["text"], "pixabay:"):
+        #     # TODO download the user photo (utilize download_user_photo)
+        #     obj=msg["text"][len("pixabay:"):]
+        #     url2 = f"http://pixabay:8082/getImage?imgName={obj}"
+        #     data2 = requests.get(url2).content
+        #     self.send_text(msg['chat']['id'], f'Your Photo from Pixabay API :{data2} \n')
         else:
             super().handle_message(msg)
     
