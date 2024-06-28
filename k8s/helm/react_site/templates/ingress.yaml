@@ -4,14 +4,18 @@ metadata:
   name: {{ .Values.ingress.name }}
 spec:
   ingressClassName: nginx  # This is the default ingress class for the NGINX Ingress Controller
+  tls:
+  - hosts:
+    - {{ .Values.ingress.host }}
+    secretName: {{ .Values.ingress.tls }}
   rules:
-    - host: {{ .Values.ingress.host }}
-      http:
-        paths:
-          - pathType: Prefix
-            path: "{{ .Values.ingress.path }}"
-            backend:
-              service:
-                name: {{ .Values.releaseName }}-service
-                port:
-                  number: {{ .Values.service.port }}
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - pathType: Prefix
+        path: "{{ .Values.ingress.path }}"
+        backend:
+          service:
+            name: {{ .Values.releaseName }}-service
+            port:
+              number: {{ .Values.service.port }}
