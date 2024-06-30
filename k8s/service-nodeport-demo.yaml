@@ -1,5 +1,3 @@
-# k8s/service-nodeport-demo.yaml
-
 apiVersion: v1
 kind: Service
 metadata:

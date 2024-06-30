@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-site-deployment
+  namespace: mjoulani
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-site
+  template:
+    metadata:
+      labels:
+        app: react-site
+    spec:
+      serviceAccountName: react-site-service-account  # Assign the service account here
+      containers:
+      - name: react-site
+        image: alexeymihaylovdev/demo:1.1
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-site-service
+  namespace: mjoulani
+spec:
+  selector:
+    app: react-site
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 32000  # Choose a specific NodePort within the range
+  type: NodePort
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: try-site-ingress
+  namespace: mjoulani
+  annotations:
+    kubernetes.io/ingress.class: "nginx"  # Ensure the correct ingress class is specified
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:933060838752:certificate/b90cda41-38d3-45c5-85bf-b59de9bf14a1
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+  labels:
+    app.kubernetes.io/managed-by: Helm  # Optional label
+spec:
+  ingressClassName: nginx  # Specify the ingress class if required by your setup
+  rules:
+  - host: try.atech-bot.click
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: react-site-service  # Name of your service handling traffic
+            port:
+              number: 80  # Port on which your service is listening
+  tls:
+  - hosts:
+    - try.atech-bot.click  # Domain for which TLS should be configured
+    secretName: tls-secret-try  # This can be anything; it won't be used because of the annotation
+
+
