@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: data-pv
+  name: sonar-pv
 spec:
   capacity:
-    storage: 50Gi
+    storage: 30Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: ""
+  storageClassName: "gp3"
   persistentVolumeReclaimPolicy: Retain
   awsElasticBlockStore:
-    volumeID: vol-04b483298173b4e38
+    volumeID: vol-09421acaabc6487b0
     fsType: ext4

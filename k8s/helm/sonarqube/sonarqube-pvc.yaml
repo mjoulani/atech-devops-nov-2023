@@ -5,9 +5,9 @@ metadata:
   name: postgresql-pvc
   namespace: sonar
 spec:
-  storageClassName: ""
+  storageClassName: "gp3"
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 28Gi

@@ -1,31 +1,31 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sonarqube-ingress
-  namespace: sonar
+  name: argocd-ingress
+  namespace: argocd
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/secure-backends: "true"
     
 spec:
   ingressClassName: nginx
   rules:
-  - host: sonarqube.atech-bot.click
+  - host: argo-cd.atech-bot.click
     http:
       paths:
       - pathType: Prefix
         path: /
         backend:
           service:
-            name: sonarqube-sonarqube
+            name: argocd-server
             port:
-              number: 9000
+              number: 80
   tls:
   - hosts:
-    - sonarqube.atech-bot.click
-    secretName: sonarqube-tls
+    - argo-cd.atech-bot.click
+    secretName: argocd-tls
