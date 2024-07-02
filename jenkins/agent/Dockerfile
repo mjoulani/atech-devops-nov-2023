@@ -40,14 +40,16 @@ ARG SONAR_VERSION=5.0.1.3006
 RUN curl -s -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip -o sonarscanner.zip \
   && unzip -qq sonarscanner.zip \
   && rm -rf sonarscanner.zip \
-  && mv sonar-scanner-${SONAR_VERSION} sonar-scanner
+  && mv sonar-scanner-${SONAR_VERSION} /usr/local/sonar-scanner
 
+ENV SONAR_RUNNER_HOME=/usr/local/sonar-scanner/
+ENV PATH=$PATH:$SONAR_RUNNER_HOME/bin
+
+RUN sonar-scanner -v
 # Install ansible and ansible-galaxy
 RUN apt-get update && apt-get install -y ansible
 RUN ansible-galaxy collection install community.general
 
 
-ENV SONAR_RUNNER_HOME=/usr/local/sonar-scanner/
-ENV SONAR $PATH:$SONAR_RUNNER_HOME/bin
-ENV PATH $SONAR_RUNNER_HOME:$PATH
+
 
