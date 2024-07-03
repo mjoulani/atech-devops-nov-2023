@@ -32,7 +32,7 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
-    nodePort: 32000  # Choose a specific NodePort within the range
+    #nodePort: 32000  # Choose a specific NodePort within the range
   type: NodePort
 ---
 apiVersion: networking.k8s.io/v1
@@ -41,13 +41,15 @@ metadata:
   name: try-site-ingress
   namespace: mjoulani
   annotations:
-    kubernetes.io/ingress.class: "nginx"  # Ensure the correct ingress class is specified
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:933060838752:certificate/b90cda41-38d3-45c5-85bf-b59de9bf14a1
-    alb.ingress.kubernetes.io/ssl-redirect: "443"
-  labels:
-    app.kubernetes.io/managed-by: Helm  # Optional label
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # nginx.ingress.kubernetes.io/secure-backends: "true"
 spec:
-  ingressClassName: nginx  # Specify the ingress class if required by your setup
+  ingressClassName: nginx
   rules:
   - host: try.atech-bot.click
     http:
@@ -56,12 +58,51 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: react-site-service  # Name of your service handling traffic
+            name: react-site-service
             port:
-              number: 80  # Port on which your service is listening
+              number: 80
   tls:
   - hosts:
-    - try.atech-bot.click  # Domain for which TLS should be configured
-    secretName: tls-secret-try  # This can be anything; it won't be used because of the annotation
+    - try.atech-bot.click
+    secretName: mjoulani-tls
+
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: try-site-ingress
+#   namespace: mjoulani
+#   annotations:
+#     # kubernetes.io/ingress.class: "nginx"  # Ensure the correct ingress class is specified
+#     # alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:933060838752:certificate/b90cda41-38d3-45c5-85bf-b59de9bf14a1
+#     # alb.ingress.kubernetes.io/ssl-redirect: "443"
+#     cert-manager.io/cluster-issuer: "letsencrypt-prod"
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+#     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+#     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+#     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+#     nginx.ingress.kubernetes.io/secure-backends: "true"
+    
+#   spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: try.atech-bot.click
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: react-site-service
+#             port:
+#               number: 80
+#   tls:
+#   - hosts:
+#     - try.atech-bot.click
+#     secretName: mjoulani-tls
+#     # secretName: tls-secret-try  # This can be anything; it won't be used because of the annotation
+    
+
+    
 
 
