@@ -29,6 +29,11 @@ spec:
               value: "https://basharz.atech-bot.click"
             - name: DYNAMO_TABLE
               value: "bashar_ziv_aws"
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "500m"
           volumeMounts:
             - name: aws-credentials
               mountPath: /root/.aws
