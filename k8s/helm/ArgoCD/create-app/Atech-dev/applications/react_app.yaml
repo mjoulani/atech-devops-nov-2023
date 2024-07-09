@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name     : react-app
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations: 
+    argocd.argoproj.io/sync-options: Prune=true
+spec:
+  destination:
+    name     : in-cluster
+    namespace: alexey
+  source:
+    path   : "HelmCharts/ReactSite"
+    repoURL: "git repo"
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - values.yaml
+
+  project: default
+  syncPolicy:
+    automated:
+      prune   : true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true         
+
+      

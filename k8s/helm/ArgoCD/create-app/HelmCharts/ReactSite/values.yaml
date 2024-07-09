@@ -1,0 +1,21 @@
+replicaCount: 3
+
+releaseName: react-site
+
+image:
+  repository: alexeymihaylovdev/demo
+  tag: "1.1"
+
+containerPort: 80
+
+service:
+  port: 80
+
+ingress:
+  name: ingress-hosts
+  host: react-demo.atech-bot.click
+
+imagePullSecrets: dockerhub
+
+maxSurge: 3
+
