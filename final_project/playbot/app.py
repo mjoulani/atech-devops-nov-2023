@@ -9,7 +9,7 @@ from flask import request
 from loguru import logger
 from botocore.exceptions import ClientError
 from telebot.types import InputFile
-from final_project.playbot.bot import ObjectDetectionBot
+from bot import ObjectDetectionBot
 from collections import Counter
 
 
@@ -170,4 +170,4 @@ def load_test():
 if __name__ == "__main__":
     bot = ObjectDetectionBot(TELEGRAM_TOKEN, TELEGRAM_APP_URL)
 
-    app.run(host='0.0.0.0', port=8443)
+    app.run(host='0.0.0.0', port=8080)

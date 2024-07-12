@@ -12,13 +12,13 @@ import time
 import requests
 
 # Function to send a POST request to the polybot service
-def send_request_to_polybot(prediction_id):
+def send_request_to_polybot(prediction_id, prediction_summary):
     polybot_host = os.getenv('POLYBOT_SERVICE_HOST', 'polybot-service.mjoulani.svc.cluster.local')
     polybot_port = os.getenv('POLYBOT_SERVICE_PORT', '8080')
-    polybot_url = f"http://{polybot_host}:{polybot_port}/results?predictionId={prediction_id}"
+    polybot_url = f"http://{polybot_host}:{polybot_port}/your-endpoint"
     
     try:
-        response = requests.get(polybot_url)
+        response = requests.post(polybot_url, json=prediction_summary)
         if response.status_code == 200:
             logger.info(f"Request successful to {polybot_url}")
             logger.info(f"Response content: {response.content}")
@@ -134,7 +134,7 @@ def consume():
                     logger.info(f"An error occurred: {str(e)}")
 
                 # Send POST request to polybot
-                connection = send_request_to_polybot(str(prediction_id))
+                connection = send_request_to_polybot(prediction_id, prediction_summary)
                 if not connection:
                     logger.info("Failed to send POST request to polybot.")
 

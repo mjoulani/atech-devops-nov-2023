@@ -1,0 +1,20 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp2
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: gp2
+# provisioner: kubernetes.io/aws-ebs
+# parameters:
+#   type: gp2
+# reclaimPolicy: Retain  # Options: Retain, Delete, or Recycle
+# volumeBindingMode: Immediate  # Options: Immediate or WaitForFirstConsumer
+

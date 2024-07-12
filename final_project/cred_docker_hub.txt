@@ -1,0 +1,6 @@
+kubectl create secret docker-registry regcred \
+  --docker-server=ghcr.io \
+  --docker-username=mjoulani \
+  --docker-password=muh1234567890@ \
+  --docker-email=muhamed_joulani@hotmail.com \
+  --namespace=mjoulani

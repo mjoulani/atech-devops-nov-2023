@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mjoulani-cert
+  namespace: mjoulani
+spec:
+  secretName: mjoulani-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: try.atech-bot.click
+  dnsNames:
+    - try.atech-bot.click

@@ -1,0 +1,21 @@
+docker build -t mjoulani/yolo5-image:latest .
+docker login   #if needed
+
+docker push mjoulani/yolo5-image:latest
+
+docker build -t mjoulani/polybot-image:latest .
+docker login   #if needed
+docker push mjoulani/polybot-image:latest
+
+
+kubectl delete deployment react-site-deployment -n mjoulani
+kubectl delete service react-site-service -n mjoulani
+
+kubectl delete ingress try-site-ingress -n mjoulani
+kubectl apply -f ingress.yaml
+
+kubectl get secret mjoulani-tls -n mjoulani
+
+ kubectl logs polybot-deployment-558b6858c4-cqmkx -n mjoulani
+
+
