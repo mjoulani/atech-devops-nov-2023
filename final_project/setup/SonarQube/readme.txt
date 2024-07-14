@@ -45,9 +45,4 @@ docker run -d \
   sonarqube:lts-community
 
 
-  docker run -d \
-  --name nexus3 \
-  -p 8081:8081 \
-  -v sonarqube_data:/opt/sonarqube/data \
-  --restart always \
-  sonatype/nexus3
+52.20.17.126:9000

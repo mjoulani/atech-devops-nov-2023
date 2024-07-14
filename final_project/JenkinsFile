@@ -1,0 +1,399 @@
+
+// with snyk
+pipeline {
+    agent any
+
+    environment {
+        SCANNER_HOME = tool 'SonarQube -Scanner'
+        SNYK_TOKEN = credentials('snyk-api-token')  // Make sure to add your Snyk API token in Jenkins credentials
+    }
+
+    stages {
+        stage('Git checkout') {
+            steps {
+                git branch: 'muhamed_joulani_final_project', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
+            }
+        }
+        stage('Test case') {
+            steps {
+                echo 'Adding test cases for Python'
+                // Add your Python test commands here
+            }
+        }
+        stage('Debug Workspace') {
+            steps {
+                dir('./final_project') {
+                    echo 'Listing files and folders in final_project directory'
+                    sh '''
+                        echo "Current directory:"
+                        pwd
+                        echo "Listing all files in the final_project directory:"
+                        ls -la || { echo "Failed to list files"; exit 0; }
+                        echo "Tree structure of final_project directory:"
+                        if command -v tree > /dev/null; then
+                            tree || { echo "Failed to list tree structure"; exit 0; }
+                        else
+                            echo "Tree command is not available. Listing with 'ls -R' instead."
+                            ls -R
+                        fi
+                    '''
+                }
+            }
+        }
+        stage('Snyk scan: configuration files') {
+            steps {
+                dir('./final_project') {
+                    echo 'Running Snyk IaC scan on configuration files'
+                    script {
+                        try {
+                            // Authenticate with Snyk
+                            sh 'snyk auth $SNYK_TOKEN'
+                            // Run Snyk IaC test and capture the output
+                            def snykOutput = sh(script: 'snyk iac test . --json', returnStdout: true).trim()
+                            // Generate Snyk IaC scan report
+                            sh 'echo "${snykOutput}" > snyk-report.json'
+                            // Upload results to Snyk
+                            sh 'snyk monitor --all-projects || true'
+                        } catch (Exception e) {
+                            echo "Snyk IaC scan issues detected"
+                            echo e.getMessage()
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'final_project/snyk-report.json', allowEmptyArchive: true
+                    echo 'Snyk report generated and available in Jenkins artifacts'
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                dir('./final_project') {
+                    withSonarQubeEnv('sonar') {
+                        sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=FinalProject \
+                            -Dsonar.projectKey=FinalProject \
+                            -Dsonar.sources=. \
+                            -Dsonar.language=python \
+                            -Dsonar.python.version=3.8'''  // Adjust Python version if needed
+                    }
+                }
+            }
+        }
+        stage('Final Test case') {
+            steps {
+                echo 'Hello World'
+                // Add any additional commands for the final test case here
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
+        unstable {
+            echo 'Pipeline unstable'
+        }
+    }
+}
+
+// with trivy
+pipeline {
+    agent any
+
+    environment {
+        SCANNER_HOME = tool 'SonarQube -Scanner'
+        TRIVY_VERSION = '0.45.0'  // Specify the Trivy version you want to use
+    }
+
+    stages {
+        stage('Git checkout') {
+            steps {
+                git branch: 'muhamed_joulani_final_project', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
+            }
+        }
+        stage('Test case') {
+            steps {
+                echo 'Adding test cases for Python'
+                // Add your Python test commands here
+            }
+        }
+        stage('Debug Workspace') {
+            steps {
+                dir('./final_project') {
+                    echo 'Listing files and folders in final_project directory'
+                    sh '''
+                        echo "Current directory:"
+                        pwd
+                        echo "Listing all files in the final_project directory:"
+                        ls -la || { echo "Failed to list files"; exit 0; }
+                        echo "Tree structure of final_project directory:"
+                        if command -v tree > /dev/null; then
+                            tree || { echo "Failed to list tree structure"; exit 0; }
+                        else
+                            echo "Tree command is not available. Listing with 'ls -R' instead."
+                            ls -R
+                        fi
+                    '''
+                }
+            }
+        }
+        stage('Trivy Scan') {
+            steps {
+                dir('./final_project') {
+                    echo 'Running Trivy scan on the final_project directory'
+                    script {
+                        try {
+                            // Download and install Trivy
+                            sh '''
+                                if ! command -v trivy > /dev/null; then
+                                    echo "Trivy not found, installing..."
+                                    wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
+                                    tar zxvf trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
+                                    sudo mv trivy /usr/local/bin/
+                                    rm trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
+                                fi
+                            '''
+                            // Run Trivy scan and capture the output
+                            def trivyOutput = sh(script: 'trivy fs . --format json', returnStdout: true).trim()
+                            // Generate Trivy scan report
+                            sh 'echo "${trivyOutput}" > trivy-report.json'
+                        } catch (Exception e) {
+                            echo "Trivy scan issues detected"
+                            echo e.getMessage()
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'final_project/trivy-report.json', allowEmptyArchive: true
+                    echo 'Trivy report generated and available in Jenkins artifacts'
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                dir('./final_project') {
+                    withSonarQubeEnv('sonar') {
+                        sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=FinalProject \
+                            -Dsonar.projectKey=FinalProject \
+                            -Dsonar.sources=. \
+                            -Dsonar.language=python \
+                            -Dsonar.python.version=3.8'''  // Adjust Python version if needed
+                    }
+                }
+            }
+        }
+        stage('Final Test case') {
+            steps {
+                echo 'Hello World'
+                // Add any additional commands for the final test case here
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
+        unstable {
+            echo 'Pipeline unstable'
+        }
+    }
+}
+/*********************************************************************************************************************/
+pipeline {
+    agent any
+
+    environment {
+        SCANNER_HOME = tool 'SonarQube -Scanner'
+        TRIVY_VERSION = '0.45.0'  // Specify the Trivy version you want to use
+        DOCKER_HUB_CREDENTIALS = 'docker_hub'
+    }
+
+    stages {
+        stage('Git checkout') {
+            steps {
+                git branch: 'muhamed_joulani_final_project', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
+            }
+        }
+        stage('Test case') {
+            steps {
+                echo 'Adding test cases for Python'
+                // Add your Python test commands here
+            }
+        }
+        stage('Debug Workspace') {
+            steps {
+                dir('./final_project') {
+                    echo 'Listing files and folders in final_project directory'
+                    sh '''
+                        echo "Current directory:"
+                        pwd
+                        echo "Listing all files in the final_project directory:"
+                        ls -la || { echo "Failed to list files"; exit 0; }
+                        echo "Tree structure of final_project directory:"
+                        if command -v tree > /dev/null; then
+                            tree || { echo "Failed to list tree structure"; exit 0; }
+                        else
+                            echo "Tree command is not available. Listing with 'ls -R' instead."
+                            ls -R
+                        fi
+                    '''
+                }
+            }
+        }
+        stage('Trivy Scan') {
+            steps {
+                dir('./final_project') {
+                    echo 'Running Trivy scan on the final_project directory'
+                    script {
+                        try {
+                            // Download and install Trivy
+                            sh '''
+                                if ! command -v trivy > /dev/null; then
+                                    echo "Trivy not found, installing..."
+                                    wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
+                                    tar zxvf trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
+                                    sudo mv trivy /usr/local/bin/
+                                    rm trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
+                                fi
+                            '''
+                            // Run Trivy scan and capture the output
+                            def trivyOutput = sh(script: 'trivy fs . --format json', returnStdout: true).trim()
+                            // Generate Trivy scan report
+                            sh 'echo "${trivyOutput}" > trivy-report.json'
+                        } catch (Exception e) {
+                            echo "Trivy scan issues detected"
+                            echo e.getMessage()
+                        }
+                    }
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'final_project/trivy-report.json', allowEmptyArchive: true
+                    echo 'Trivy report generated and available in Jenkins artifacts'
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                dir('./final_project') {
+                    withSonarQubeEnv('sonar') {
+                        sh '''${SCANNER_HOME}/bin/sonar-scanner \
+                            -Dsonar.projectName=FinalProject \
+                            -Dsonar.projectKey=FinalProject \
+                            -Dsonar.sources=. \
+                            -Dsonar.language=python \
+                            -Dsonar.python.version=3.8'''  // Adjust Python version if needed
+                    }
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                script {
+                    // Wait for SonarQube analysis to complete and check the Quality Gate status
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            echo "Quality gate failed: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Build & Tag Docker Image for polybot') {
+            steps {
+                script {
+                    def polybotImage = "mjoulani/polybot-image:${env.BUILD_ID}"
+                    withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
+                        dir('./final_project/playbot/') {
+                            sh "ls -la"
+                            sh "docker build -t ${polybotImage} ."
+                        }
+                    }
+                    env.POLYBOT_IMAGE = polybotImage
+                }
+            }
+        }
+        stage('Build & Tag Docker Image for yolo5') {
+            steps {
+                script {
+                    def yolo5Image = "mjoulani/yolo5-image:${env.BUILD_ID}"
+                    withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
+                        dir('./final_project/yolo5') {
+                            sh "ls -la"
+                            sh "docker build -t ${yolo5Image} ."
+                        }
+                    }
+                    env.YOLO5_IMAGE = yolo5Image
+                }
+            }
+        }
+        stage('Docker image polybot scan with Trivy') {
+            steps {
+                script {
+                    sh "trivy image ${env.POLYBOT_IMAGE} --format json --output polybot-image-trivy-report.json"
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'final_project/polybot/polybot-image-trivy-report.json', allowEmptyArchive: true
+                    echo 'Polybot Docker image Trivy report generated and available in Jenkins artifacts'
+                }
+            }
+        }
+        stage('Docker image yolo5 scan with Trivy') {
+            steps {
+                script {
+                    sh "trivy image ${env.YOLO5_IMAGE} --format json --output yolo5-image-trivy-report.json"
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'final_project/yolo5/yolo5-image-trivy-report.json', allowEmptyArchive: true
+                    echo 'Yolo5 Docker image Trivy report generated and available in Jenkins artifacts'
+                }
+            }
+        }
+        stage('Push Docker Images to DockerHub') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
+                        sh "docker push ${env.POLYBOT_IMAGE}"
+                        sh "docker push ${env.YOLO5_IMAGE}"
+                    }
+                }
+            }
+        }
+        stage('Final Test case') {
+            steps {
+                echo 'Hello World'
+                // Add any additional commands for the final test case here
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+        failure {
+            echo 'Pipeline failed'
+        }
+        unstable {
+            echo 'Pipeline unstable'
+        }
+    }
+}

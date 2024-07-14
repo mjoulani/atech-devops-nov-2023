@@ -53,6 +53,12 @@ save and exit
 
 sudo chmod +x docker.sh
 ./docker.sh
+usermod -aG docker jenkins
+sudo systemctl restart jenkins
+sudo systemctl restart docker
+docker --version
+
+
 
 sudo systemctl daemon-reload
 sudo systemctl restart jenkins
@@ -68,3 +74,22 @@ sonar-------------------SonarQube ScannerVersion
 docker------------docker and docker Pipeline
 kubernets-----------Kubernetes Client API and Kubernetes CredentialsVersion and  KubernetesVersion and Kubernete cli
 aws 
+
+
+installing trivy:
+create file trivy:
+nano trivy.sh
+
+copy past and save eixt:
+
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy -y
+
+chmod +x trivy.sh
+./trivy.sh
+
+trivy  --version
+
