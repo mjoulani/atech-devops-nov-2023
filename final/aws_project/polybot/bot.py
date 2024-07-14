@@ -102,7 +102,8 @@ class ObjectDetectionBot(Bot):
          
             message = {
                 'image': photo_key,
-                'chat_id': msg['chat']['id']
+                'chat_id': msg['chat']['id'],
+                'message_id': msg["message_id"]
             }
             
             self.send_message_to_sqs(json.dumps(message))

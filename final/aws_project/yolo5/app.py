@@ -49,7 +49,7 @@ def consume():
             # Receives a URL parameter representing the image to download from S3
             img_name = params['image']
             chat_id = params['chat_id']
-            
+            message_id=params['message_id']
             #TODO download img_name from S3, store the local image path in original_img_path
             bucket_name = os.getenv('BUCKET_NAME')
 
@@ -107,7 +107,7 @@ def consume():
                 }
 
                 # TODO store the prediction_summary in a DynamoDB table
-                insertData(prediction_id,img_name,labels,chat_id,table_name)
+                insertData(prediction_id,img_name,labels,chat_id,message_id,table_name)
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
                 url = f"{alb}/results/?predictionId={prediction_id}"
@@ -117,7 +117,7 @@ def consume():
             # Delete the message from the queue as the job is considered as DONE
             sqs_client.delete_message(QueueUrl=queue_name, ReceiptHandle=receipt_handle)
 
-def insertData(prediction_id,filename,data,chat_id,table_name):
+def insertData(prediction_id,filename,data,chat_id,message_id,table_name):
 
     # Create a DynamoDB client
     dynamodb = boto3.client('dynamodb',region_name='eu-west-1')
@@ -126,6 +126,7 @@ def insertData(prediction_id,filename,data,chat_id,table_name):
     item = {
         'prediction_id': {'S': prediction_id},
         'chat_id': {'S': str(chat_id)},
+        'message_id': {'S': str(message_id)},
         'description': {'S': json.dumps(data)}
     }
 
