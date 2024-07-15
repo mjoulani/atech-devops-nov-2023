@@ -127,7 +127,7 @@ def consume():
                     logger.error(f'Error updating dynamo: {e}')
 
                 # TODO perform a GET request to Polybot to `/results` endpoint
-                url = f'https://ahmad-baloum-1107395860.ap-northeast-2.elb.amazonaws.com:8443/results/?predictionId={prediction_id}'
+                url = f'http://ahmad-baloum-1107395860.ap-northeast-2.elb.amazonaws.com/results/?predictionId={prediction_id}'
                 logger.info(f'url: {url}')
                 response = requests.get(url, verify=False)
                 logger.info(f'response: {response}')
