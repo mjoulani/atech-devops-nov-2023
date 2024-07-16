@@ -440,9 +440,15 @@ past than change the ip address to blackbox under target : 52.201.178.63:9115
 
 sudo nano /usr/local/bin/prometheus-2.53.1/prometheus.yml
 
+install helm:
+
+https://www.coachdevops.com/2022/05/how-to-setup-monitoring-on-kubernetes.html
 
 
+muh-grafan.atech-bot.click
+UserName: admin
+password: 1234
 
+http://muh-promethues.atech-bot.click:9090/
 
-
-
+Kubernetes EKS Cluster (Prometheus)

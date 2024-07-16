@@ -1,13 +1,26 @@
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: mjoulani-cert
+#   namespace: mjoulani
+# spec:
+#   secretName: mjoulani-tls
+#   issuerRef:
+#     name: letsencrypt-prod
+#     kind: ClusterIssuer
+#   commonName: try.atech-bot.click
+#   dnsNames:
+#     - try.atech-bot.click
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: mjoulani-cert
   namespace: mjoulani
 spec:
-  secretName: mjoulani-tls
+  secretName: mjoulani-tls # This will store the generated TLS secret
   issuerRef:
-    name: letsencrypt-prod
-    kind: ClusterIssuer
-  commonName: try.atech-bot.click
+    name: letsencrypt-prod # Name of the ClusterIssuer or Issuer
+    kind: ClusterIssuer # Specify whether it's a ClusterIssuer or Issuer
+  commonName: try.atech-bot.click # Common name for the certificate
   dnsNames:
-    - try.atech-bot.click
+  - try.atech-bot.click # List of DNS names for which the certificate is valid

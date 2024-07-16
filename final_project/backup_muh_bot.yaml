@@ -346,4 +346,3 @@ spec:
   - hosts:
     - try.atech-bot.click
     secretName: mjoulani-tls
-

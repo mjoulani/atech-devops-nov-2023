@@ -1,0 +1,14 @@
+server:
+  persistentVolume:
+    enabled: true
+    storageClass: gp2 # Replace with your desired storage class
+    size: 10Gi # Replace with your desired size
+    accessModes:
+    - ReadWriteOnce
+alertmanager:
+  persistentVolume:
+    enabled: true
+    storageClass: gp2 # Replace with your desired storage class
+    size: 5Gi # Replace with your desired size
+    accessModes:
+    - ReadWriteOnce
