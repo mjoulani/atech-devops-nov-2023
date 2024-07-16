@@ -1,192 +1,3 @@
-
-// /*********************************************************************************************************************/
-// pipeline {
-//     agent any
-
-//     environment {
-//         SCANNER_HOME = tool 'SonarQube -Scanner'
-//         TRIVY_VERSION = '0.45.0'  // Specify the Trivy version you want to use
-//         DOCKER_HUB_CREDENTIALS = 'docker_hub'
-//     }
-
-//     stages {
-//         stage('Git checkout') {
-//             steps {
-//                 git branch: 'muhamed_joulani_final_project', url: 'https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git'
-//             }
-//         }
-//         stage('Test case') {
-//             steps {
-//                 echo 'Adding test cases for Python'
-//                 // Add your Python test commands here
-//             }
-//         }
-//         stage('Debug Workspace') {
-//             steps {
-//                 dir('./final_project') {
-//                     echo 'Listing files and folders in final_project directory'
-//                     sh '''
-//                         echo "Current directory:"
-//                         pwd
-//                         echo "Listing all files in the final_project directory:"
-//                         ls -la || { echo "Failed to list files"; exit 0; }
-//                         echo "Tree structure of final_project directory:"
-//                         if command -v tree > /dev/null; then
-//                             tree || { echo "Failed to list tree structure"; exit 0; }
-//                         else
-//                             echo "Tree command is not available. Listing with 'ls -R' instead."
-//                             ls -R
-//                         fi
-//                     '''
-//                 }
-//             }
-//         }
-//         stage('Trivy Scan') {
-//             steps {
-//                 dir('./final_project') {
-//                     echo 'Running Trivy scan on the final_project directory'
-//                     script {
-//                         try {
-//                             // Download and install Trivy
-//                             sh '''
-//                                 if ! command -v trivy > /dev/null; then
-//                                     echo "Trivy not found, installing..."
-//                                     wget https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
-//                                     tar zxvf trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
-//                                     sudo mv trivy /usr/local/bin/
-//                                     rm trivy_${TRIVY_VERSION}_Linux-x86_64.tar.gz
-//                                 fi
-//                             '''
-//                             // Run Trivy scan and capture the output
-//                             def trivyOutput = sh(script: 'trivy fs . --format json', returnStdout: true).trim()
-//                             // Generate Trivy scan report
-//                             sh 'echo "${trivyOutput}" > trivy-report.json'
-//                         } catch (Exception e) {
-//                             echo "Trivy scan issues detected"
-//                             echo e.getMessage()
-//                         }
-//                     }
-//                 }
-//             }
-//             post {
-//                 always {
-//                     archiveArtifacts artifacts: 'final_project/trivy-report.json', allowEmptyArchive: true
-//                     echo 'Trivy report generated and available in Jenkins artifacts'
-//                 }
-//             }
-//         }
-//         stage('SonarQube Analysis') {
-//             steps {
-//                 dir('./final_project') {
-//                     withSonarQubeEnv('sonar') {
-//                         sh '''${SCANNER_HOME}/bin/sonar-scanner \
-//                             -Dsonar.projectName=FinalProject \
-//                             -Dsonar.projectKey=FinalProject \
-//                             -Dsonar.sources=. \
-//                             -Dsonar.language=python \
-//                             -Dsonar.python.version=3.8'''  // Adjust Python version if needed
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Quality Gate') {
-//             steps {
-//                 script {
-//                     // Wait for SonarQube analysis to complete and check the Quality Gate status
-//                     timeout(time: 1, unit: 'HOURS') {
-//                         def qg = waitForQualityGate()
-//                         if (qg.status != 'OK') {
-//                             echo "Quality gate failed: ${qg.status}"
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-
-//         stage('Build & Tag Docker Image for polybot') {
-//             steps {
-//                 script {
-//                     def polybotImage = "mjoulani/polybot-image:${env.BUILD_ID}"
-//                     withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
-//                         dir('./final_project/playbot/') {
-//                             sh "ls -la"
-//                             sh "docker build -t ${polybotImage} ."
-//                         }
-//                     }
-//                     env.POLYBOT_IMAGE = polybotImage
-//                 }
-//             }
-//         }
-//         stage('Build & Tag Docker Image for yolo5') {
-//             steps {
-//                 script {
-//                     def yolo5Image = "mjoulani/yolo5-image:${env.BUILD_ID}"
-//                     withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
-//                         dir('./final_project/yolo5') {
-//                             sh "ls -la"
-//                             sh "docker build -t ${yolo5Image} ."
-//                         }
-//                     }
-//                     env.YOLO5_IMAGE = yolo5Image
-//                 }
-//             }
-//         }
-//         stage('Docker image polybot scan with Trivy') {
-//             steps {
-//                 script {
-//                     sh "trivy image ${env.POLYBOT_IMAGE} --format json --output polybot-image-trivy-report.json"
-//                 }
-//             }
-//             post {
-//                 always {
-//                     archiveArtifacts artifacts: 'final_project/polybot/polybot-image-trivy-report.json', allowEmptyArchive: true
-//                     echo 'Polybot Docker image Trivy report generated and available in Jenkins artifacts'
-//                 }
-//             }
-//         }
-//         stage('Docker image yolo5 scan with Trivy') {
-//             steps {
-//                 script {
-//                     sh "trivy image ${env.YOLO5_IMAGE} --format json --output yolo5-image-trivy-report.json"
-//                 }
-//             }
-//             post {
-//                 always {
-//                     archiveArtifacts artifacts: 'final_project/yolo5/yolo5-image-trivy-report.json', allowEmptyArchive: true
-//                     echo 'Yolo5 Docker image Trivy report generated and available in Jenkins artifacts'
-//                 }
-//             }
-//         }
-//         stage('Push Docker Images to DockerHub') {
-//             steps {
-//                 script {
-//                     withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
-//                         sh "docker push ${env.POLYBOT_IMAGE}"
-//                         sh "docker push ${env.YOLO5_IMAGE}"
-//                     }
-//                 }
-//             }
-//         }
-//         stage('Final Test case') {
-//             steps {
-//                 echo 'Hello World'
-//                 // Add any additional commands for the final test case here
-//             }
-//         }
-//     }
-//     post {
-//         always {
-//             echo 'Pipeline completed'
-//         }
-//         failure {
-//             echo 'Pipeline failed'
-//         }
-//         unstable {
-//             echo 'Pipeline unstable'
-//         }
-//     }
-// }
-
 pipeline {
     agent any
 
@@ -194,6 +5,7 @@ pipeline {
         SCANNER_HOME = tool 'SonarQube -Scanner'
         TRIVY_VERSION = '0.45.0'  // Specify the Trivy version you want to use
         DOCKER_HUB_CREDENTIALS = 'docker_hub'
+        GIT_CREDENTIALS = 'git_token'  // Add your GitHub credentials ID
     }
 
     stages {
@@ -350,6 +162,33 @@ pipeline {
                     withDockerRegistry(credentialsId: DOCKER_HUB_CREDENTIALS, toolName: 'docker') {
                         sh "docker push ${env.POLYBOT_IMAGE}"
                         sh "docker push ${env.YOLO5_IMAGE}"
+                    }
+                }
+            }
+        }
+        stage('Update muh_bot.yaml') {
+            steps {
+                script {
+                    dir('./final_project/argo-deploy/') {
+                        sh "ls -la"
+                        def polybotImage1 = env.POLYBOT_IMAGE
+                        def yolo5Image1 = env.YOLO5_IMAGE
+
+                        sh """
+                            sed -i 's|image: mjoulani/polybot-image:.*|image: ${polybotImage1}|' muh_bot.yaml
+                            sed -i 's|image: mjoulani/yolo5-image:.*|image: ${yolo5Image1}|' muh_bot.yaml
+                        """
+                        sh 'cat muh_bot.yaml'
+                        
+                        withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                            sh """
+                                git config user.email "muhamed_joulani@hotmail.com"
+                                git config user.name "mjoulani"
+                                git add muh_bot.yaml
+                                git commit -m "update deployment images to version ${polybotImage1} and ${yolo5Image1}"
+                                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git HEAD:muhamed_joulani_final_project
+                            """
+                        }
                     }
                 }
             }
