@@ -22,7 +22,7 @@ spec:
           claimName: new-aws-ebs-pvc
       containers:
       - name: polybot
-        image: mjoulani/polybot-image:99
+        image: mjoulani/polybot-image:100
         ports:
         - containerPort: 8080
         env:
@@ -80,7 +80,7 @@ spec:
       - name: regcred
       containers:
       - name: yolo5
-        image: mjoulani/yolo5-image:99
+        image: mjoulani/yolo5-image:100
         ports:
         - containerPort: 5000
         env:
