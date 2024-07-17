@@ -1,9 +1,11 @@
 name: Sync Fork with Upstream
 
 on:
-  push:
-    branches:
-      - main  # Adjust branch name as needed
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour, you can adjust this
+  repository_dispatch:
+    types: [sync_with_fork]
 
 jobs:
   sync:
@@ -12,22 +14,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          repository: mjoulani/atech-devops-nov-2023
+          ref: muhamed_joulani_final_project
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set upstream remote
         run: |
           git remote add upstream https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git
-          git remote -v  # List remotes for debugging purposes
-
-      - name: Fetch upstream changes
-        run: git fetch upstream
+          git fetch upstream
 
       - name: Merge upstream changes
         run: |
-          git checkout main  # Ensure we are on the main branch
-          git merge upstream/main  # Adjust branch name as needed
-        continue-on-error: true  # Continue even if there are merge conflicts
+          git checkout muhamed_joulani_final_project
+          git merge upstream/muhamed_joulani_final_project
+          git push origin muhamed_joulani_final_project
 
-      - name: Push changes to fork
-        run: git push origin main  # Adjust branch name as needed
-        if: success()  # Only push if the merge was successful
 
