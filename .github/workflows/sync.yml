@@ -1,0 +1,26 @@
+name: Sync Fork with Upstream
+
+on:
+  push:
+    branches:
+      - main  # Adjust branch name as needed
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set upstream remote
+        run: git remote add upstream https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git
+
+      - name: Fetch upstream changes
+        run: git fetch upstream
+
+      - name: Merge upstream changes
+        run: git merge upstream/main  # Adjust branch name as needed
+
+      - name: Push changes to fork
+        run: git push origin main  # Adjust branch name as needed
