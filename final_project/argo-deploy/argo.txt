@@ -3,4 +3,4 @@ https://argo-cd.atech-bot.click/
 UserName: admin
 password: admin2024
 
-test project auto trigger
+test project auto trigger with webhook and fork
