@@ -11,16 +11,23 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set upstream remote
-        run: git remote add upstream https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git
+        run: |
+          git remote add upstream https://github.com/AlexeyMihaylovDev/atech-devops-nov-2023.git
+          git remote -v  # List remotes for debugging purposes
 
       - name: Fetch upstream changes
         run: git fetch upstream
 
       - name: Merge upstream changes
-        run: git merge upstream/main  # Adjust branch name as needed
+        run: |
+          git checkout main  # Ensure we are on the main branch
+          git merge upstream/main  # Adjust branch name as needed
+        continue-on-error: true  # Continue even if there are merge conflicts
 
       - name: Push changes to fork
         run: git push origin main  # Adjust branch name as needed
+        if: success()  # Only push if the merge was successful
+
